@@ -1,5 +1,5 @@
 
-import styles from "../App.module.scss";
+import styles from "./App.module.scss";
 import { Outlet} from "react-router";
 
 export function App() {  
@@ -13,6 +13,8 @@ export function App() {
 }
 
 function Nav() { 
+
+  console.log("Nav component rendered");
 
   return (
     <nav className={styles.nav}>      

@@ -4,10 +4,10 @@ import { useLoaderData } from "react-router";
 
 
 export function Home() {
-   
+    console.log("Home component rendered");
     const message = useLoaderData<string>();
-    
-    
+    console.log(`${message} retured from server`);   
+        
     return (
     <main className={styles.homeMain}>
         <h1>SocialSphere</h1>

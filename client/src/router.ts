@@ -8,8 +8,7 @@ export const router = createBrowserRouter([
     {
         path: "/",
         Component: App,
-        children: [
-            { index: true, loader: () => redirect("/") },
+        children: [            
             { path: "*", Component: NotFound },   
             { path: "/",
                 Component: Home,                

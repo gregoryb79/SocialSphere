@@ -1,0 +1,64 @@
+:root{
+    --primary-blue:     #3B82F6;   // Buttons like "Login", "View Quiz History"
+    --light-gray-bg:    #F9FAFB;   // Background of the entire app
+    --gray-border:      #E5E7EB;   // Input borders, card outlines
+    --dark-text:        #111827;   // Main text (headings, questions)
+    --light-text:       #6B7280;   // Secondary text (labels, meta info)
+    --green-success:    #10B981;   // Feedback: Correct answer
+    --red-error:        #EF4444;   // Feedback: Incorrect answer
+    --yellow-warning:   #F59E0B;   // Feedback: Warning or info messages
+
+    --white:            #FFFFFF;   // Base color for cards and inputs
+    --input-bg:         #F3F4F6;   // Input fields background
+
+    --font-xxl: 2rem;      // ~32px — Main headings (e.g., “Quiz Completed!”)
+    --font-xl:  1.5rem;     // ~24px — Section titles (“Login”, “History”)
+    --font-lg:  1.25rem;    // ~20px — Question text, button text
+    --font-md:  1rem;       // ~16px — Normal body text, form labels
+    --font-sm:  0.875rem;   // ~14px — Subtext, meta info (score, difficulty)
+    --font-xs:  0.75rem;    // ~12px — Optional notes, input hints
+
+    --standard-width: 85%; // Standard width for main content areas
+    --standard-height: 90%; // Standard height for main content areas
+
+    @media (prefers-color-scheme: dark){
+        // Backgrounds
+        --light-gray-bg: #1F2937;   // Primary background (replaces light-gray)
+        --input-bg:      #111827;   // Cards, input backgrounds
+        --gray-border:   #374151;   // Outlines, dividers
+
+        // Text
+        --dark-text:   #F9FAFB;   // Headings, main text
+        --light-text:  #9CA3AF;   // Labels, secondary info     
+    }
+}
+
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+li{
+    list-style: none;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    color: var(--dark-text);
+    background-color: var(--light-gray-bg);
+}
+
+#root {
+    height: 100%;
+    max-width: 37rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem;
+}

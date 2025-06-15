@@ -1,40 +1,56 @@
 # SocialSphere
 
-SocialSphere is a full-stack social networking web application that allows users to connect, share, and interact in a clean and user-friendly environment. Users can register, create profiles, follow others, post updates, like and comment on posts, and engage with a personalized feed.
+SocialSphere is a full-stack social networking web application that allows users to connect, share, and interact in a clean and user-friendly environment. Built with the MERN stack (MongoDB, Express, React, Node.js), this project is designed to demonstrate full-stack development with modern features and best practices.
 
-List of MVP features
-Authentication:
+---
+
+## Features
+
+### MVP Features
+
+#### Authentication
 - User registration and login
-- Password encryption
+- Password encryption with bcrypt
 - Auth sessions using JWT
-- Route protection
-User Profile
-- View user profile
-- Edit profile details (name, bio)
-- Follow / unfollow users
-- Display follower / following counts
-Posts
-- Create a post (text)
+- Protected routes for authenticated users
+
+#### User Profile
+- View/edit user profile (name, bio)
+- Follow / unfollow other users
+- Display followers/following count
+
+#### Posts
+- Create text posts
 - Edit/delete own posts
-- Like / unlike posts
+- Like/unlike posts
 - Comment on posts
 - View post details with comments
-Feed
-- Home feed showing posts from followed users
-- Time-based sorting (newest first)
-Search
-- Search for users by username
-Responsive design
 
-List of extra and cool features
-Media and UI enhancements
-- Image upload in posts and profile
-- Animations (post fade-ins, button effects)
-Notifications
-- Notifications for likes, comments, follows
-Feed
-- Search in posts/feed
+#### Feed
+- Home feed (posts from followed users)
+- Sorted by newest first
+
+#### Search
+- Search users by username
+
+#### Responsive Design
+- Mobile-first responsive layout
+
+---
+
+### Extra & Cool Features
+
+#### Media & UI
+- Image upload for posts and profile avatars
+- Smooth animations for post rendering and interactions
+
+#### Notifications
+- In-app notifications for likes, comments, and follows
+
+#### Feed Enhancements
+- Search within posts/feed
 - Bookmark posts
-- Sort by trending posts (based on likes/comments)
-RealTime
-- Live Chat between users
+- Sort by trending posts (based on engagement)
+
+#### Real-Time
+- Live Chat between users (via WebSockets or Socket.IO)

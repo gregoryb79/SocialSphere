@@ -12,15 +12,25 @@
   updatedAt: Date
 }
 
-# Post/Comment
+# Post
 {
   _id: ObjectId,
-  author: ObjectId, // ref to User
-  postId: ObjectId,  // ref to Post or comment if coment NULL if post
+  author: ObjectId, // ref to User  
   content: String,
   image?: String, // optional image URL
   likes: [ObjectId], // user IDs
   comments: [ObjectId], // comment IDs
+  createdAt: Date,
+  updatedAt: Date
+}
+
+# Comment
+{
+  _id: ObjectId,
+  author: ObjectId, // ref to User  
+  content: String,
+  image?: String, // optional image URL
+  likes: [ObjectId], // user IDs  
   createdAt: Date,
   updatedAt: Date
 }

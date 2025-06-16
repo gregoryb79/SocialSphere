@@ -8,6 +8,7 @@
   avatar: String,   // image URL
   followers: [ObjectId], // user IDs
   following: [ObjectId], // user IDs
+  bookmsrks: [ObjectId], // Post ID's
   createdAt: Date,
   updatedAt: Date
 }
@@ -19,7 +20,7 @@
   content: String,
   image?: String, // optional image URL
   likes: [ObjectId], // user IDs
-  comments: [ObjectId], // comment IDs
+  comments: [ObjectId], // comment IDs  
   createdAt: Date,
   updatedAt: Date
 }

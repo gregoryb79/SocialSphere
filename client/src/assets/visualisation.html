@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SocialSphere Wireframe</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; }
+    .navbar { background: #222; color: #fff; padding: 12px; display: flex; gap: 24px; }
+    .container { max-width: 500px; margin: 24px auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
+    .section { margin-bottom: 32px; }
+    .postcard, .usercard, .comment { border: 1px solid #ddd; border-radius: 6px; padding: 12px; margin-bottom: 12px; background: #fafafa; }
+    .avatar { width: 40px; height: 40px; border-radius: 50%; background: #ccc; display: inline-block; vertical-align: middle; margin-right: 8px; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+    .tab { padding: 6px 16px; border: 1px solid #bbb; border-radius: 4px 4px 0 0; background: #eee; cursor: pointer; }
+    .tab.active { background: #fff; border-bottom: 1px solid #fff; }
+    .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0006; display: flex; align-items: center; justify-content: center; }
+    .modal-content { background: #fff; padding: 24px; border-radius: 8px; min-width: 300px; }
+    .close { float: right; cursor: pointer; }
+    .searchbar { width: 100%; padding: 8px; margin-bottom: 12px; border-radius: 4px; border: 1px solid #ccc; }
+    .actions { margin-top: 8px; }
+    .actions button { margin-right: 8px; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <span>Home</span>
+    <span>Search</span>
+    <span>Me</span>
+    <span>Notifications</span>
+  </div>
+
+  <div class="container">
+
+    <!-- Authentication -->
+    <div class="section">
+      <h2>Login / Register</h2>
+      <input type="text" placeholder="Username" style="width:100%;margin-bottom:8px;">
+      <input type="email" placeholder="Email" style="width:100%;margin-bottom:8px;">
+      <input type="password" placeholder="Password" style="width:100%;margin-bottom:8px;">
+      <div>
+        <button>Register</button>
+        <button>Login</button>
+      </div>
+      <a href="#">Forgot password?</a>
+    </div>
+
+    <!-- Home Feed -->
+    <div class="section">
+      <h2>Feed</h2>
+      <div class="postcard">
+        <div><span class="avatar"></span><b>Username</b></div>
+        <div style="margin:8px 0;">What's on your mind?</div>
+        <input type="file">
+        <div class="actions">
+          <button>Post</button>
+        </div>
+      </div>
+      <div class="postcard">
+        <div><span class="avatar"></span><b>JaneDoe</b></div>
+        <div style="margin:8px 0;">Hello world! 🌎</div>
+        <img src="https://via.placeholder.com/400x150" style="width:100%;border-radius:6px;">
+        <div class="actions">
+          <button>Like</button>
+          <button>Comment</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div class="section">
+      <h2>Profile</h2>
+      <div>
+        <span class="avatar" style="width:60px;height:60px;"></span>
+        <b style="font-size:1.2em;">Username</b>
+      </div>
+      <div>Bio: Just another user.</div>
+      <div>
+        <button>Edit Profile</button>
+        <button>Follow</button>
+      </div>
+      <div>Followers: 123 | Following: 45</div>
+      <div class="tabs">
+        <div class="tab active">Posts</div>
+        <div class="tab">Likes</div>
+      </div>
+      <div class="postcard">
+        <div><span class="avatar"></span><b>Username</b></div>
+        <div>My first post!</div>
+      </div>
+    </div>
+
+    <!-- Post Details with Comments -->
+    <div class="section">
+      <h2>Post Details</h2>
+      <div class="postcard">
+        <div><span class="avatar"></span><b>JaneDoe</b></div>
+        <div>Check out this cool photo!</div>
+        <img src="https://via.placeholder.com/400x150" style="width:100%;border-radius:6px;">
+      </div>
+      <div>
+        <b>Comments:</b>
+        <div class="comment">
+          <span class="avatar"></span>
+          <b>John</b>: Nice post!
+          <div class="actions">
+            <button>Like</button>
+            <button>Reply</button>
+          </div>
+        </div>
+        <input type="text" placeholder="Add a comment..." style="width:80%;">
+        <button>Send</button>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="section">
+      <h2>Search</h2>
+      <input class="searchbar" type="text" placeholder="Search users...">
+      <div class="usercard">
+        <span class="avatar"></span>
+        <b>JaneDoe</b>
+        <button style="float:right;">Follow</button>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="section">
+      <h2>Notifications</h2>
+      <div class="comment">
+        <b>JaneDoe</b> liked your post.
+      </div>
+      <div class="comment">
+        <b>John</b> followed you.
+      </div>
+    </div>
+
+    <!-- Modal Example -->
+    <div class="modal" style="display:none;" id="modal">
+      <div class="modal-content">
+        <span class="close" onclick="document.getElementById('modal').style.display='none'">&times;</span>
+        <h3>Edit Profile</h3>
+        <input type="text" placeholder="Username" style="width:100%;margin-bottom:8px;">
+        <input type="text" placeholder="Bio" style="width:100%;margin-bottom:8px;">
+        <button>Save</button>
+      </div>
+    </div>
+
+  </div>
+</body>

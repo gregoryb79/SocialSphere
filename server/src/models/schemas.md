@@ -8,7 +8,7 @@
   avatar: String,   // image URL
   followers: [ObjectId], // user IDs
   following: [ObjectId], // user IDs
-  bookmsrks: [ObjectId], // Post ID's
+  bookmarks: [ObjectId], // Post ID's
   createdAt: Date,
   updatedAt: Date
 }

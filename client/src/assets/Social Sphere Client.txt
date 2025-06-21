@@ -1,0 +1,138 @@
+Components:
+Input
+Password Input
+Error Message
+Primary Button
+Follow Button
+User Name and and Bio/img(?)
+
+App.tsx:
+Top Navigation - 
+Back Button
+Website Header
+Settings Button
+
+Bottom Navigation-
+Home
+Search
+Create Post
+Notifications
+Profile
+Logout- Link to login page
+Website Credintials
+
+
+Pages:
+
+Login-
+User name input
+Password input
+Link to Register page Button
+
+Register-
+User name input
+Email input
+Password input
+Repeat password input
+Link to Login page Button
+
+Home-
+Top Nav
+Posts By Last updated
+Bottom Nav
+
+Users Profile-
+LoggedInUser:
+Top Nav
+User Img ( add Edit Button?)
+User Name and and Bio component ( add Edit Button?)
+User's Followers, Following and Posts sum
+Toggle-Posts/Bookmarks By Last Updated 
+Bottom Nav
+OtherUsers:
+Top Nav
+User Img
+User Name and and Bio component
+Follow/Unfollow Button
+if make account privet is true && unfollow-    Hide:
+(User's Followers, Following and Posts sum
+Posts By last Updated)- instead, show message: This account is privet.
+Bottom Nav
+
+Create Post-
+Top Nav
+Page header
+User name and img component
+Post input
+Post img input
+"Post" Button
+Bottom Nav
+Each Post:
+User Name and Img component(different style)
+Date and time of Post creation:
+(Less than 24 hours- show sum of hours since created
+Less than 1 hour - show sum of minutes since created
+Over a week- show Date only)
+Post content
+Starts with False Likes Button and an Empty array of comments as a Button
+-For LoggedIn users: Show Edit/remove Button
+-For Other Users: Show False/True Bookmark Button 
+Posts comments-
+Filter by last updated
+User Name and Img component(different style)
+Date and time of Comment creation
+comment content
+Starts with False Likes Button (and an Empty array of comments as a Button?)
+-For LoggedIn users: Show Remove/Edit Button
+
+Search-
+Top Nav
+Search Bar Input
+Show matching results by User Name
+Each result:
+(Is Link to Users Page-
+User Name and and Bio component
+Follow/UnFollow Button)
+Bottom Nav
+
+
+Edit Profile-
+Top nav(instead of settings button- will be Save button)
+Edit User Name
+Edit Profile img
+Edit Boi
+Edit user account info-
+Edit password
+Renter  new password 
+Edit Email
+Make account Privet checkbox(False by default)
+Delete account
+Bottom Nav
+
+Notifications-
+Top nav
+Notifications by last added
+Bottom nav
+Each notification:
+New Follower-
+Is Link to user's Profile
+User Name and and Bio/img
+Date and time of request creation
+Button to confirm
+New Like-
+Is Link to the relevant post/comment 
+User Name and and img
+Date and time of like updated
+New comment-
+Is Link to the relevant comment 
+User Name and and img
+Date and time of comment updated
+comment content
+
+Not Found-
+Top Nav
+Not found message
+Bottom Nav
+
+
+

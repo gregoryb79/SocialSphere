@@ -1,0 +1,13 @@
+.generalButton{
+    border: 2px solid var(--gray-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--light-gray-bg);
+    color: var(--dark-text);
+    font-size: var(--font-lg);
+    &:hover{
+        color: var(--white);
+        background: var(--primary-blue);
+        border-color: var(--primary-blue);
+    }
+}

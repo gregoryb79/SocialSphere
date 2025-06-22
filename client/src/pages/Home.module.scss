@@ -19,3 +19,24 @@
     @include postCardFrame;
     @include shadowBorder;
 }
+
+.lucideIconPost{
+    width: var(--font-xl);
+    height: var(--font-xl);  
+    background-color: var(--light-gray-bg);     
+}
+
+.postActions{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem;
+    .likeComment{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+    }
+}

@@ -59,6 +59,7 @@
 {   
     _id: ObjectId,
     sender: ObjectId,
+    receiver: ObjectId,
     text: String,
     createdAt: Date
 }

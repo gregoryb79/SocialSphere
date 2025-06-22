@@ -13,7 +13,7 @@ export type Post = {
 };
 
 export async function fetchPosts(): Promise<Post[]> {
-    const message = getUsers();
+    const message = await getUsers();
     console.log("Verifying connection to server:", message);
     
     return new Promise((resolve) => {

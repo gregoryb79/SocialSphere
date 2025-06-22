@@ -1,0 +1,112 @@
+Table users {
+  id          objectid [pk]
+  username    string   [unique, not null]
+  email       string   [unique, not null]
+  password    string   [not null]
+  bio         string
+  avatar      string
+  created_at  datetime
+  updated_at  datetime
+}
+
+Table posts {
+  id          objectid [pk]
+  author_id   objectid [ref: > users.id]
+  content     string   [not null]
+  image       string
+  created_at  datetime
+  updated_at  datetime
+}
+
+Table comments {
+  id          objectid [pk]
+  author_id   objectid [ref: > users.id]
+  post_id     objectid [ref: > posts.id]
+  content     string   [not null]
+  image       string
+  created_at  datetime
+  updated_at  datetime
+}
+
+Table notifications {
+  id          objectid [pk]
+  recipient_id objectid [ref: > users.id]
+  type        string   // 'like' | 'comment' | 'follow'
+  sender_id   objectid [ref: > users.id]
+  post_id     objectid [ref: > posts.id]
+  seen        boolean
+  created_at  datetime
+}
+
+// Join table for followers (user follows user)
+Table user_followers {
+  user_id     objectid [ref: > users.id] // the user being followed
+  follower_id objectid [ref: > users.id] // the user who follows
+  Note: "Composite PK"
+  indexes {
+    (user_id, follower_id) [pk]
+  }
+}
+
+// Join table for following (user follows user)
+Table user_following {
+  user_id     objectid [ref: > users.id] // the user who follows
+  following_id objectid [ref: > users.id] // the user being followed
+  Note: "Composite PK"
+  indexes {
+    (user_id, following_id) [pk]
+  }
+}
+
+// Join table for bookmarks (user bookmarks post)
+Table user_bookmarks {
+  user_id     objectid [ref: > users.id]
+  post_id     objectid [ref: > posts.id]
+  Note: "Composite PK"
+  indexes {
+    (user_id, post_id) [pk]
+  }
+}
+
+// Join table for post likes
+Table post_likes {
+  post_id     objectid [ref: > posts.id]
+  user_id     objectid [ref: > users.id]
+  Note: "Composite PK"
+  indexes {
+    (post_id, user_id) [pk]
+  }
+}
+
+// Join table for comment likes
+Table comment_likes {
+  comment_id  objectid [ref: > comments.id]
+  user_id     objectid [ref: > users.id]
+  Note: "Composite PK"
+  indexes {
+    (comment_id, user_id) [pk]
+  }
+}
+
+// Chat and messages (extra feature)
+Table chats {
+  id            objectid [pk]
+  created_at    datetime
+}
+
+Table chat_participants {
+  chat_id       objectid [ref: > chats.id]
+  user_id       objectid [ref: > users.id]
+  indexes {
+    (chat_id, user_id) [pk]
+  }
+}
+
+Table messages {
+  id            objectid [pk]
+  chat_id       objectid [ref: > chats.id]
+  sender_id     objectid [ref: > users.id]
+  receiver_id   objectid [ref: > users.id]
+  text          string
+  created_at    datetime
+}

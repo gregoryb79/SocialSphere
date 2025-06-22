@@ -1,0 +1,19 @@
+@mixin shadowBorder{
+    border: 1px solid var(--gray-border);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+@mixin pageFrame{
+    margin: -2px auto 0 auto;
+    width: var(--standard-width);
+    height: var(--standard-height);
+
+    position: relative;
+    
+    border: 2px solid var(--gray-border);
+    border-radius: 0 0 8px 8px;
+
+    background-color: var(--light-gray-bg);
+}
+

@@ -6,13 +6,14 @@ export function App() {
 
   return (
      <>      
-      <Nav/>      
+      <TopNav/>      
       <Outlet/>
+      <Footer/>
     </>
   );
 }
 
-function Nav() { 
+function TopNav() { 
 
   console.log("Nav component rendered");
 
@@ -20,5 +21,15 @@ function Nav() {
     <nav className={styles.nav}>      
       <p>Navigation Bar</p>
     </nav>
+  );
+}
+
+function Footer() {
+  console.log("Footer component rendered");
+
+  return (
+    <footer className={styles.footer}>
+      <p>Footer</p>
+    </footer>
   );
 }

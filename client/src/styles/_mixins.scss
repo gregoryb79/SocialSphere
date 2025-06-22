@@ -15,5 +15,12 @@
     // border-radius: 0 0 8px 8px;
 
     background-color: var(--light-gray-bg);
+
+    overflow-y: auto;
+}
+
+@mixin postCardFrame{
+    width: 95%;
+    padding: 0.5rem;
 }
 

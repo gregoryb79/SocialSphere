@@ -3,6 +3,7 @@ import { App } from "./App";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { getUsers } from "./models/users";
+import { fetchPosts } from "./models/posts";
 
 export const router = createBrowserRouter([
     {
@@ -13,7 +14,7 @@ export const router = createBrowserRouter([
             { path: "/",
                 Component: Home,                
                 loader: () => {
-                    return getUsers();
+                    return fetchPosts();
                 }
              },      
            

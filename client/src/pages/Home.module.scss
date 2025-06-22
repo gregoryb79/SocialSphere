@@ -2,8 +2,20 @@
 
 .homeMain{
     width: 100%;
-    height: var(--standard-height);
-    background-color: gray;
-    @include pageFrame;
-    
+    height: var(--standard-height);    
+    @include pageFrame;    
+}
+
+.postsFeed{
+    margin-top: 1rem;;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+   
+}
+
+.postCard{
+    @include postCardFrame;
+    @include shadowBorder;
 }

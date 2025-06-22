@@ -37,7 +37,7 @@ const mockPosts: Post[] = [
   {
     _id: "2",
     author: "user2",
-    content: "Enjoying the new platform. Great work!",
+    content: "Enjoying the new platform. Great work! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     image: undefined,
     likes: ["user1"],
     comments: ["c3"],

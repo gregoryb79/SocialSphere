@@ -16,7 +16,7 @@ export function Home() {
             <h1>SocialSphere Homepage</h1>
             <ul className={styles.postsFeed}>
                 {posts.map((post) => (
-                <li key={post._id} className={styles.post}>                     
+                <li key={post._id} className={styles.postCard}>                     
                     <p>{post.content}</p>
                     <p><strong>Author:</strong> {post.author}</p>
                     <p><strong>Created at:</strong> {new Date(post.createdAt).toLocaleString()}</p>                    

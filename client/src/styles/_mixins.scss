@@ -19,3 +19,8 @@
     overflow-y: auto;
 }
 
+@mixin postCardFrame{
+    width: 95%;
+    padding: 0.5rem;
+}
+

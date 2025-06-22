@@ -1,0 +1,48 @@
+.nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    background-color: var(--primary-blue);
+    color: var(--white);
+
+    height: calc(var(--font-xxl) + 1rem); 
+    
+}
+
+.footer{
+    margin-top: -2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    border: 2px solid var(--gray-border);
+    padding: 0.5rem;
+}
+.footerNav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    background-color: var(--light-gray-bg);
+    color: var(--dark-text);
+
+    height: var(--font-xxl);
+    width: 100%;
+    
+}
+
+.lucideIconTop{
+    width: var(--font-xl);
+    height: var(--font-xl);   
+    background-color: var(--primary-blue); 
+}
+
+.lucideIconFooter{
+    width: var(--font-xl);
+    height: var(--font-xl);  
+    background-color: var(--light-gray-bg);     
+}

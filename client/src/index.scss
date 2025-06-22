@@ -1,25 +1,25 @@
 :root{
-    --primary-blue:     #3B82F6;   // Buttons like "Login", "View Quiz History"
+    --primary-blue:     #3B82F6;   // Buttons like "Login"
     --light-gray-bg:    #F9FAFB;   // Background of the entire app
     --gray-border:      #E5E7EB;   // Input borders, card outlines
     --dark-text:        #111827;   // Main text (headings, questions)
     --light-text:       #6B7280;   // Secondary text (labels, meta info)
-    --green-success:    #10B981;   // Feedback: Correct answer
-    --red-error:        #EF4444;   // Feedback: Incorrect answer
+    --green-success:    #10B981;   // Feedback: OK 
+    --red-error:        #EF4444;   // Feedback: Error messages 
     --yellow-warning:   #F59E0B;   // Feedback: Warning or info messages
 
     --white:            #FFFFFF;   // Base color for cards and inputs
     --input-bg:         #F3F4F6;   // Input fields background
 
-    --font-xxl: 2rem;      // ~32px — Main headings (e.g., “Quiz Completed!”)
-    --font-xl:  1.5rem;     // ~24px — Section titles (“Login”, “History”)
-    --font-lg:  1.25rem;    // ~20px — Question text, button text
+    --font-xxl: 2rem;      // ~32px — Main headings 
+    --font-xl:  1.5rem;     // ~24px — Section titles 
+    --font-lg:  1.25rem;    // ~20px — button text
     --font-md:  1rem;       // ~16px — Normal body text, form labels
-    --font-sm:  0.875rem;   // ~14px — Subtext, meta info (score, difficulty)
+    --font-sm:  0.875rem;   // ~14px — Subtext, meta info 
     --font-xs:  0.75rem;    // ~12px — Optional notes, input hints
 
-    --standard-width: 85%; // Standard width for main content areas
-    --standard-height: 90%; // Standard height for main content areas
+    --standard-width: 100%; // Standard width for main content areas
+    --standard-height: 80%; // Standard height for main content areas
 
     @media (prefers-color-scheme: dark){
         // Backgrounds
@@ -42,6 +42,7 @@
 
 * {
     margin: 0;
+    padding: 0;
 }
 li{
     list-style: none;

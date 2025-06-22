@@ -15,7 +15,7 @@ export function Home() {
         
     return (
         <main className={styles.homeMain}>
-            <h1>SocialSphere</h1>
+            <h1>SocialSphere Homepage</h1>
             <p>Server message: {message}</p>            
         </main>
     );

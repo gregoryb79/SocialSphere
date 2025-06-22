@@ -1,0 +1,9 @@
+@use '../styles/mixins' as *;
+
+.homeMain{
+    width: 100%;
+    height: var(--standard-height);
+    background-color: gray;
+    @include pageFrame;
+    
+}

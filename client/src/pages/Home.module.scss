@@ -2,8 +2,7 @@
 
 .homeMain{
     width: 100%;
-    height: var(--standard-height);
-    background-color: gray;
+    height: var(--standard-height);    
     @include pageFrame;
     
 }

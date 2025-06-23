@@ -1,0 +1,66 @@
+@use '../styles/mixins' as *;
+
+.registerContainer{
+    @include pageFrame;   
+   
+    display: flex;
+    flex-direction: column;
+    align-items: center;      
+    padding: 1rem;
+    
+}
+
+
+.registerForm{
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 90%;   
+    font-size: var(--font-lg);
+    background-color: var(--white-bg);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    @include shadowBorder; 
+    
+    section{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 0.5rem;
+    } 
+    
+}
+
+.passwordRules {
+    padding-inline: 1.5rem;
+    color: var(--dark-text);
+    font-size: var(--font-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;    
+
+    li.satisfied {
+        color: var(--green-success);
+    }
+}
+
+@media (max-width: 500px){
+    .registerContainer{
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;        
+    }
+    .registerForm{
+        width: 100%;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;        
+        p{
+            text-align: center;
+        }
+    }
+}

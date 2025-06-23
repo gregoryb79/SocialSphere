@@ -12,7 +12,8 @@ export type Post = {
     updatedAt: string;
 };
 
-export async function fetchPosts(): Promise<Post[]> {
+// Fetches feed for the user == all posts of the users in his following list
+export async function fetchPosts(userId: string): Promise<Post[]> {
     const message = await getUsers();
     console.log("Verifying connection to server:", message);
     
@@ -22,6 +23,18 @@ export async function fetchPosts(): Promise<Post[]> {
         }, 1000);
     });
 }
+
+export async function fetchMyPosts(): Promise<Post[]> {
+  const message = await getUsers();
+    console.log("Verifying connection to server:", message);
+    
+    return new Promise((resolve) => {
+        setTimeout(() => {
+        resolve(mockMyPosts);
+        }, 1000);
+    });
+}
+
 
 const mockPosts: Post[] = [
   {
@@ -67,6 +80,59 @@ const mockPosts: Post[] = [
   {
     _id: "5",
     author: "user5",
+    content: "Just joined SocialSphere! Excited to connect.",
+    image: "https://placehold.co/400x200?text=Welcome",
+    likes: [],
+    comments: [],
+    createdAt: "2024-06-05T08:20:00Z",
+    updatedAt: "2024-06-05T08:20:00Z",
+  },
+];
+
+const mockMyPosts: Post[] = [
+  {
+    _id: "11",
+    author: "user1",
+    content: "Hello SocialSphere! 🚀",
+    image: "https://placehold.co/400x200",
+    likes: ["user2", "user3"],
+    comments: ["c1", "c2"],
+    createdAt: "2024-06-01T10:00:00Z",
+    updatedAt: "2024-06-01T10:00:00Z",
+  },
+  {
+    _id: "12",
+    author: "user1",
+    content: "Enjoying the new platform. Great work! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    image: undefined,
+    likes: ["user5"],
+    comments: ["c3"],
+    createdAt: "2024-06-02T12:30:00Z",
+    updatedAt: "2024-06-02T12:30:00Z",
+  },
+  {
+    _id: "13",
+    author: "user1",
+    content: "Check out this cool photo!",
+    image: "https://placehold.co/400x200?text=Photo",
+    likes: [],
+    comments: [],
+    createdAt: "2024-06-03T09:15:00Z",
+    updatedAt: "2024-06-03T09:15:00Z",
+  },
+  {
+    _id: "14",
+    author: "user1",
+    content: "Anyone up for a chat?",
+    image: undefined,
+    likes: ["user5", "user3"],
+    comments: ["c4"],
+    createdAt: "2024-06-04T14:45:00Z",
+    updatedAt: "2024-06-04T14:45:00Z",
+  },
+  {
+    _id: "15",
+    author: "user1",
     content: "Just joined SocialSphere! Excited to connect.",
     image: "https://placehold.co/400x200?text=Welcome",
     likes: [],

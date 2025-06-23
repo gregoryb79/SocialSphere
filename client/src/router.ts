@@ -2,8 +2,10 @@ import { createBrowserRouter, redirect } from "react-router";
 import { App } from "./App";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
-import { getUsers } from "./models/users";
+import { getUsers, getCurrentUserId } from "./models/users";
 import { fetchPosts } from "./models/posts";
+
+const userId = "user1"; // Simulating a logged-in user
 
 export const router = createBrowserRouter([
     {
@@ -14,7 +16,7 @@ export const router = createBrowserRouter([
             { path: "/",
                 Component: Home,                
                 loader: () => {
-                    return fetchPosts();
+                    return fetchPosts(getCurrentUserId());
                 }
              },      
            

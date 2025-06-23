@@ -12,7 +12,8 @@ export type Post = {
     updatedAt: string;
 };
 
-// Fetches feed for the user == all posts of the users in his following list
+// Fetches feed for the user == all posts of the users in his following list,
+// if Guest = latest posts of all users
 export async function fetchPosts(userId: string): Promise<Post[]> {
     const message = await getUsers();
     console.log("Verifying connection to server:", message);
@@ -24,9 +25,9 @@ export async function fetchPosts(userId: string): Promise<Post[]> {
     });
 }
 
-export async function fetchMyPosts(): Promise<Post[]> {
+export async function fetchOwnPosts(userId: string): Promise<Post[]> {
   const message = await getUsers();
-    console.log("Verifying connection to server:", message);
+  console.log("Verifying connection to server:", message);
     
     return new Promise((resolve) => {
         setTimeout(() => {

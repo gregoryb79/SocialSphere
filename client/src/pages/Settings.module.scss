@@ -1,0 +1,13 @@
+@use '../styles/mixins' as *;
+
+.settingsMain{
+    width: 100%;
+    height: var(--standard-height);    
+    @include pageFrame;    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+

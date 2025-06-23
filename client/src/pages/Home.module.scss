@@ -6,6 +6,20 @@
     @include pageFrame;    
 }
 
+.userGreeting{
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+    .lucideIcon{
+        width: var(--font-xl);
+        height: var(--font-xl); 
+        stroke-width: 3;    
+    }
+}
+
 .postsFeed{
     margin-top: 1rem;;
     display: flex;

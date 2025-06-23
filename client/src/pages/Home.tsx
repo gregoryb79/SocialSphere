@@ -4,18 +4,22 @@ import { useLoaderData } from "react-router";
 import { GeneralButton } from "./components/GeneralButton";
 import type { Post } from "../models/posts";
 import { NavButton } from "./components/NavButton";
-import { Bookmark, Heart,MessageCircle } from "lucide-react";
+import { Bookmark, Heart,MessageCircle, User } from "lucide-react";
 
 
 export function Home() {
     console.log("Home component rendered");
-    const posts = useLoaderData<Post[]>();
+    const {username, posts} = useLoaderData() as {username: string, posts: Post[]};
     console.log(`Array of ${posts.length} retured from server`); 
+    console.log(`User:`, username);
     
         
     return (
         <main className={styles.homeMain}>
-            <h1>SocialSphere Homepage</h1>
+            <section className={styles.userGreeting}>
+                <User className={styles.lucideIcon} color={username == "Guest" ? "var(--light-text)" : "var(--primary-blue)"}/>
+                <h2>{username}</h2>
+            </section>
             <ul className={styles.postsFeed}>
                 {posts.map((post) => (
                 <li key={post._id} className={styles.postCard}>                     

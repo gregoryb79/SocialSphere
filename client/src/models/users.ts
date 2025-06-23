@@ -1,4 +1,4 @@
-import { apiClient } from "./apiClient";
+import { apiClient, clearToken } from "./apiClient";
 
 export type User = {
     _id: string;
@@ -12,6 +12,11 @@ export type User = {
     createdAt: string;
     updatedAt: string;
 };
+
+export function doLogOut() {
+    localStorage.removeItem("user"); 
+    clearToken();   
+}
 
 export async function getUsers() {
     try {
@@ -27,8 +32,13 @@ export function getCurrentUserId(): string {
     return "user1";
 }
 
-export function getCurrentUserName(): string {
+//returns the username of the logged in user
+export function getLoggedInUserName(): string {
     return "";
+}
+
+export function getLoggedInUserId(): string {    
+    return "user1";
 }
 
 export async function fetchUser(userId: string): Promise<User> {
@@ -49,6 +59,26 @@ export async function fetchLoggedInUser(): Promise<User> {
     return new Promise((resolve) => {
         setTimeout(() => {
         resolve(mockUser);
+        }, 1000);
+    });
+}
+
+export async function putLogIn(username: string, password: string): Promise<boolean> {
+    console.log("putLogIn called with username:", username, "and password:", password);
+        
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(true);
+        }, 1000);
+    });
+}
+
+export async function postRegister(email: string, username: string, password: string): Promise<boolean> {
+    console.log("postRegister called with email:", email, "username:", username, "and password:", password);
+        
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(true);
         }, 1000);
     });
 }

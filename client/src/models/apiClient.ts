@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// export const tokenKeyName = "token";
+export const tokenKeyName = "token";
 
 export const apiClient = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -25,6 +25,6 @@ apiClient.interceptors.request.use((config) => {
 //     sessionStorage.setItem(tokenKeyName, token);
 // }
 
-// export function clearToken() {
-//     sessionStorage.removeItem(tokenKeyName);
-// }
+export function clearToken() {
+    sessionStorage.removeItem(tokenKeyName);
+}

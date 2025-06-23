@@ -5,6 +5,7 @@ import { ArrowLeft, Bell, Home, LogOut, Plus, Search, Settings, User } from "luc
 import { NavButton } from "./pages/components/NavButton";
 import { useEffect, useState } from "react";
 import { Spinner } from "./pages/components/Spinner";
+import { doLogOut } from "./models/users";
 
 export function App() {  
 
@@ -60,14 +61,23 @@ function Footer() {
             navigate("/");
             setLoading(true);
           }}/>      
-        <NavButton title="Search" ariaLabel="Open Search Page" icon={<Search className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => navigate("/")}/> {/* stub for navigation to search page */     }
-        <NavButton title="Create Post" ariaLabel="Create new post" icon={<Plus className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => navigate("/")}/> {/* stub for navigation to new post page */ }
-        <NavButton title="Notifications" ariaLabel="Check your notifications" icon={<Bell className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => navigate("/")}/> {/* stub for navigation to notofications page */       }
+        <NavButton title="Search" ariaLabel="Open Search Page" icon={<Search className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => navigate("/search")}/>
+        <NavButton title="Create Post" ariaLabel="Create new post" icon={<Plus className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
+            navigate("/new-post");
+            setLoading(true);
+          }}/>
+        <NavButton title="Notifications" ariaLabel="Check your notifications" icon={<Bell className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
+              navigate("/notifications");
+              setLoading(true);
+            }}/>
         <NavButton title="Profile" ariaLabel="Configure your profile" icon={<User className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
             navigate("/profile");
             setLoading(true);
           }}/>
-        <NavButton title="LogOut" ariaLabel="LogOut" icon={<LogOut className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => navigate("/")}/> {/* stub for logging out and navigation to login page */}             
+        <NavButton title="LogOut" ariaLabel="LogOut" icon={<LogOut className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
+            doLogOut();
+            navigate("/login");
+          }}/> {/* stub for logging out and navigation to login page */}             
       </nav>
       <p>-- Website Credintials --</p>
       

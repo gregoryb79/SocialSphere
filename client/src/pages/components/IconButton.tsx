@@ -11,7 +11,7 @@
  * <NavButton icon={<HomeIcon />} label="Home" ariaLabel="Go to home" onClick={handleHomeClick} />
  */
 import React from 'react';
-import styles from "./NavButton.module.scss";
+import styles from "./IconButton.module.scss";
 
 type NavButtonProps = {
   disabled?: boolean;
@@ -21,10 +21,10 @@ type NavButtonProps = {
   ariaLabel?: string;
   onClick?: () => void;    
 };
-export function NavButton({disabled, title, label, ariaLabel, icon, onClick}: NavButtonProps) {
+export function IconButton({disabled, title, label, ariaLabel, icon, onClick}: NavButtonProps) {
 
     return (
-    <button className={styles.navButton} onClick={onClick} aria-label={ariaLabel} title={title} disabled={disabled}>
+    <button className={styles.iconButton} onClick={onClick} aria-label={ariaLabel} title={title} disabled={disabled}>
       {icon}
       {label}
     </button>

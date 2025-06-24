@@ -5,6 +5,7 @@
     background: var(--light-gray-bg);
     color: var(--dark-text);
     font-size: var(--font-lg);
+    cursor: pointer;
     &:hover{
         color: var(--white);
         background: var(--primary-blue);

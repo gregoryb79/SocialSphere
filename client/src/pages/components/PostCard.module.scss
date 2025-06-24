@@ -1,0 +1,119 @@
+@use '../../styles/mixins' as *;
+
+
+.postCard{
+    @include postCardFrame;
+    @include shadowBorder;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+}
+
+.lucideIconPost{
+    width: var(--font-xl);
+    height: var(--font-xl);  
+    background-color: var(--light-gray-bg);     
+}
+.lucideIconStats{
+    width: var(--font-md);
+    height: var(--font-md);  
+    background-color: var(--light-gray-bg);     
+}
+.postActions{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem;
+    .likeComment{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+    }
+}
+
+.postStatistics{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;    
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-md);
+    span{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--light-text);
+    }
+}
+
+.textButton{
+    border: none;
+    background-color: transparent;
+    color: var(--light-text);
+    font-size: var(--font-md);
+    cursor: pointer;
+    &:hover{
+        color: var(--dark-text);
+    }
+}
+
+.twoLineClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.commentsSection{
+    width: 100%;
+    display: flex;
+    flex-direction: column;    
+    gap: 0.5rem;      
+}
+
+.commentsList{
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;    
+    gap: 0.5rem;  
+    width: 90%;    
+}
+
+.commentCard{
+    @include postCardFrame;
+    @include shadowBorder;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.commentStatistics{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;    
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-sm);
+    color: var(--light-text);
+
+    span{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.25rem;
+    }    
+}
+
+.lucideIconComment{
+    width: var(--font-sm);
+    height: var(--font-sm);  
+    background-color: var(--light-gray-bg);     
+}

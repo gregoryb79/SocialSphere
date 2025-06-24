@@ -3,7 +3,7 @@ import { App } from "./App";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
 import { getUsers, getCurrentUserId, fetchUser, fetchLoggedInUser, getLoggedInUserName, getLoggedInUserId } from "./models/users";
-import { fetchOwnPosts, fetchPosts } from "./models/posts";
+import { fetchOwnPosts, fetchPosts, getPost } from "./models/posts";
 import { Profile } from "./pages/Profile";
 import { Settings } from "./pages/Settings";
 import { Search } from "./pages/Search";
@@ -12,6 +12,9 @@ import { LogIn } from "./pages/LogIn";
 import { Register } from "./pages/Register";
 import { Notifications } from "./pages/Notifications";
 import { fetchNotifications } from "./models/notifications";
+import { PauseOctagon } from "lucide-react";
+import { getComments } from "./models/comments";
+import { Post } from "./pages/Post";
 
 export const router = createBrowserRouter([
     {
@@ -19,9 +22,10 @@ export const router = createBrowserRouter([
         Component: App,        
         children: [            
             { path: "*", Component: NotFound },   
-            { path: "/",
+            { index: true,
                 Component: Home,                
                 loader: async () => {
+                    console.log("Fetching posts for home page");
                     const userId = getCurrentUserId();
                     const username = getLoggedInUserName() || "Guest";
                     const posts = await fetchPosts(userId);
@@ -70,6 +74,14 @@ export const router = createBrowserRouter([
                     const userId = getLoggedInUserId();
                     const notifications = await fetchNotifications(userId);                    
                     return notifications
+                }
+            },
+             { path: "/post/:postId",
+                Component: Post,
+                loader: async ({params}) => {
+                    const post = await getPost(params.postId!);
+                    const comments = await getComments(post.comments);                    
+                    return {post, comments};
                 }
             },
             

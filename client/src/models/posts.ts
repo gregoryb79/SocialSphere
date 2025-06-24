@@ -12,6 +12,9 @@ export type Post = {
     updatedAt: string;
 };
 
+
+
+
 // Fetches feed for the user == all posts of the users in his following list,
 // if Guest = latest posts of all users
 export async function fetchPosts(userId: string): Promise<Post[]> {
@@ -32,6 +35,26 @@ export async function fetchOwnPosts(userId: string): Promise<Post[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
         resolve(mockMyPosts);
+        }, 1000);
+    });
+}
+
+export async function getPost(postId: string): Promise<Post> {
+    const message = await getUsers();
+    console.log("Verifying connection to server:", message);
+    
+    const post = mockPosts.find(p => p._id === postId);
+    if (!post) {
+        console.log (`Post with ID ${postId} not found`);
+        return new Promise((_, reject) => {
+        setTimeout(() => {        
+          reject(new Error("Post not found"));
+        }, 1000);
+    });
+    }
+    return new Promise((resolve) => {
+        setTimeout(() => {        
+          resolve(post);
         }, 1000);
     });
 }
@@ -97,7 +120,7 @@ const mockMyPosts: Post[] = [
     content: "Hello SocialSphere! 🚀",
     image: "https://placehold.co/400x200",
     likes: ["user2", "user3"],
-    comments: ["c1", "c2"],
+    comments: ["c11", "c12"],
     createdAt: "2024-06-01T10:00:00Z",
     updatedAt: "2024-06-01T10:00:00Z",
   },
@@ -107,7 +130,7 @@ const mockMyPosts: Post[] = [
     content: "Enjoying the new platform. Great work! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     image: undefined,
     likes: ["user5"],
-    comments: ["c3"],
+    comments: ["c13"],
     createdAt: "2024-06-02T12:30:00Z",
     updatedAt: "2024-06-02T12:30:00Z",
   },
@@ -117,7 +140,7 @@ const mockMyPosts: Post[] = [
     content: "Check out this cool photo!",
     image: "https://placehold.co/400x200?text=Photo",
     likes: [],
-    comments: [],
+    comments: ["c15","c16","c17"],
     createdAt: "2024-06-03T09:15:00Z",
     updatedAt: "2024-06-03T09:15:00Z",
   },
@@ -127,7 +150,7 @@ const mockMyPosts: Post[] = [
     content: "Anyone up for a chat?",
     image: undefined,
     likes: ["user5", "user3"],
-    comments: ["c4"],
+    comments: ["c14"],
     createdAt: "2024-06-04T14:45:00Z",
     updatedAt: "2024-06-04T14:45:00Z",
   },
@@ -136,9 +159,10 @@ const mockMyPosts: Post[] = [
     author: "user1",
     content: "Just joined SocialSphere! Excited to connect.",
     image: "https://placehold.co/400x200?text=Welcome",
-    likes: [],
-    comments: [],
+    likes: ["user2", "user3", "user4", "user5"],
+    comments: ["c18", "c19"],
     createdAt: "2024-06-05T08:20:00Z",
     updatedAt: "2024-06-05T08:20:00Z",
   },
 ];
+

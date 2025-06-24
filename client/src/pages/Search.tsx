@@ -1,13 +1,22 @@
-import { useLoaderData } from "react-router";
+//import { useLoaderData } from "react-router";
 import styles from "./Search.module.scss";
-import type { User } from "../models/users";
+import { Input } from "./components/Input";
+import { IconButton } from "./components/IconButton";
+import { SearchIcon } from "lucide-react";
 
-export function Search() {  
+export function Search() { 
 
   return (
-    <div className={styles.searchMain}>
-      <h1>Search Page</h1>
-      <p>This will be a search page</p>
-    </div>
+    <main className={styles.searchMain}>
+      <div>
+        <h1 className={styles.searchHeader}>
+            <Input className={styles.SearchInput} id="search" type="search" name="search" label="" placeholder="Type a Username to search..."/>
+            <IconButton title="Search" ariaLabel="Search" icon={<SearchIcon className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={Search} />
+        </h1>
+      </div>
+      <ul className={styles.searchResults}> 
+        results
+      </ul> 
+    </main>
   );
 }

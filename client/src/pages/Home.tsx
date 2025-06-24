@@ -19,7 +19,7 @@ export function Home() {
                 <h2>{username}</h2>
             </section>
             <ul className={styles.postsFeed}>
-                {posts.map((post) => (<PostCard key={post._id} post={post} />))}
+                {posts.map((post) => (<PostCard post={post} />))}
             </ul>
             
         </main>

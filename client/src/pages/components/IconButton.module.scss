@@ -9,6 +9,10 @@
     &:hover{
         transform: scale(1.3);
     }
+    &:disabled{
+        cursor: default;
+        transform: none;        
+    }
     font-size: var(--font-lg);
     background-color: var(--light-gray-bg);
 }

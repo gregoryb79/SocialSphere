@@ -1,0 +1,47 @@
+@use '../../styles/mixins' as *;
+
+.commentsList{
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;    
+    gap: 0.5rem;  
+    width: 90%;    
+}
+
+.commentCard{
+    @include postCardFrame;
+    @include shadowBorder;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.commentStatistics{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;    
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-sm);
+    color: var(--light-text);
+
+    span{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.25rem;
+    }    
+}
+
+.lucideIconComment{
+    width: var(--font-sm);
+    height: var(--font-sm);  
+    background-color: var(--light-gray-bg);     
+}
+
+.lucideIconCommentAction{
+    width: var(--font-md);
+    height: var(--font-md);  
+    background-color: var(--light-gray-bg);     
+}

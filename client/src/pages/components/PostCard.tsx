@@ -1,3 +1,17 @@
+/**
+ * A post card component displaying post content, actions, and comments.
+ *
+ * @param post The post object to display.
+ * @example
+ * <PostCard post={post} />
+ *
+ * Features:
+ * - Shows post content, author, image, creation date, like/bookmark/comment actions.
+ * - Truncates content to 2 lines with "See more"/"See less" toggle if clamped.
+ * - Shows a spinner while loading comments.
+ * - Displays comments section with CommentCard components when expanded.
+ */
+
 import { Bookmark, Heart,MessageCircle } from "lucide-react";
 import type { Post } from "../../models/posts";
 import { getComments,type Comment} from "../../models/comments";

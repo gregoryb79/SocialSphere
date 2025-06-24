@@ -1,3 +1,17 @@
+/**
+ * A comment card component displaying a comment, like button, and statistics.
+ *
+ * @param comment The comment object to display.
+ * @example
+ * <CommentCard comment={comment} />
+ *
+ * Features:
+ * - Shows author, content, like count, and age.
+ * - Like button is disabled for unauthenticated users and the comment author.
+ * - Spinner is shown while like action is pending.
+ * - Filled heart icon if current user liked the comment.
+ */
+
 import { Heart } from "lucide-react";
 import { IconButton } from "./IconButton";
 import styles from "./CommentCard.module.scss";

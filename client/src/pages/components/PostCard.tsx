@@ -1,10 +1,11 @@
 import { Bookmark, Heart,MessageCircle } from "lucide-react";
 import type { Post } from "../../models/posts";
-import { getComments, type Comment } from "../../models/comments";
+import { getComments,type Comment} from "../../models/comments";
 import { IconButton } from "./IconButton";
 import styles from "./PostCard.module.scss";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./Spinner";
+import { CommentCard } from "./CommentCard";
 
 type PostCardProps = {
     post: Post;    
@@ -77,51 +78,11 @@ export function PostCard({post}: PostCardProps) {
                     <h3>Comments:</h3>
                     <ul className={styles.commentsList}>
                         {comments.map((comment) => (
-                            <Comment comment={comment} />
+                            <CommentCard comment={comment} />
                         ))}
                     </ul>
                 </section>
             )}
         </li>
     );
-}
-
-type CommentProps = {
-    comment: Comment;
-}
-function Comment({comment}: CommentProps){    
-    return (
-        <li key={comment._id} className={styles.commentCard}>
-            <p><strong>{comment.author}:</strong></p>
-            <p>{comment.content}</p>
-            <section className={styles.commentStatistics}>
-                <span><Heart className={styles.lucideIconComment} color="var(--primary-blue)"/> {comment.likes.length}</span>
-                <span>{commentAge(comment.createdAt)}</span>
-            </section>
-            <section className={styles.commentActions}>           
-                <IconButton title="Like" ariaLabel= "Like post" icon={<Heart className={styles.lucideIconComment} color="var(--primary-blue)"/>}
-                            onClick={() => console.log(`Liked post ${comment._id}`)} />
-            </section>
-            
-        </li>
-    );
-}
-
-function commentAge(createdAt: string): string {
-    const now = new Date();
-    const commentDate = new Date(createdAt);
-    const diffInSeconds = Math.floor((now.getTime() - commentDate.getTime()) / 1000);
-    
-    if (diffInSeconds < 60) {
-        return `${diffInSeconds} s`;
-    } else if (diffInSeconds < 3600) {
-        return `${Math.floor(diffInSeconds / 60)} m`;
-    } else if (diffInSeconds < 3600*24) {
-        return `${Math.floor(diffInSeconds / 3600)} H`;
-    } else if (diffInSeconds < 3600*24*365){
-        return `${Math.floor(diffInSeconds / 3600*24)} d`;
-    } else {
-        return `${Math.floor(diffInSeconds / (3600*24*7))} W`;
-    }
-
 }

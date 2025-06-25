@@ -1,5 +1,5 @@
 import { apiClient } from "./apiClient";
-import { getUsers } from "./users";
+import { getLoggedInUserId, getUsers } from "./users";
 
 export type Post = {
     _id: string;
@@ -55,6 +55,44 @@ export async function getPost(postId: string): Promise<Post> {
     return new Promise((resolve) => {
         setTimeout(() => {        
           resolve(post);
+        }, 1000);
+    });
+}
+
+export async function addComment(commentId: string, postId: string): Promise<boolean> {
+        
+    console.log(`Adding comment ${commentId} to post ${postId}`);
+    const post = mockPosts.find(p => p._id === postId);
+    if (!post) {
+        console.error(`Post with ID ${postId} not found`);
+        return Promise.reject(new Error(`Post with ID ${postId} not found`));
+    }
+    post.comments.push(commentId);    
+    console.log(`Comment ${commentId} added to post ${postId}`);
+    
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            console.log(`Comment ${commentId} added to ${postId} successfully`);
+            resolve(true);
+        }, 1000);
+    });
+}
+
+export async function likePost(postId: string): Promise<Post> {
+    const post = mockPosts.find(p => p._id === postId);
+    const currentUserId = getLoggedInUserId();
+    console.log(`Toggling like for post with ID: ${postId}, likes before toggle:`, post?.likes);
+    if (!post) {
+        console.error(`Post with ID ${postId} not found`);
+        return Promise.reject(new Error(`Post with ID ${postId} not found`));
+    }
+    post.likes = post.likes.includes(currentUserId) ? post.likes.filter(like => like !== currentUserId) : [...post.likes, currentUserId];
+    console.log(`Likes after toggle:`, post.likes);
+    post.updatedAt = new Date().toISOString();
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            console.log(`Comment with ID ${postId} liked`);
+            resolve(post);
         }, 1000);
     });
 }

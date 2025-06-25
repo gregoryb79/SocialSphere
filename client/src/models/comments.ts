@@ -11,9 +11,13 @@ export type Comment = {
 };
 
 export async function getComments(commentsId: string[]): Promise<Comment[]> {
+
+    const comments = mockComments.filter(comment => commentsId.includes(comment._id))
+                    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
     return new Promise((resolve) => {
         setTimeout(() => {
-            resolve(mockComments.filter(comment => commentsId.includes(comment._id)));
+            resolve(comments);
         }, 1000);
     });
 }
@@ -33,6 +37,33 @@ export async function likeComment(commentId: string): Promise<Comment> {
         setTimeout(() => {
             console.log(`Comment with ID ${commentId} liked`);
             resolve(comment);
+        }, 1000);
+    });
+}
+
+export async function postComment(commentText: string): Promise<string> {
+    console.log(`Posting comment:`, commentText);
+    if (!commentText || commentText.trim() === "") {
+        console.error("Comment text cannot be empty");       
+        return Promise.reject(new Error("Comment text cannot be empty"));        
+    }
+    const comment: Comment = {
+        _id: `c${mockComments.length + 1}`,
+        author: getLoggedInUserId(),
+        content: commentText,
+        image: undefined, // No image for this comment
+        likes: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+    };
+    console.log(`Comment object created:`, comment);
+    mockComments.push(comment);
+    console.log(`Comment added to mockComments:`, mockComments);
+    
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            console.log(`Comment posted:`, comment);            
+            resolve(comment._id);
         }, 1000);
     });
 }

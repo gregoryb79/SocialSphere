@@ -1,0 +1,17 @@
+@use '../../styles/mixins' as *;
+
+.newCommentCard{
+    @include postCardFrame;
+    @include shadowBorder;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.commentTtext{
+    resize: none;
+    @include shadowBorder;
+    padding: 0.25rem;
+    font-size: var(--font-md);
+
+}

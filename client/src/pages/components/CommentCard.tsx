@@ -64,8 +64,7 @@ export function CommentCard({comment}: CommentProps){
                 console.log(`Comment ${commentId} like toggled successfully`);
                 comment.likes = result.likes;
                 console.log("Comment likes", comment.likes);                
-                comment.updatedAt = result.updatedAt;
-                // filled = filled === "var(--primary-blue)" ? "none" : "var(--primary-blue)";
+                comment.updatedAt = result.updatedAt;                
             }else {
                 console.log(`Failed to like toggle comment ${commentId}`);
             }

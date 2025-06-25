@@ -58,7 +58,10 @@ export function NewCommentCard({post, onCommentPosted}: CommentProps){
                 <label htmlFor="commentContent">New Comment</label>
                 <textarea id="commentContent" name="commentContent" placeholder="Write your comment here..."
                     rows={5} required className={styles.commentTtext}/>
-                <GeneralButton label="Post Comment" disabled={disable}/>            
+                <section className={styles.buttonsSection}>
+                    <GeneralButton label="Post Comment" disabled={disable}/>            
+                    <GeneralButton label="Cancel" disabled={disable} onClick={onCommentPosted}/>
+                </section>                
             </form> 
             {loading && <Spinner />}
             {showError && error && <ErrorMsg message={error} onOk={() => {setShowError(false)}} />}

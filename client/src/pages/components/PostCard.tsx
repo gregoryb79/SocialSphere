@@ -77,7 +77,7 @@ export function PostCard({post}: PostCardProps) {
             setShowComments(false);                                
             console.log(`showComments state is ${showComments}`);
         }
-        console.log(`Clicked to see comments for post ${post._id}`);                            
+        console.log(`Clicked to see comments for post ${post._id} with showComments state in now: ${showComments}`);                            
         if (!showComments && comments.length === 0) {
             setLoading(true);
             try{
@@ -126,15 +126,24 @@ export function PostCard({post}: PostCardProps) {
         }
     }
 
-    function handlePostedComment() {
+    async function handlePostedComment() {
         console.log(`PC: New comment posted for post ${post._id}`);
         setDisplayNewComment(false);
-        setShowComments(true);
-        setComments([]); 
-        setShowComments(false);
-        displayComments();
+        setLoading(true);
+        try{
+            console.log(`comment to fetch`, post.comments);
+            const postComments = await getComments(post.comments);
+            console.log(`Fetched comments for post ${post._id}:`, postComments);
+            setComments(postComments);
+            console.log(`Comments for post ${post._id}:`, postComments);
+        }catch (error) {
+            console.error(`Error fetching comments for post ${post._id}:`, error);
+        }finally {
+            setLoading(false);
+        }       
     }
 
+    console.log("RENDER: showComments:", showComments, "comments:", comments);
     return (
         <li key={post._id} className={styles.postCard}> 
             {loading && <Spinner/>}

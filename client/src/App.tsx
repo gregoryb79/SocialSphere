@@ -1,11 +1,11 @@
 
 import styles from "./App.module.scss";
 import { Outlet, useLocation, useNavigate} from "react-router";
-import { ArrowLeft, Bell, Home, LogOut, Plus, Search, Settings, User } from "lucide-react";
+import { ArrowLeft, Bell, Home, LogIn, LogOut, Plus, Search, Settings, User } from "lucide-react";
 import { IconButton } from "./pages/components/IconButton";
 import { useEffect, useState } from "react";
 import { Spinner } from "./pages/components/Spinner";
-import { doLogOut } from "./models/users";
+import { doLogOut, getLoggedInUserName } from "./models/users";
 
 export function App() {  
 
@@ -51,6 +51,7 @@ function Footer() {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(false);
+  const username = getLoggedInUserName();
   useEffect(() => {
     setLoading(false); // Hide spinner on any route change
   }, [location]);
@@ -76,10 +77,11 @@ function Footer() {
             navigate("/profile");
             setLoading(true);
           }}/>
-        <IconButton title="LogOut" ariaLabel="LogOut" icon={<LogOut className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
+        {(username == "Guest") && <IconButton title="Log In" icon={<LogIn className={styles.lucideIcon} color="var(--primary-blue)" />} ariaLabel="Log In Button" onClick={() => navigate("/login")}/>}
+        {(username != "Guest") && <IconButton title="LogOut" ariaLabel="LogOut" icon={<LogOut className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
             doLogOut();
             navigate("/login");
-          }}/> {/* stub for logging out and navigation to login page */}             
+          }}/>}
       </nav>
       <p>-- Website Credintials --</p>
       

@@ -151,7 +151,7 @@ export function PostCard({post}: PostCardProps) {
             {clamped && !showMore && <button className={styles.textButton} onClick={() => setShowMore(true)}>See more</button>}
             {showMore && <button className={styles.textButton} onClick={() => setShowMore(false)}>See less</button>}
             {post.image && <img src={post.image} alt="Post visual content" className={styles.postImage} />}
-            <p><strong>Author:</strong> {post.author}</p>
+            <p><strong>Author:</strong> {post.authorName}</p>
             <p><strong>Created at:</strong> {new Date(post.createdAt).toLocaleString()}</p>
             <section className={styles.postStatistics}>
                 <span><Heart className={styles.lucideIconStats} color="var(--primary-blue)"/> {post.likes.length.toString()}</span>                

@@ -4,6 +4,7 @@ import { getLoggedInUserId, getUsers } from "./users";
 export type Post = {
     _id: string;
     author: string; 
+    authorName?: string; // Optional, can be fetched separately
     content: string;
     image?: string;
     likes: string[]; 
@@ -102,6 +103,7 @@ const mockPosts: Post[] = [
   {
     _id: "1",
     author: "user1",
+    authorName: "johnDoe",
     content: "Hello SocialSphere! 🚀",
     image: "https://placehold.co/400x200",
     likes: ["user2", "user3"],
@@ -112,6 +114,7 @@ const mockPosts: Post[] = [
   {
     _id: "2",
     author: "user2",
+    authorName: "Jane Smith",
     content: "Enjoying the new platform. Great work! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     image: undefined,
     likes: ["user1"],
@@ -122,6 +125,7 @@ const mockPosts: Post[] = [
   {
     _id: "3",
     author: "user3",
+    authorName: "Bob Johnson",
     content: "Check out this cool photo!",
     image: "https://placehold.co/400x200?text=Photo",
     likes: [],
@@ -132,6 +136,7 @@ const mockPosts: Post[] = [
   {
     _id: "4",
     author: "user4",
+    authorName: "Alice Lee",
     content: "Anyone up for a chat?",
     image: undefined,
     likes: ["user1", "user3"],
@@ -142,6 +147,7 @@ const mockPosts: Post[] = [
   {
     _id: "5",
     author: "user5",
+    authorName: "Charlie Kim",
     content: "Just joined SocialSphere! Excited to connect.",
     image: "https://placehold.co/400x200?text=Welcome",
     likes: [],

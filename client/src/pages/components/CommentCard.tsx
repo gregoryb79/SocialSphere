@@ -81,7 +81,7 @@ export function CommentCard({comment}: CommentProps){
     return (
         <li key={comment._id} className={styles.commentCard}>
             {loading && <Spinner/>} 
-            <p><strong>{comment.author}:</strong></p>
+            <p><strong>{comment.authorName}:</strong></p>
             <p>{comment.content}</p>
             <section className={styles.commentStatistics}>
                 <span><Heart className={styles.lucideIconComment} color="var(--primary-blue)"/> {comment.likes.length}</span>

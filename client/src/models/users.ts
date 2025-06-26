@@ -14,7 +14,7 @@ export type User = {
 };
 
 export function doLogOut() {
-    localStorage.removeItem("user"); 
+    localStorage.removeItem("loggeduser"); 
     clearToken();   
 }
 
@@ -29,16 +29,27 @@ export async function getUsers() {
 }
 
 export function getCurrentUserId(): string {
-    return "user1";
+    return sessionStorage.getItem("currentuser")||"guest"; // Placeholder for guest user
 }
 
 //returns the username of the logged in user
 export function getLoggedInUserName(): string {
-    return "";
+    const loggedUser = JSON.parse(localStorage.getItem("loggeduser")!) as User | null;
+    if (!loggedUser) {
+        console.warn("No user is logged in, returning 'Guest'");
+        return "Guest";
+    }
+    console.log("Logged in user:", loggedUser.username);
+    return loggedUser.username;
 }
 
 export function getLoggedInUserId(): string {    
-    return "";
+    const loggedUser = JSON.parse(localStorage.getItem("loggeduser")!) as User | null;
+    if (!loggedUser) {
+        console.warn("No user is logged in, returning 'Guest'");
+        return "Guest";
+    }
+    return loggedUser._id;
 }
 
 export async function fetchUser(userId: string): Promise<User> {
@@ -65,6 +76,9 @@ export async function fetchLoggedInUser(): Promise<User> {
 
 export async function putLogIn(username: string, password: string): Promise<boolean> {
     console.log("putLogIn called with username:", username, "and password:", password);
+
+    localStorage.setItem("loggeduser", JSON.stringify(mockUser));
+    sessionStorage.setItem("currentuser", JSON.stringify(mockUser.username));
         
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -85,7 +99,7 @@ export async function postRegister(email: string, username: string, password: st
 
 export const mockUser: User = {
     _id: "user1",
-    username: "johndoe",
+    username: "johnDoe",
     email: "johndoe@example.com",
     profilePicture: "https://placehold.co/100x100",
     bio: "Just another SocialSphere user.",

@@ -64,8 +64,7 @@ export function CommentCard({comment}: CommentProps){
                 console.log(`Comment ${commentId} like toggled successfully`);
                 comment.likes = result.likes;
                 console.log("Comment likes", comment.likes);                
-                comment.updatedAt = result.updatedAt;
-                // filled = filled === "var(--primary-blue)" ? "none" : "var(--primary-blue)";
+                comment.updatedAt = result.updatedAt;                
             }else {
                 console.log(`Failed to like toggle comment ${commentId}`);
             }
@@ -82,7 +81,7 @@ export function CommentCard({comment}: CommentProps){
     return (
         <li key={comment._id} className={styles.commentCard}>
             {loading && <Spinner/>} 
-            <p><strong>{comment.author}:</strong></p>
+            <p><strong>{comment.authorName}:</strong></p>
             <p>{comment.content}</p>
             <section className={styles.commentStatistics}>
                 <span><Heart className={styles.lucideIconComment} color="var(--primary-blue)"/> {comment.likes.length}</span>

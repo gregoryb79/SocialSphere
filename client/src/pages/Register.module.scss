@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;      
-    padding: 1rem;
+    padding: 0.5rem;
     
 }
 
@@ -16,12 +16,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
     width: 90%;   
     font-size: var(--font-lg);
     background-color: var(--white-bg);
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     padding-left: 1rem;
     padding-right: 1rem;
     @include shadowBorder; 
@@ -34,13 +34,23 @@
         width: 100%;
         gap: 0.5rem;
     } 
+
+    .bioTtext{
+        resize: none;
+        @include shadowBorder;
+        padding: 0.25rem;
+        width: 100%;
+        font-size: var(--font-lg);
+    }
+
+
     
 }
 
 .passwordRules {
-    padding-inline: 1.5rem;
+    padding-inline: 0.5rem;
     color: var(--dark-text);
-    font-size: var(--font-md);
+    font-size: var(--font-xs);
     display: flex;
     flex-direction: column;
     gap: 0.25rem;    

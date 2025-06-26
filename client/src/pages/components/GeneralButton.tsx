@@ -10,12 +10,13 @@ import styles from "./GeneralButton.module.scss";
 
 type GeneralButtonProps = {
   label: string;
+  disabled?: boolean;
   onClick?: () => void;    
 };
-export function GeneralButton({label, onClick}: GeneralButtonProps) {
+export function GeneralButton({label, disabled, onClick}: GeneralButtonProps) {
 
     return (
-    <button className={styles.generalButton} onClick={onClick}>
+    <button className={styles.generalButton} onClick={onClick} disabled={disabled}>
       {label}
     </button>
   );

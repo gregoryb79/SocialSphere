@@ -58,12 +58,14 @@ export function Register() {
             <form className={styles.registerForm} onSubmit={handleRegister}>                
                 <Input type="email" id="email" label="Email" name="email" placeholder="Enter your e-mail" required />
                 <Input type="username" id="username" label="Username" name="username" placeholder="Select username" required />
+                <Input type="text" id="avatarURL" label="Profile Picture" name="avatarURL" placeholder="link to your picture" />
+                <textarea name="bio" id="bio" rows={3} placeholder='say something about you' className={styles.bioTtext}/>
                 <PasswordInput id="password" label="Password" name="password" placeholder="Enter your password" 
                 required minLength={8} onInput={(e) => setPassword(e.currentTarget.value)} value={password}/>
                 <PasswordInput id="password" label="Repeat password:" name="repeatPassword" placeholder="Repeat password" required />
                 <GeneralButton label="Register"/>     
                 <section>
-                    <p>Password Rules:</p>
+                    <h6>Password Rules:</h6>
                     <PasswordRules password={password} />  
                 </section>                       
             </form>

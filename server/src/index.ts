@@ -8,7 +8,7 @@ import { app } from "./app";
 
 dotenv.config({ path: "../.env" });
 const server = createServer(app);
-const port = process.env.PORT || 8081;
+const port = process.env.PORT || 5000;
 
 async function init() {
     await mongoose.connect(process.env.CONNECTION_STRING!, {

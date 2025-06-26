@@ -26,6 +26,7 @@ function TopNav() {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(false);
+  const username = getLoggedInUserName();
   useEffect(() => {
     setLoading(false); // Hide spinner on any route change
   }, [location]);
@@ -38,10 +39,10 @@ function TopNav() {
           setLoading(true);
         }}/>      
       <h2>SocialSphere</h2>
-      <IconButton title="Settings" ariaLabel="Settings"  icon={<Settings className={styles.lucideIconTop} color="var(--white)"/>} onClick={() => {
+      <IconButton title="Settings" ariaLabel="Settings"  icon={<Settings className={styles.lucideIconTop} color={(username != "Guest") ? "var(--white)" : "var(--light-text)"}/>} onClick={() => {
           navigate("/settings");
           setLoading(true);
-        }}/>
+        }}disabled={username == "Guest"}/>
     </nav>
   );
 }
@@ -65,18 +66,18 @@ function Footer() {
             setLoading(true);
           }}/>      
         <IconButton title="Search" ariaLabel="Open Search Page" icon={<Search className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => navigate("/search")}/>
-        <IconButton title="Create Post" ariaLabel="Create new post" icon={<Plus className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
+        <IconButton title="Create Post" ariaLabel="Create new post" icon={<Plus className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-text)"}/>} onClick={() => {
             navigate("/new-post");
             setLoading(true);
-          }}/>
-        <IconButton title="Notifications" ariaLabel="Check your notifications" icon={<Bell className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
+          }} disabled={username == "Guest"}/>
+        <IconButton title="Notifications" ariaLabel="Check your notifications" icon={<Bell className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-text)"}/>} onClick={() => {
               navigate("/notifications");
               setLoading(true);
-            }}/>
-        <IconButton title="Profile" ariaLabel="Configure your profile" icon={<User className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
+            }} disabled={username == "Guest"}/>
+        <IconButton title="Profile" ariaLabel="Configure your profile" icon={<User className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-text)"}/>} onClick={() => {
             navigate("/profile");
             setLoading(true);
-          }}/>
+          }} disabled={username == "Guest"}/>
         {(username == "Guest") && <IconButton title="Log In" icon={<LogIn className={styles.lucideIcon} color="var(--primary-blue)" />} ariaLabel="Log In Button" onClick={() => navigate("/login")}/>}
         {(username != "Guest") && <IconButton title="LogOut" ariaLabel="LogOut" icon={<LogOut className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
             doLogOut();

@@ -3,6 +3,7 @@ import styles from "./Search.module.scss";
 import { Input } from "./components/Input";
 import { IconButton } from "./components/IconButton";
 import { SearchIcon } from "lucide-react";
+import { UserInfo } from "./components/UserInfo";
 
 export function Search() { 
 
@@ -15,7 +16,7 @@ export function Search() {
         </h1>
       </div>
       <ul className={styles.searchResults}> 
-        results
+        <UserInfo username="johnDoe" profilePicture="https://placehold.co/100x100" bio="Just another SocialSphere user." />
       </ul> 
     </main>
   );

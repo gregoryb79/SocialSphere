@@ -34,11 +34,11 @@ export function getCurrentUserId(): string {
 
 //returns the username of the logged in user
 export function getLoggedInUserName(): string {
-    return "user2";
+    return "";
 }
 
 export function getLoggedInUserId(): string {    
-    return "user2";
+    return "";
 }
 
 export async function fetchUser(userId: string): Promise<User> {

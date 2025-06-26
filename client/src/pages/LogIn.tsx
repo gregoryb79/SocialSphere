@@ -17,7 +17,7 @@ export function LogIn() {
 
     const username = useLoaderData<string>();
     useEffect(() => {
-        if (username) {
+        if (username != "Guest") {
             console.log(`User is already logged in as ${username}. Redirecting to home page...`);
             navigate("/");
         }

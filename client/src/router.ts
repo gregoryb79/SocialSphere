@@ -14,7 +14,6 @@ import { Notifications } from "./pages/Notifications";
 import { fetchNotifications } from "./models/notifications";
 import { PauseOctagon } from "lucide-react";
 import { getComments } from "./models/comments";
-import { Post } from "./pages/Post";
 
 export const router = createBrowserRouter([
     {
@@ -75,15 +74,7 @@ export const router = createBrowserRouter([
                     const notifications = await fetchNotifications(userId);                    
                     return notifications
                 }
-            },
-             { path: "/post/:postId",
-                Component: Post,
-                loader: async ({params}) => {
-                    const post = await getPost(params.postId!);
-                    const comments = await getComments(post.comments);                    
-                    return {post, comments};
-                }
-            },
+            },            
             
         ],
     },

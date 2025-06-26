@@ -1,9 +1,10 @@
 import { apiClient } from "./apiClient";
-import { getUsers } from "./users";
+import { getLoggedInUserId, getUsers } from "./users";
 
 export type Post = {
     _id: string;
     author: string; 
+    authorName?: string; // Optional, can be fetched separately
     content: string;
     image?: string;
     likes: string[]; 
@@ -59,11 +60,50 @@ export async function getPost(postId: string): Promise<Post> {
     });
 }
 
+export async function addComment(commentId: string, postId: string): Promise<boolean> {
+        
+    console.log(`Adding comment ${commentId} to post ${postId}`);
+    const post = mockPosts.find(p => p._id === postId);
+    if (!post) {
+        console.error(`Post with ID ${postId} not found`);
+        return Promise.reject(new Error(`Post with ID ${postId} not found`));
+    }
+    post.comments.push(commentId);    
+    console.log(`Comment ${commentId} added to post ${postId}`);
+    
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            console.log(`Comment ${commentId} added to ${postId} successfully`);
+            resolve(true);
+        }, 1000);
+    });
+}
+
+export async function likePost(postId: string): Promise<Post> {
+    const post = mockPosts.find(p => p._id === postId);
+    const currentUserId = getLoggedInUserId();
+    console.log(`Toggling like for post with ID: ${postId}, likes before toggle:`, post?.likes);
+    if (!post) {
+        console.error(`Post with ID ${postId} not found`);
+        return Promise.reject(new Error(`Post with ID ${postId} not found`));
+    }
+    post.likes = post.likes.includes(currentUserId) ? post.likes.filter(like => like !== currentUserId) : [...post.likes, currentUserId];
+    console.log(`Likes after toggle:`, post.likes);
+    post.updatedAt = new Date().toISOString();
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            console.log(`Comment with ID ${postId} liked`);
+            resolve(post);
+        }, 1000);
+    });
+}
+
 
 const mockPosts: Post[] = [
   {
     _id: "1",
     author: "user1",
+    authorName: "johnDoe",
     content: "Hello SocialSphere! 🚀",
     image: "https://placehold.co/400x200",
     likes: ["user2", "user3"],
@@ -74,6 +114,7 @@ const mockPosts: Post[] = [
   {
     _id: "2",
     author: "user2",
+    authorName: "Jane Smith",
     content: "Enjoying the new platform. Great work! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     image: undefined,
     likes: ["user1"],
@@ -84,6 +125,7 @@ const mockPosts: Post[] = [
   {
     _id: "3",
     author: "user3",
+    authorName: "Bob Johnson",
     content: "Check out this cool photo!",
     image: "https://placehold.co/400x200?text=Photo",
     likes: [],
@@ -94,6 +136,7 @@ const mockPosts: Post[] = [
   {
     _id: "4",
     author: "user4",
+    authorName: "Alice Lee",
     content: "Anyone up for a chat?",
     image: undefined,
     likes: ["user1", "user3"],
@@ -104,6 +147,7 @@ const mockPosts: Post[] = [
   {
     _id: "5",
     author: "user5",
+    authorName: "Charlie Kim",
     content: "Just joined SocialSphere! Excited to connect.",
     image: "https://placehold.co/400x200?text=Welcome",
     likes: [],

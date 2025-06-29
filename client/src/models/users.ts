@@ -110,3 +110,31 @@ export const mockUser: User = {
     updatedAt: "2024-06-01T10:00:00Z",
 };
 
+
+
+export async function getUserByName(username: string): Promise<User>  {
+    const message = await getUsers();
+    console.log("Verifying connection to server:", message);
+
+let UserInfo: User | undefined;
+if (mockUser.username.toLowerCase().includes(username.toLowerCase().trim())) {
+    UserInfo = mockUser;
+} else {
+    UserInfo = undefined;
+}
+if (!UserInfo) {
+    console.log (`User name:  ${username} not found`);
+    return new Promise((_, reject) => {
+        setTimeout(() => {
+            reject(new Error("User not found"));
+        }, 1000);
+    });
+}
+
+
+return new Promise((resolve) => {
+    setTimeout(() => {
+        resolve(UserInfo as User);
+    }, 1000);
+});
+};

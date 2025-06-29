@@ -3,11 +3,43 @@
 .searchMain{
     width: 100%;
     height: var(--standard-height);    
-    @include pageFrame;    
+    @include pageFrame;
+    
+}
+.searchHeader{
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-around;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    .SearchInput{
+        width:90%;
+        box-sizing: border-box;
+        font-size: var(--font-lg);
+        border: 1px solid var(--gray-border);
+        border-radius: 0.5rem;
+    }
+}
+
+.searchResults{
+    width: 95%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
     align-items: center;
-    justify-content: center;
-    gap: 2rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;;
+}
+
+
+
+.lucideIconFooter{
+    width: var(--font-xl);
+    height: var(--font-xl);  
+    background-color: var(--light-gray-bg);     
 }
 

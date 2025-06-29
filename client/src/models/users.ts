@@ -112,7 +112,7 @@ export const mockUser: User = {
 
 
 
-export async function getUserByName(username: string, profilePicture?: string, bio?: string): Promise<User>  {
+export async function getUserByName(username: string): Promise<User>  {
     const message = await getUsers();
     console.log("Verifying connection to server:", message);
 
@@ -131,7 +131,6 @@ if (!UserInfo) {
     });
 }
 
-console.log("Using mockUser data for getUserInfo", username, profilePicture, bio);
 
 return new Promise((resolve) => {
     setTimeout(() => {

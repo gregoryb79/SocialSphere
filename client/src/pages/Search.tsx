@@ -8,7 +8,7 @@ import { getUserByName, type User } from "../models/users";
 import { Spinner } from "./components/Spinner";
 
 
-export function Search() { 
+export function Search() {
 const UserInfo = useLoaderData<User>();
 const [user, setUser] = useState<User | null>(UserInfo || null);
 const [loading, setLoading] = useState<boolean>(false);
@@ -25,7 +25,7 @@ useEffect(() => {
   setLoading(true);
   async function fetchUser() {
     try {
-      const fetchedUser = await getUserByName(searchTerm);
+      const fetchedUser = await getUserByName(searchTerm.toLowerCase().trim());
       setUser(fetchedUser);
       setError(null);
     } catch (err) {
@@ -36,17 +36,18 @@ useEffect(() => {
       setLoading(false);
     }
   }
-  fetchUser();
-}, [searchTerm]);
 
-function handleSearch() {
-  const input = document.getElementById("search") as HTMLInputElement | null;
-  if (input) {
-    setSearchTerm(input.value);
-  }
+  const handler = setTimeout(() => {
+    fetchUser();
+  }, 300); 
 
-  return
-}
+
+  return () => {
+    clearTimeout(handler);
+  };
+
+}, [searchTerm]); 
+
   return (
     <main className={styles.searchMain}>
       <div>
@@ -58,13 +59,13 @@ function handleSearch() {
             name="search"
             label=""
             placeholder="Type a Username to search..."
-            onKeyDown={e => { if (e.key === "Enter") handleSearch(); }}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
           <IconButton
             title="Search"
             ariaLabel="Search"
             icon={<SearchIcon className={styles.lucideIconFooter} color="var(--primary-blue)"/>}
-            onClick={handleSearch}
+            onClick={() => setSearchTerm((document.getElementById("search") as HTMLInputElement)?.value.trim() || "")}
           />
         </h1>
       </div>
@@ -77,6 +78,9 @@ function handleSearch() {
             {user.profilePicture && <img src={user.profilePicture} alt={`${user.username}'s profile`} />}
             {user.bio && <p>{user.bio}</p>}
           </li>
+        )}
+        {!loading && !error && !user && searchTerm && (
+            <li>No user found matching "{searchTerm}"</li>
         )}
       </ul>
     </main>

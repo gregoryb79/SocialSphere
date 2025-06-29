@@ -2,7 +2,6 @@ import { useLoaderData, useNavigate } from "react-router";
 import styles from "./Profile.module.scss";
 import type { User } from "../models/users";
 import type { Post } from "../models/posts";
-import { UserInfo } from "./Search"; 
 
 function PostItem({ post }: { post: Post }) {
     return (
@@ -31,7 +30,8 @@ export function Profile() {
   return (
     <div className={styles.profileMain}>
       <h1>Profile Page</h1>
-      <UserInfo username={user.username} profilePicture={user.profilePicture} bio={user.bio} />
+      <div> username={user.username} profilePicture={user.profilePicture} bio={user.bio}
+      </div>
 
       <div className={styles.followStats}>
           <p>Followers: {user.followers.length}</p>

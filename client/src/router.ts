@@ -47,7 +47,11 @@ export const router = createBrowserRouter([
                 }
             },
             { path: "/search",
-                Component: Search
+                Component: Search,
+                //                loader: async () => {                    
+                //    const username = await getUsers();
+                //    return await getUserByName(await username);
+                //} 
             },
             { path: "/new-post",
                 Component: NewPost,

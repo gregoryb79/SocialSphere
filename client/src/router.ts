@@ -2,7 +2,7 @@ import { createBrowserRouter, redirect } from "react-router";
 import { App } from "./App";
 import { Home } from "./pages/Home";
 import { NotFound } from "./pages/NotFound";
-import { getUsers, getCurrentUserId, fetchUser, fetchLoggedInUser, getLoggedInUserName, getLoggedInUserId } from "./models/users";
+import { getUsers, getCurrentUserId, fetchUser, fetchLoggedInUser, getLoggedInUserName, getLoggedInUserId, getUserByName } from "./models/users";
 import { fetchOwnPosts, fetchPosts, getPost } from "./models/posts";
 import { Profile } from "./pages/Profile";
 import { Settings } from "./pages/Settings";
@@ -48,10 +48,10 @@ export const router = createBrowserRouter([
             },
             { path: "/search",
                 Component: Search,
-                //                loader: async () => {                    
-                //    const username = await getUsers();
-                //    return await getUserByName(await username);
-                //} 
+                loader: async () => {
+                    const username = ""; 
+                    return await getUserByName(username);
+                } 
             },
             { path: "/new-post",
                 Component: NewPost,

@@ -21,7 +21,7 @@ export function Profile() {
 
   return (
     <main className={styles.profileMain}>
-      <div className={styles.profileHeader}>
+      <section className={styles.profileHeader}>
         {user.profilePicture && <img src={user.profilePicture} alt={`${user.username}'s profile`} />}
       <h1>{user.username}</h1>
       <p> {user.bio && <p>{user.bio}</p>}</p>
@@ -30,8 +30,7 @@ export function Profile() {
             <p>Following: {user.following.length}</p>
             <IconButton title="Bookmark" ariaLabel= "Saved Bookmarks" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>} onClick={handleBookmarksClick}/>
       </div>
-      </div>    
-      <div>
+      </section>
       <ul className={styles.userPosts}>
           {posts.length > 0 ? (
               posts.map(post => (
@@ -41,7 +40,6 @@ export function Profile() {
               <p>No posts found.</p>
           )}
       </ul>
-      </div>
     </main>
   );
 }

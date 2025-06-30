@@ -1,7 +1,9 @@
+import type { ReactNode } from "react";
 import { apiClient } from "./apiClient";
 import { getLoggedInUserId, getUsers } from "./users";
 
 export type Post = {
+    [x: string]: ReactNode;
     _id: string;
     author: string; 
     authorName?: string; // Optional, can be fetched separately

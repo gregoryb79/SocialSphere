@@ -50,8 +50,8 @@ useEffect(() => {
 
 }, [searchTerm]);
 
-const handleUserClick = (userId: string) => {
-    navigate(`/profile/${userId}`); 
+const handleUserClick = () => {
+    navigate(`/profile`); 
 };
 
 
@@ -82,7 +82,7 @@ const handleUserClick = (userId: string) => {
         {user && (
           <li
             key={user._id}
-            onClick={() => handleUserClick(user._id)} //check if can be done before backend
+            onClick={() => handleUserClick()} //check if can be done before backend
           >
             <h2>{user.username}</h2>
             {user.profilePicture && <img src={user.profilePicture} alt={`${user.username}'s profile`} />}

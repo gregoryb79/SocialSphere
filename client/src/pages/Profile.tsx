@@ -34,7 +34,7 @@ export function Profile() {
       <ul className={styles.userPosts}>
           {posts.length > 0 ? (
               posts.map(post => (
-                  <PostCard key={post._id} post={post} />
+                  <PostCard key={post._id} post={post}/>
               ))
           ) : (
               <p>No posts found.</p>

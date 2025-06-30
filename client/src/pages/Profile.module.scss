@@ -6,8 +6,52 @@
     @include pageFrame;    
     display: flex;
     flex-direction: column;
+
+}
+
+.profileHeader{
+    width: 95%;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 2rem;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    img{
+        width: 5rem;
+        height: 5rem;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    h1{
+        font-size: var(--font-xl);
+        color: var(--primary-blue);
+    }
+
+}
+.followStats{
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    p{
+        font-size: var(--font-md);
+        color: var(--primary-blue);
+    }
+}
+
+.userPosts{
+    margin-top: 1rem;;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+   
 }
 

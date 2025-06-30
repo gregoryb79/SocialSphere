@@ -2,17 +2,9 @@ import { useLoaderData, useNavigate } from "react-router";
 import styles from "./Profile.module.scss";
 import type { User } from "../models/users";
 import type { Post } from "../models/posts";
-
-function PostItem({ post }: { post: Post }) {
-    return (
-        <div className={styles.postItem}>
-            <h3>{post.title}</h3> 
-            <p>{post.content} 
-            {post.image && <img src={post.image} alt="Post" className={styles.postImage} />}
-            </p>
-        </div>
-    );
-}
+import { PostCard } from "./components/PostCard";
+import { Bookmark } from "lucide-react";
+import { IconButton } from "./components/IconButton";
 
 
 export function Profile() {
@@ -28,33 +20,28 @@ export function Profile() {
   };
 
   return (
-    <div className={styles.profileMain}>
-      <h1>Profile Page</h1>
-      <div> username={user.username} profilePicture={user.profilePicture} bio={user.bio}
-      </div>
-
+    <main className={styles.profileMain}>
+      <div className={styles.profileHeader}>
+        {user.profilePicture && <img src={user.profilePicture} alt={`${user.username}'s profile`} />}
+      <h1>{user.username}</h1>
+      <p> {user.bio && <p>{user.bio}</p>}</p>
       <div className={styles.followStats}>
-          <p>Followers: {user.followers.length}</p>
-          <p>Following: {user.following.length}</p>
+            <p>Followers: {user.followers.length}</p>
+            <p>Following: {user.following.length}</p>
+            <IconButton title="Bookmark" ariaLabel= "Saved Bookmarks" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>} onClick={handleBookmarksClick}/>
       </div>
-
-      <button onClick={handleBookmarksClick} className={styles.bookmarksButton}>
-          View Bookmarks
-      </button>
-
-      <p></p> {/* Add some spacing */}
-
-      <h2>Your Posts</h2>
-      <div className={styles.userPosts}>
+      </div>    
+      <div>
+      <ul className={styles.userPosts}>
           {posts.length > 0 ? (
               posts.map(post => (
-                  <PostItem key={post._id} post={post} />
+                  <PostCard key={post._id} post={post} />
               ))
           ) : (
               <p>No posts found.</p>
           )}
+      </ul>
       </div>
-
-    </div>
+    </main>
   );
 }

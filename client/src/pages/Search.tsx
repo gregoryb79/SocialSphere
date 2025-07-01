@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import styles from "./Search.module.scss";
 import { Input } from "./components/Input";
 import { IconButton } from "./components/IconButton";
@@ -14,6 +14,8 @@ const [user, setUser] = useState<User | null>(UserInfo || null);
 const [loading, setLoading] = useState<boolean>(false);
 const [error, setError] = useState<string | null>(null);
 const [searchTerm, setSearchTerm] = useState<string>("");
+
+const navigate = useNavigate();
 
 useEffect(() => {
   if (!searchTerm) {
@@ -39,14 +41,19 @@ useEffect(() => {
 
   const handler = setTimeout(() => {
     fetchUser();
-  }, 300); 
+  }, 300);
 
 
   return () => {
     clearTimeout(handler);
   };
 
-}, [searchTerm]); 
+}, [searchTerm]);
+
+const handleUserClick = () => {
+    navigate(`/profile`); 
+};
+
 
   return (
     <main className={styles.searchMain}>
@@ -73,7 +80,10 @@ useEffect(() => {
         {loading && <Spinner />}
         {error && <div>{error}</div>}
         {user && (
-          <li>
+          <li
+            key={user._id}
+            onClick={() => handleUserClick()} //check if can be done before backend
+          >
             <h2>{user.username}</h2>
             {user.profilePicture && <img src={user.profilePicture} alt={`${user.username}'s profile`} />}
             {user.bio && <p>{user.bio}</p>}

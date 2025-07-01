@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { createServer } from "http";
 import { app } from "./app";
 import { dbClient } from "./models/db";
+import { initDb } from "./models/initDb";
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ async function init() {
     try {
         const result = await dbClient.execute("SELECT 1 as test");
         console.log("Connected to Turso:", result.rows);
+
+        await initDb();
 
         server.listen(port, () => {
             console.log(`Server listening on port ${port}`);

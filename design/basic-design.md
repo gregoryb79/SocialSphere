@@ -39,7 +39,7 @@
 |   📄 Posts: 12  👥 Followers: 58    |
 |   👣 Following: 41                  |
 |                                      |
-| [✏️ Edit Profile] or [➕ Follow]    | //<-  depends if own or viewing other user
+| [Followers] [Following] [➕ Follow]  | 
 |--------------------------------------|
 |   [Posts] [Likes]   [Bookmarks]      |
 |--------------------------------------|
@@ -101,6 +101,68 @@
 | [👤 avatar] @john_dev                |
 | “JS | Node | Travel.”                |
 | [➕ Follow]                          |
++--------------------------------------+
+
+## Notifications Page
++--------------------------------------+
+|            Notifications             |
+|======================================|
+| [👤 avatar] @sarah_tech              |
+| followed you                         |
+| 2h ago                    [•]        |← unread indicator
+|--------------------------------------|
+| [👤 avatar] @john_dev                |
+| liked your post                      |
+| "Just finished my React project!"   |
+| 5h ago                               |
+|--------------------------------------|
+| [👤 avatar] @alice_code              |
+| commented on your post              |
+| "Great work on this!"               |
+| 1d ago                               |
++--------------------------------------+
+| [🏠] [🔍] [➕] [🔔] [👤]            |
++--------------------------------------+
+
+## Settings Page
++--------------------------------------+
+| ← Back             Settings          |
+|======================================|
+|         [🧑 avatar image]            |
+|         [📷 Change Avatar]           |
+|                                      |
+|--------------------------------------|
+| Profile Information                  |
+|--------------------------------------|
+| Username                             |
+| [gregor_dev                    ]     |
+|                                      |
+| Email                                |
+| [gregor@example.com            ]     |
+|                                      |
+| Bio                                  |
+| [Loves clean code and design.  ]     |
+| [                              ]     |
+|                                      |
+|--------------------------------------|
+| Privacy & Security                   |
+|--------------------------------------|
+| Change Password                      |
+| [🔒 Current Password           ]     |
+| [🔒 New Password               ]     |
+| [🔒 Confirm New Password       ]     |
+|                                      |
+| Privacy Settings                     |
+| [ ✓ ] Private Account               |
+| [ ✓ ] Allow message requests        |
+|                                      |
+|--------------------------------------|
+| Account Actions                      |
+|--------------------------------------|
+| [💾 Save Changes]                    |
+| [🗑️ Delete Account]                 |
++--------------------------------------+
+| [🏠] [🔍] [➕] [🔔] [👤]            |
 +--------------------------------------+
 
 ## Chat Page (for later)

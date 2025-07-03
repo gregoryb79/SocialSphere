@@ -21,7 +21,7 @@ export function doLogOut() {
 export async function getUsers() {
     try {
         const response = await apiClient.get("/users");
-        return response.data.message.toString();
+        return response?.data?.message?.toString() || "No message from server";
     } catch (error) {
         console.error("Error fetching users:", error);
         throw error;

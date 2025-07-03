@@ -18,8 +18,9 @@
     --font-sm:  0.875rem;   // ~14px — Subtext, meta info 
     --font-xs:  0.75rem;    // ~12px — Optional notes, input hints
 
-    --standard-width: 100%; // Standard width for main content areas
-    --standard-height: 80%; // Standard height for main content areas
+    --standard-width: 100%; // Standard relative width for main content areas
+    --standard-height: 80%; // Standard relative height for main content areas
+    --app-max-width: 37rem; // Max width for the app container
 
     @media (prefers-color-scheme: dark){
         // Backgrounds
@@ -58,7 +59,7 @@ html, body {
 
 #root {
     height: 100%;
-    max-width: 37rem;
+    max-width: var(--app-max-width);
     margin-left: auto;
     margin-right: auto;
     padding: 1rem;

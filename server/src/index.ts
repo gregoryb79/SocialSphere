@@ -8,7 +8,7 @@ import { initDb } from "./models/initDb";
 dotenv.config();
 
 const server = createServer(app);
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5050;
 
 async function init() {
     try {

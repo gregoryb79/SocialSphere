@@ -3,6 +3,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import { json } from "body-parser";
 import { router as usersRouter} from "./routers/users.router";
+import { router as notificationRouter } from "./routers/notifications.route";  
 import cors from "cors";
 
 export const app = express();
@@ -19,6 +20,7 @@ app.use((req, _, next) => {
 app.use(json());
 
 app.use("/users", usersRouter);
+app.use("/api/notifications", notificationRouter)
 
 
 

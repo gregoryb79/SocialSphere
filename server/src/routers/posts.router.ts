@@ -95,6 +95,7 @@ router.get('/:userId', async (req, res) => {
                 console.log("No posts found for user:", userId);
                 res.json([]);
                 return;
+                return;
             }
 
             

@@ -20,14 +20,15 @@ export type Post = {
 // Fetches feed for the user == all posts of the users in his following list,
 // if Guest = latest posts of all users
 export async function fetchPosts(userId: string): Promise<Post[]> {
-    const message = await getUsers();
-    console.log("Verifying connection to server:", message);
-    
-    return new Promise((resolve) => {
-        setTimeout(() => {
-        resolve(mockPosts);
-        }, 1000);
-    });
+  console.log("Fetching posts for user:", userId);
+   try {
+        const response = await apiClient.get(`/posts/${userId}`);
+        console.log("Fetched posts:", response.data);
+        return response.data as Post[];
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        throw error;
+    }
 }
 
 export async function fetchOwnPosts(userId: string): Promise<Post[]> {

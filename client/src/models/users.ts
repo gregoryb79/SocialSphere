@@ -14,14 +14,16 @@ export type User = {
 };
 
 export function doLogOut() {
-    localStorage.removeItem("loggeduser"); 
+    localStorage.removeItem("loggeduser");
+    sessionStorage.removeItem("currentuser");
+    console.log("User logged out, clearing session storage and local storage"); 
     clearToken();   
 }
 
 export async function getUsers() {
     try {
         const response = await apiClient.get("/users");
-        return response?.data?.message?.toString() || "No message from server";
+        return response.data.message.toString();
     } catch (error) {
         console.error("Error fetching users:", error);
         throw error;
@@ -78,7 +80,7 @@ export async function putLogIn(username: string, password: string): Promise<bool
     console.log("putLogIn called with username:", username, "and password:", password);
 
     localStorage.setItem("loggeduser", JSON.stringify(mockUser));
-    sessionStorage.setItem("currentuser", JSON.stringify(mockUser.username));
+    sessionStorage.setItem("currentuser", mockUser._id);
         
     return new Promise((resolve) => {
         setTimeout(() => {

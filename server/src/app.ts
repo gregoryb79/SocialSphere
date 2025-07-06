@@ -3,6 +3,8 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import { json } from "body-parser";
 import { router as usersRouter} from "./routers/users.router";
+import { router as postsRouter } from "./routers/posts.router";
+import { router as commentsRouter} from "./routers/comments.router";
 import cors from "cors";
 
 export const app = express();
@@ -19,6 +21,8 @@ app.use((req, _, next) => {
 app.use(json());
 
 app.use("/users", usersRouter);
+app.use("/posts", postsRouter);
+app.use("/comments", commentsRouter);
 
 
 

@@ -340,7 +340,7 @@ export async function seedDatabase() {
     for (const comment of mockComments) {
       await dbClient.execute({
         sql: `INSERT OR REPLACE INTO comments (id, parent_id, author_id, content, image, created_at, updated_at) 
-              VALUES (?, ?, ?, ?, ?, ?)`,
+              VALUES (?, ?, ?, ?, ?, ?, ?)`,
         args: [
           comment._id,
           comment.parent_id ?? null,

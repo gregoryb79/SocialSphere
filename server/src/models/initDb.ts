@@ -24,13 +24,12 @@ export async function initDb() {
     `CREATE TABLE IF NOT EXISTS comments (
       id TEXT PRIMARY KEY,
       author_id TEXT NOT NULL,
-      post_id TEXT NOT NULL,
+      parent_id TEXT,  
       content TEXT NOT NULL,
       image TEXT,
       created_at TEXT,
       updated_at TEXT,
-      FOREIGN KEY (author_id) REFERENCES users(id),
-      FOREIGN KEY (post_id) REFERENCES posts(id)
+      FOREIGN KEY (author_id) REFERENCES users(id)
     );`,
     `CREATE TABLE IF NOT EXISTS notifications (
       id TEXT PRIMARY KEY,
@@ -72,6 +71,7 @@ export async function initDb() {
       FOREIGN KEY (post_id) REFERENCES posts(id),
       FOREIGN KEY (user_id) REFERENCES users(id)
     );`,
+    
     `CREATE TABLE IF NOT EXISTS comment_likes (
       comment_id TEXT NOT NULL,
       user_id TEXT NOT NULL,

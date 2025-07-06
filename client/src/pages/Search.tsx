@@ -6,54 +6,100 @@ import { SearchIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getUserByName, type User } from "../models/users";
 import { Spinner } from "./components/Spinner";
+import { fetchPostsByContent, type Post } from "../models/posts";
+import { PostCard } from "./components/PostCard";
 
 
 export function Search() {
 const UserInfo = useLoaderData<User>();
 const [user, setUser] = useState<User | null>(UserInfo || null);
-const [loading, setLoading] = useState<boolean>(false);
-const [error, setError] = useState<string | null>(null);
+const [userLoading, setUserLoading] = useState<boolean>(false);
+const [userError, setUserError] = useState<string | null>(null);
+
+const [postResults, setPostResults] = useState<Post[]>([]);
+const [postLoading, setPostLoading] = useState<boolean>(false);
+const [postError, setPostError] = useState<string | null>(null);
+
+
 const [searchTerm, setSearchTerm] = useState<string>("");
 
 const navigate = useNavigate();
 
+
 useEffect(() => {
   if (!searchTerm) {
     setUser(null);
-    setError(null);
-    setLoading(false);
+    setUserError(null);
+    setUserLoading(false);
     return;
   }
-  setLoading(true);
-  async function fetchUser() {
+  setUserLoading(true);
+  setUserError(null); 
+  async function fetchUserData() {
     try {
       const fetchedUser = await getUserByName(searchTerm.toLowerCase().trim());
       setUser(fetchedUser);
-      setError(null);
+      setUserError(null);
     } catch (err) {
       console.error("Error fetching user:", err);
-      setError("Failed to load user information.");
+      setUserError("Failed to load user information.");
       setUser(null);
     } finally {
-      setLoading(false);
+      setUserLoading(false);
     }
   }
-
-  const handler = setTimeout(() => {
-    fetchUser();
-  }, 300);
-
+  const userHandler = setTimeout(() => {
+    fetchUserData();
+  }, 300); 
 
   return () => {
-    clearTimeout(handler);
+    clearTimeout(userHandler);
   };
-
 }, [searchTerm]);
 
-const handleUserClick = () => {
-    navigate(`/profile`); 
+
+
+useEffect(() => {
+    if (!searchTerm) {
+        setPostResults([]);
+        setPostError(null);
+        setPostLoading(false);
+        return;
+    }
+    setPostLoading(true);
+    setPostError(null);
+    async function fetchPostData() {
+        try {
+            const fetchedPosts = await fetchPostsByContent(searchTerm.toLowerCase().trim());
+            setPostResults(fetchedPosts);
+            setPostError(null);
+        } catch (err) {
+            console.error("Error fetching posts:", err);
+            setPostError("Failed to load post information.");
+            setPostResults([]);
+        } finally {
+            setPostLoading(false);
+        }
+    }
+    const postHandler = setTimeout(() => {
+        fetchPostData();
+    }, 300);
+
+    return () => {
+        clearTimeout(postHandler);
+    };
+
+}, [searchTerm]); 
+
+
+
+const handleUserClick = (userId: string) => {
+    navigate(`/profile/${userId}`); 
 };
 
+const handlePostClick = (postId: string) => {
+    console.log("Post clicked:", postId); 
+};
 
   return (
     <main className={styles.searchMain}>
@@ -65,8 +111,9 @@ const handleUserClick = () => {
             type="search"
             name="search"
             label=""
-            placeholder="Type a Username to search..."
+            placeholder="Type to search the app for Users or Posts..."
             onChange={(e) => setSearchTerm(e.target.value)}
+            value={searchTerm}
           />
           <IconButton
             title="Search"
@@ -76,23 +123,37 @@ const handleUserClick = () => {
           />
         </h1>
       </div>
+      <section>
       <ul className={styles.searchResults}>
-        {loading && <Spinner />}
-        {error && <div>{error}</div>}
+        {userLoading && <Spinner />}
+        {userError && <div>{userError}</div>}
         {user && (
           <li
             key={user._id}
-            onClick={() => handleUserClick()} //check if can be done before backend
+            onClick={() => handleUserClick(user._id)} 
           >
             <h2>{user.username}</h2>
             {user.profilePicture && <img src={user.profilePicture} alt={`${user.username}'s profile`} />}
             {user.bio && <p>{user.bio}</p>}
           </li>
         )}
-        {!loading && !error && !user && searchTerm && (
-            <li>No user found matching "{searchTerm}"</li>
+        {!userLoading && !userError && !user && searchTerm && (
+          <li>No users found matching "{searchTerm}"</li>
         )}
       </ul>
+      <ul>
+        {postLoading && <Spinner />}
+        {postError && <div>{postError}</div>}
+        {postResults.map((post) => (
+          <li key={post._id} onClick={() => handlePostClick(post._id)}>
+            <PostCard post={post} />
+          </li>
+        ))}
+        {!postLoading && !postError && postResults.length === 0 && searchTerm && (
+            <li>No posts found matching "{searchTerm}"</li>
+        )}
+      </ul>
+      </section>
     </main>
   );
 }

@@ -45,28 +45,7 @@ router.get('/:userId', async (req, res) => {
                 args: postIds
             });
 
-            const combinedPosts = posts.map(post => {
-                const postLikes = likesResult.rows
-                    .filter(like => like.post_id === post.id)
-                    .map(like => like.user_id);
-
-                const postComments = commentsResult.rows
-                    .filter(comment => comment.post_id === post.id)
-                    .map(comment => comment.comment_id);
-
-                return {
-                    _id: post.id,
-                    author: post.author_id,
-                    authorName: post.author_name,
-                    content: post.content,
-                    image: post.image,
-                    likes: postLikes,
-                    comments: postComments,
-                    createdAt: post.created_at,
-                    updatedAt: post.updated_at
-                };
-            });
-
+            const combinedPosts = await fetchAndCombinePostData(posts, dbClient);
             res.json(combinedPosts);
         } catch (error) {
             console.error("Error fetching all posts:", error);

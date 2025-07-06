@@ -211,3 +211,22 @@ const mockMyPosts: Post[] = [
   },
 ];
 
+export async function fetchPostsByContent(searchTerm: string): Promise<Post[]> {
+    console.log("fetchPostsByContent called with searchTerm:", searchTerm);
+
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    if (!searchTerm) {
+        return [];
+    }
+
+    const lowerCaseSearchTerm = searchTerm.toLowerCase().trim();
+
+    const filteredPosts = mockPosts.filter(post =>
+        post.content.toLowerCase().includes(lowerCaseSearchTerm)
+    );
+
+    console.log("Filtered posts:", filteredPosts);
+
+    return filteredPosts;
+}

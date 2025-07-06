@@ -78,13 +78,15 @@ router.get('/:userId', async (req, res) => {
 
 async function fetchAndCombinePosts(postIds: string[], posts: any[]) {
     const placeholders = postIds.map(() => '?').join(',');
+    console.log(`Fetching likes and comments for posts: ${postIds}`);
 
     const likesResult = await dbClient.execute({
-        sql: `SELECT post_id, user_id 
-            FROM post_likes 
-            WHERE post_id IN (${placeholders})`,
+        sql: `SELECT comment_id, user_id 
+            FROM comment_likes 
+            WHERE comment_id IN (${placeholders})`,
         args: postIds
     });
+    console.log(`Found like results:`,likesResult);
             
     const commentsResult = await dbClient.execute({
         sql: `SELECT parent_id, id as comment_id
@@ -92,16 +94,19 @@ async function fetchAndCombinePosts(postIds: string[], posts: any[]) {
             WHERE parent_id IN (${placeholders})`,
         args: postIds
     });
+    console.log(`Found comment results:`,commentsResult);
 
             
     return posts.map(post => {
         const postLikes = likesResult.rows
-            .filter(like => like.post_id === post.id)
+            .filter(like => like.comment_id === post.id)
             .map(like => like.user_id);
 
         const postComments = commentsResult.rows
             .filter(comment => comment.parent_id === post.id)
             .map(comment => comment.comment_id);
+
+        console.log(`Post ${post.id} has ${postLikes.length} likes and ${postComments.length} comments`);
 
         return {
             _id: post.id,

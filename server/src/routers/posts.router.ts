@@ -9,6 +9,7 @@ router.get('/:userId', async (req, res) => {
 
     if (!userId) {
         res.status(400).json({ error: "User ID is required" });
+        return;
     }
 
     if (userId === "guest") {

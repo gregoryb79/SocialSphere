@@ -9,6 +9,7 @@ router.get('/:userId', async (req, res) => {
 
     if (!userId) {
         res.status(400).json({ error: "User ID is required" });
+        return;
     }
 
     if (userId === "guest") {
@@ -23,48 +24,13 @@ router.get('/:userId', async (req, res) => {
             });
 
             const posts = allPostsResult.rows;
-            const postIds = posts.map(post => post.id);
+            const postIds = posts.map(post => post.id as string);
 
             if (postIds.length === 0) {
                 res.json([]);
+                return;
             }
-
-            const placeholders = postIds.map(() => '?').join(',');
-            const likesResult = await dbClient.execute({
-                sql: `SELECT post_id, user_id 
-                    FROM post_likes 
-                    WHERE post_id IN (${placeholders})`,
-                args: postIds
-            });
-            
-            const commentsResult = await dbClient.execute({
-                sql: `SELECT post_id, id as comment_id
-                    FROM comments 
-                    WHERE post_id IN (${placeholders})`,
-                args: postIds
-            });
-
-            const combinedPosts = posts.map(post => {
-                const postLikes = likesResult.rows
-                    .filter(like => like.post_id === post.id)
-                    .map(like => like.user_id);
-
-                const postComments = commentsResult.rows
-                    .filter(comment => comment.post_id === post.id)
-                    .map(comment => comment.comment_id);
-
-                return {
-                    _id: post.id,
-                    author: post.author_id,
-                    authorName: post.author_name,
-                    content: post.content,
-                    image: post.image,
-                    likes: postLikes,
-                    comments: postComments,
-                    createdAt: post.created_at,
-                    updatedAt: post.updated_at
-                };
-            });
+            const combinedPosts = await fetchAndCombinePosts(postIds, posts);
 
             res.json(combinedPosts);
         } catch (error) {
@@ -88,52 +54,14 @@ router.get('/:userId', async (req, res) => {
             });
 
             const posts = postsResult.rows;
-            const postIds = posts.map(post => post.id);
+            const postIds = posts.map(post => post.id as string);
 
             if (postIds.length === 0) {
                 console.log("No posts found for user:", userId);
                 res.json([]);
                 return;
             }
-
-            
-            const placeholders = postIds.map(() => '?').join(',');
-            const likesResult = await dbClient.execute({
-                sql: `SELECT post_id, user_id 
-                    FROM post_likes 
-                    WHERE post_id IN (${placeholders})`,
-                args: postIds
-            });
-            
-            const commentsResult = await dbClient.execute({
-                sql: `SELECT post_id, id as comment_id
-            FROM comments 
-            WHERE post_id IN (${placeholders})`,
-                args: postIds
-            });
-
-            
-            const combinedPosts = posts.map(post => {
-                const postLikes = likesResult.rows
-                    .filter(like => like.post_id === post.id)
-                    .map(like => like.user_id);
-
-                const postComments = commentsResult.rows
-                    .filter(comment => comment.post_id === post.id)
-                    .map(comment => comment.comment_id);
-
-                return {
-                    _id: post.id,
-                    author: post.author_id,
-                    authorName: post.author_name,
-                    content: post.content,
-                    image: post.image,
-                    likes: postLikes,
-                    comments: postComments,
-                    createdAt: post.created_at,
-                    updatedAt: post.updated_at
-                };
-            });
+            const combinedPosts = await fetchAndCombinePosts(postIds, posts);   
 
             res.json(combinedPosts);
         } catch (error) {
@@ -141,6 +69,45 @@ router.get('/:userId', async (req, res) => {
             res.status(500).json({ error: "Failed to fetch posts" });
         }
     }
-
     
 });
+
+async function fetchAndCombinePosts(postIds: string[], posts: any[]) {
+    const placeholders = postIds.map(() => '?').join(',');
+
+    const likesResult = await dbClient.execute({
+        sql: `SELECT post_id, user_id 
+            FROM post_likes 
+            WHERE post_id IN (${placeholders})`,
+        args: postIds
+    });
+            
+    const commentsResult = await dbClient.execute({
+        sql: `SELECT post_id, id as comment_id
+            FROM comments 
+            WHERE post_id IN (${placeholders})`,
+        args: postIds
+    });
+
+            
+    return posts.map(post => {
+        const postLikes = likesResult.rows
+            .filter(like => like.post_id === post.id)
+            .map(like => like.user_id);
+
+        const postComments = commentsResult.rows
+            .filter(comment => comment.post_id === post.id)
+            .map(comment => comment.comment_id);
+
+        return {
+            _id: post.id,
+            author: post.author_id,
+            authorName: post.author_name,
+            content: post.content,
+            image: post.image,
+            likes: postLikes,
+            comments: postComments,
+            createdAt: post.created_at,
+            updatedAt: post.updated_at
+        };});    
+}

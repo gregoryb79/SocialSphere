@@ -26,7 +26,7 @@ export async function fetchPosts(userId: string): Promise<Post[]> {
         console.log("Fetched posts:", response.data);
         return response.data as Post[];
     } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching posts:", error);
         throw error;
     }
 }

@@ -4,6 +4,7 @@ import { createServer } from "http";
 import { app } from "./app";
 import { dbClient } from "./models/db";
 import { initDb } from "./models/initDb";
+import { seedDatabase } from "./models/generatedBdata";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ async function init() {
         console.log("Connected to Turso:", result.rows);
 
         await initDb();
+        await seedDatabase();
 
         server.listen(port, () => {
             console.log(`Server listening on port ${port}`);

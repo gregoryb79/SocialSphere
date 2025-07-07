@@ -74,8 +74,19 @@ export const router = createBrowserRouter([
                 Component: Notifications,
                 loader: async () => {
                     const userId = getLoggedInUserId();
-                    const notifications = await fetchNotifications(userId);                    
-                    return notifications
+
+                    if (!userId || userId === "Guest") {
+                        console.warn("No valid userId was found. Moving to login")
+                        return redirect("/login");
+                    }
+
+                    try {
+                        const notifications = await fetchNotifications(userId);
+                        return notifications;
+                    } catch (error) {
+                        console.error("Failed to load notifications:", error);
+                        throw new Response("Failed to load notifications", {status: 500});
+                    }
                 }
             },            
             

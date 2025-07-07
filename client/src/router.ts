@@ -28,7 +28,10 @@ export const router = createBrowserRouter([
                     const userId = getCurrentUserId();
                     const username = getLoggedInUserName() || "Guest";
                     const posts = await fetchPosts(userId);
-                    return {username, posts};
+                    return {
+                        username,
+                        posts: Array.isArray(posts) ? posts : []
+                      };
                 }
              },      
            { path: "/profile",

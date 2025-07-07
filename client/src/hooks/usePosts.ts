@@ -3,7 +3,7 @@ import { getLoggedInUserId } from "../models/users";
 import { postComment } from "../models/comments";
 import { addComment } from "../models/posts";
 
-export function useAddComment(onSuccess: () => void) {
+export function useAddComment(onSuccess: (newCommentId: string) => void) {
     const [error, setError] = useState<string>();
     const [loading, setLoading] = useState(false);  
     const isCanceled = useRef(false);
@@ -15,22 +15,23 @@ export function useAddComment(onSuccess: () => void) {
         setLoading(true);
 
         try {                
-            const newCommentId = await postComment(commentContent);
+            const newCommentId = await postComment(commentContent, postId);
             if (newCommentId) {
-                console.log(`uAC Comment posted successfully with ID: ${newCommentId}`);            
+                console.log(`uAC Comment posted successfully with ID: ${newCommentId}`); 
+                onSuccess(newCommentId);            
             } else {
                 console.error("uAC Failed to post comment");
                 setError("Failed to post comment");
             }
                 
-            const result = await addComment(newCommentId, postId);
-            if (result) {
-                console.log(`uAC Comment ${newCommentId} added to post ${postId} successfully`);  
-                onSuccess();          
-            } else {
-                console.error(`uAC Failed to add comment ${newCommentId} to post ${postId}`);
-                setError(`Failed to add comment ${newCommentId} to post ${postId}`);
-            }        
+            // const result = await addComment(newCommentId, postId);
+            // if (result) {
+            //     console.log(`uAC Comment ${newCommentId} added to post ${postId} successfully`);  
+            //     onSuccess();          
+            // } else {
+            //     console.error(`uAC Failed to add comment ${newCommentId} to post ${postId}`);
+            //     setError(`Failed to add comment ${newCommentId} to post ${postId}`);
+            // }        
         } catch (error) {
             if (!isCanceled.current) {
                 setError(error as string);

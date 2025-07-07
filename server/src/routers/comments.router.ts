@@ -93,6 +93,7 @@ router.post('/', async (req, res) => {
 
     if (!authorId) {
         res.status(401).json({ error: "Unauthorized" });
+        return;
     }
 
     if (!content || content.trim() === "") {

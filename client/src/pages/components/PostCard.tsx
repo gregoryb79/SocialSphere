@@ -206,7 +206,7 @@ function commentAge(createdAt: string): string {
     } else if (diffInSeconds < 3600*24) {
         return `${Math.floor(diffInSeconds / 3600)} H`;
     } else if (diffInSeconds < 3600*24*365){
-        return `${Math.floor(diffInSeconds / 3600*24)} d`;
+        return `${Math.floor(diffInSeconds / (3600 * 24))} d`;
     } else {
         return `${Math.floor(diffInSeconds / (3600*24*7))} W`;
     }

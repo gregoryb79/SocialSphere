@@ -15,16 +15,18 @@ router.get('/:userId', async (req, res) => {
     if (userId === "guest") {
         try {
             const allPostsResult = await dbClient.execute({
-                sql: `SELECT p.id, p.author_id, p.content, p.image, p.created_at, p.updated_at,
+                sql: `SELECT c.id, c.author_id, c.content, c.image, c.created_at, c.updated_at,
                             u.username as author_name
-                    FROM posts p
-                    INNER JOIN users u ON p.author_id = u.id
-                    ORDER BY p.created_at DESC`,
+                    FROM comments c
+                    INNER JOIN users u ON c.author_id = u.id
+                    WHERE c.parent_id IS NULL
+                    ORDER BY c.created_at DESC`,
                 args: []
             });
 
             const posts = allPostsResult.rows;
             const postIds = posts.map(post => post.id as string);
+            console.log(`Found ${postIds} posts for guest user`);
 
             if (postIds.length === 0) {
                 res.json([]);
@@ -40,21 +42,23 @@ router.get('/:userId', async (req, res) => {
     } else{
         try {
             const postsResult = await dbClient.execute({
-                sql: `SELECT p.id, p.author_id, p.content, p.image, p.created_at, p.updated_at,
+                sql: `SELECT c.id, c.author_id, c.content, c.image, c.created_at, c.updated_at,
                  u.username as author_name
-                FROM posts p
-                INNER JOIN users u ON p.author_id = u.id
-                WHERE p.author_id IN (
+                FROM comments c
+                INNER JOIN users u ON c.author_id = u.id
+                WHERE c.author_id IN (
                     SELECT following_id 
                     FROM user_following 
                     WHERE user_id = ?
                 )
-                ORDER BY p.created_at DESC`,
+                AND c.parent_id IS NULL
+                ORDER BY c.created_at DESC`,
                 args: [userId]
             });
 
             const posts = postsResult.rows;
             const postIds = posts.map(post => post.id as string);
+            console.log(`Found ${postIds} posts for guest user`);
 
             if (postIds.length === 0) {
                 console.log("No posts found for user:", userId);
@@ -74,30 +78,35 @@ router.get('/:userId', async (req, res) => {
 
 async function fetchAndCombinePosts(postIds: string[], posts: any[]) {
     const placeholders = postIds.map(() => '?').join(',');
+    console.log(`Fetching likes and comments for posts: ${postIds}`);
 
     const likesResult = await dbClient.execute({
-        sql: `SELECT post_id, user_id 
-            FROM post_likes 
-            WHERE post_id IN (${placeholders})`,
+        sql: `SELECT comment_id, user_id 
+            FROM comment_likes 
+            WHERE comment_id IN (${placeholders})`,
         args: postIds
     });
+    console.log(`Found like results:`,likesResult);
             
     const commentsResult = await dbClient.execute({
-        sql: `SELECT post_id, id as comment_id
+        sql: `SELECT parent_id, id as comment_id
             FROM comments 
-            WHERE post_id IN (${placeholders})`,
+            WHERE parent_id IN (${placeholders})`,
         args: postIds
     });
+    console.log(`Found comment results:`,commentsResult);
 
             
     return posts.map(post => {
         const postLikes = likesResult.rows
-            .filter(like => like.post_id === post.id)
+            .filter(like => like.comment_id === post.id)
             .map(like => like.user_id);
 
         const postComments = commentsResult.rows
-            .filter(comment => comment.post_id === post.id)
+            .filter(comment => comment.parent_id === post.id)
             .map(comment => comment.comment_id);
+
+        console.log(`Post ${post.id} has ${postLikes.length} likes and ${postComments.length} comments`);
 
         return {
             _id: post.id,

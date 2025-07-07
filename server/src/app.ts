@@ -27,12 +27,19 @@ app.use((req, _, next) => {
 app.use(json());
 
 app.use("/users", usersRouter);
+<<<<<<< HEAD
 app.use("/auth", authRouter);
 
 app.use("/api/notifications", notificationRouter)
 app.use("/posts", postsRouter);
 app.use("/comments", commentsRouter);
 app.use("/search", searchRouter);
+=======
+app.use("/posts", postsRouter);
+app.use("/comments", commentsRouter);
+app.use("/api/notifications", notificationRouter)
+
+>>>>>>> 583a1a6 (removing the confclits lines)
 
 
 

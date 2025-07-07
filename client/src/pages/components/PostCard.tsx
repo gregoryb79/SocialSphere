@@ -41,7 +41,7 @@ export function PostCard({post}: PostCardProps) {
     console.log(`PostCard rendered for post: ${post._id} with current user: ${currUserId.current}`);  
 
     const filled = (post.likes.includes(currUserId.current) ? "var(--primary-blue)" : "none");
-    const showBookmarkButton = (post.parentId === null || post.parentId === undefined) && (post.author !== currUserId.current); 
+    const isPost = (post.parentId === null || post.parentId === undefined) && (post.author !== currUserId.current); 
     
     useEffect(() => {
         const el = pRef.current;
@@ -156,7 +156,8 @@ export function PostCard({post}: PostCardProps) {
             {showMore && <button className={styles.textButton} onClick={() => setShowMore(false)}>See less</button>}
             {post.image && <img src={post.image} alt="Post visual content" className={styles.postImage} />}
             <p><strong>Author:</strong> {post.authorName}</p>
-            <p><strong>Created at:</strong> {new Date(post.createdAt).toLocaleString()}</p>
+            {isPost && <p><strong>Created at:</strong> {new Date(post.createdAt).toLocaleString()}</p>}
+            {!isPost && <p>{commentAge(post.createdAt)}</p>}
             <section className={styles.postStatistics}>
                 <span><Heart className={styles.lucideIconStats} color="var(--primary-blue)"/> {post.likes.length.toString()}</span>                
                 {post.comments.length > 0 && <button className={styles.textButton} 
@@ -175,7 +176,7 @@ export function PostCard({post}: PostCardProps) {
                             setDisplayNewComment(true);
                         }} disabled={commentDisable} /> 
                 </section>                        
-                {showBookmarkButton && <IconButton title="Bookmark" ariaLabel= "Bookmark post" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>}
+                {isPost && <IconButton title="Bookmark" ariaLabel= "Bookmark post" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>}
                 onClick={() => console.log(`Bookemarked on post ${post._id}`)} />}             
             </section>            
             { (showComments && comments) && (
@@ -191,4 +192,23 @@ export function PostCard({post}: PostCardProps) {
             )}
         </li>
     );
+}
+
+function commentAge(createdAt: string): string {
+    const now = new Date();
+    const commentDate = new Date(createdAt);
+    const diffInSeconds = Math.floor((now.getTime() - commentDate.getTime()) / 1000);
+    
+    if (diffInSeconds < 60) {
+        return `${diffInSeconds} s`;
+    } else if (diffInSeconds < 3600) {
+        return `${Math.floor(diffInSeconds / 60)} min`;
+    } else if (diffInSeconds < 3600*24) {
+        return `${Math.floor(diffInSeconds / 3600)} H`;
+    } else if (diffInSeconds < 3600*24*365){
+        return `${Math.floor(diffInSeconds / 3600*24)} d`;
+    } else {
+        return `${Math.floor(diffInSeconds / (3600*24*7))} W`;
+    }
+
 }

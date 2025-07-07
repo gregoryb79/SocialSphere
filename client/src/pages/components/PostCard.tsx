@@ -24,7 +24,7 @@ import { getLoggedInUserId } from "../../models/users";
 import { NewCommentCard } from "./NewCommentCard";
 
 type PostCardProps = {
-    post: Post;    
+    post: Post | Comment;    
 };
 export function PostCard({post}: PostCardProps) {
     const pRef = useRef<HTMLParagraphElement>(null);
@@ -41,6 +41,7 @@ export function PostCard({post}: PostCardProps) {
     console.log(`PostCard rendered for post: ${post._id} with current user: ${currUserId.current}`);  
 
     const filled = (post.likes.includes(currUserId.current) ? "var(--primary-blue)" : "none");
+    const showBookmarkButton = (post.parentId === null || post.parentId === undefined) && (post.author !== currUserId.current); 
     
     useEffect(() => {
         const el = pRef.current;
@@ -112,8 +113,7 @@ export function PostCard({post}: PostCardProps) {
                 console.log(`Comment ${post._id} like toggled successfully`);
                 post.likes = result.likes;
                 console.log("Comment likes", post.likes);                
-                post.updatedAt = result.updatedAt;
-                // filled = filled === "var(--primary-blue)" ? "none" : "var(--primary-blue)";
+                post.updatedAt = result.updatedAt;                
             }else {
                 console.log(`Failed to like toggle comment ${post._id}`);
             }
@@ -171,8 +171,8 @@ export function PostCard({post}: PostCardProps) {
                             setDisplayNewComment(true);
                         }} disabled={commentDisable} /> 
                 </section>                        
-                <IconButton title="Bookmark" ariaLabel= "Bookmark post" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>}
-                onClick={() => console.log(`Bookemarked on post ${post._id}`)} />             
+                {showBookmarkButton && <IconButton title="Bookmark" ariaLabel= "Bookmark post" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>}
+                onClick={() => console.log(`Bookemarked on post ${post._id}`)} />}             
             </section>            
             { (showComments && comments && comments.length > 0) && (
                 <section className={styles.commentsSection}>
@@ -180,7 +180,7 @@ export function PostCard({post}: PostCardProps) {
                     {displayNewComment && <NewCommentCard post={post} onCommentPosted={handlePostedComment}/>}
                     <ul className={styles.commentsList}>
                         {comments.map((comment) => (
-                            <CommentCard key={comment._id} comment={comment} />
+                            <PostCard key={comment._id} post={comment} />
                         ))}
                     </ul>
                 </section>

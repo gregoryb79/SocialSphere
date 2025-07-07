@@ -1,26 +1,33 @@
+import { apiClient } from "./apiClient";
 import { getLoggedInUserId, getLoggedInUserName } from "./users";
 
 export type Comment = {
     _id: string;
-    author: string;
-    authorName?: string; // Optional, can be fetched separately
+    author: string; 
+    authorName?: string; 
+    parentId?: string; 
     content: string;
     image?: string;
-    likes: string[];
+    likes: string[]; 
+    comments: string[];
     createdAt: string;
     updatedAt: string;
 };
 
 export async function getComments(commentsId: string[]): Promise<Comment[]> {
 
-    const comments = mockComments.filter(comment => commentsId.includes(comment._id))
-                    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    console.log("Fetching comments with ids:", commentsId);
+    try {
+        const response = await apiClient.get(`/comments`,
+           {params: { ids: commentsId.join(",") }});
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(comments);
-        }, 1000);
-    });
+        console.log("Fetched comments:", response.data);
+        
+        return response.data as Comment[];
+    } catch (error) {
+        console.error("Error fetching posts:", error);
+        throw error;
+    }
 }
 
 export async function likeComment(commentId: string): Promise<Comment> {
@@ -55,6 +62,7 @@ export async function postComment(commentText: string): Promise<string> {
         content: commentText,
         image: undefined, // No image for this comment
         likes: [],
+        comments: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
     };
@@ -71,130 +79,130 @@ export async function postComment(commentText: string): Promise<string> {
 }
 
 const mockComments: Comment[] = [
-  {
-    _id: "c1",
-    author: "user2",
-    authorName: "Jane Smith",
-    content: "Welcome to SocialSphere! 🚀",
-    likes: ["user3"],
-    createdAt: "2024-06-01T11:00:00Z",
-    updatedAt: "2024-06-01T11:00:00Z",
-  },
-  {
-    _id: "c2",
-    author: "user3",
-    authorName: "Bob Johnson",
-    content: "Glad to see you here!",
-    likes: [],
-    createdAt: "2024-06-01T12:00:00Z",
-    updatedAt: "2024-06-01T12:00:00Z",
-  },
-  {
-    _id: "c3",
-    author: "user1",
-    authorName: "johnDoe",
-    content: "Thanks for the feedback!",
-    likes: ["user2"],
-    createdAt: "2024-06-02T13:00:00Z",
-    updatedAt: "2024-06-02T13:00:00Z",
-  },
-  {
-    _id: "c4",
-    author: "user5",
-    authorName: "Charlie Kim",
-    content: "I'm up for a chat!",
-    likes: [],
-    createdAt: "2024-06-04T15:00:00Z",
-    updatedAt: "2024-06-04T15:00:00Z",
-  },
-  {
-    _id: "c5",
-    author: "user4",
-    authorName: "Alice Lee",
-    content: "Nice post!",
-    likes: ["user1"],
-    createdAt: "2024-06-05T09:00:00Z",
-    updatedAt: "2024-06-05T09:00:00Z",
-  },
-  {
-    _id: "c11",
-    author: "user2",
-    authorName: "Jane Smith",
-    content: "Nice post!",
-    likes: ["user3"],
-    createdAt: "2024-06-01T11:10:00Z",
-    updatedAt: "2024-06-01T11:10:00Z",
-  },
-  {
-    _id: "c12",
-    author: "user3",
-    authorName: "Bob Johnson",
-    content: "Welcome!",
-    likes: [],
-    createdAt: "2024-06-01T12:10:00Z",
-    updatedAt: "2024-06-01T12:10:00Z",
-  },
-  {
-    _id: "c13",
-    author: "user5",
-    authorName: "Charlie Kim",
-    content: "Great work!",
-    likes: ["user1"],
-    createdAt: "2024-06-02T13:10:00Z",
-    updatedAt: "2024-06-02T13:10:00Z",
-  },
-  {
-    _id: "c14",
-    author: "user3",
-    authorName: "Bob Johnson",
-    content: "Let's chat!",
-    likes: [],
-    createdAt: "2024-06-04T15:10:00Z",
-    updatedAt: "2024-06-04T15:10:00Z",
-  },
-  {
-    _id: "c15",
-    author: "user2",
-    authorName: "Jane Smith",
-    content: "Nice photo!",
-    likes: [],
-    createdAt: "2024-06-03T10:00:00Z",
-    updatedAt: "2024-06-03T10:00:00Z",
-  },
-  {
-    _id: "c16",
-    author: "user4",
-    authorName: "Alice Lee",
-    content: "Cool!",
-    likes: [],
-    createdAt: "2024-06-03T10:10:00Z",
-    updatedAt: "2024-06-03T10:10:00Z",
-  },
-  {
-    _id: "c17",
-    author: "user5",
-    authorName: "Charlie Kim",
-    content: "Love it!",
-    likes: ["user1"],
-    createdAt: "2024-06-03T10:20:00Z",
-    updatedAt: "2024-06-03T10:20:00Z",
-  },
-  {
-    _id: "c18",
-    author: "user2",
-    authorName: "Jane Smith",
-    content: "Congrats on joining!",
-    likes: [],
-    createdAt: "2024-06-05T09:00:00Z",
-    updatedAt: "2024-06-05T09:00:00Z",
-  },
-  {
-    _id: "c19",
-    author: "user3",
-    authorName: "Bob Johnson",
-    content: "Welcome aboard!",
-    likes: [],
-    createdAt: "2024-06-05T09:10:00Z",
-    updatedAt: "2024-06-05T09:10:00Z",
-  },
+  // {
+  //   _id: "c1",
+  //   author: "user2",
+  //   authorName: "Jane Smith",
+  //   content: "Welcome to SocialSphere! 🚀",
+  //   likes: ["user3"],
+  //   createdAt: "2024-06-01T11:00:00Z",
+  //   updatedAt: "2024-06-01T11:00:00Z",
+  // },
+  // {
+  //   _id: "c2",
+  //   author: "user3",
+  //   authorName: "Bob Johnson",
+  //   content: "Glad to see you here!",
+  //   likes: [],
+  //   createdAt: "2024-06-01T12:00:00Z",
+  //   updatedAt: "2024-06-01T12:00:00Z",
+  // },
+  // {
+  //   _id: "c3",
+  //   author: "user1",
+  //   authorName: "johnDoe",
+  //   content: "Thanks for the feedback!",
+  //   likes: ["user2"],
+  //   createdAt: "2024-06-02T13:00:00Z",
+  //   updatedAt: "2024-06-02T13:00:00Z",
+  // },
+  // {
+  //   _id: "c4",
+  //   author: "user5",
+  //   authorName: "Charlie Kim",
+  //   content: "I'm up for a chat!",
+  //   likes: [],
+  //   createdAt: "2024-06-04T15:00:00Z",
+  //   updatedAt: "2024-06-04T15:00:00Z",
+  // },
+  // {
+  //   _id: "c5",
+  //   author: "user4",
+  //   authorName: "Alice Lee",
+  //   content: "Nice post!",
+  //   likes: ["user1"],
+  //   createdAt: "2024-06-05T09:00:00Z",
+  //   updatedAt: "2024-06-05T09:00:00Z",
+  // },
+  // {
+  //   _id: "c11",
+  //   author: "user2",
+  //   authorName: "Jane Smith",
+  //   content: "Nice post!",
+  //   likes: ["user3"],
+  //   createdAt: "2024-06-01T11:10:00Z",
+  //   updatedAt: "2024-06-01T11:10:00Z",
+  // },
+  // {
+  //   _id: "c12",
+  //   author: "user3",
+  //   authorName: "Bob Johnson",
+  //   content: "Welcome!",
+  //   likes: [],
+  //   createdAt: "2024-06-01T12:10:00Z",
+  //   updatedAt: "2024-06-01T12:10:00Z",
+  // },
+  // {
+  //   _id: "c13",
+  //   author: "user5",
+  //   authorName: "Charlie Kim",
+  //   content: "Great work!",
+  //   likes: ["user1"],
+  //   createdAt: "2024-06-02T13:10:00Z",
+  //   updatedAt: "2024-06-02T13:10:00Z",
+  // },
+  // {
+  //   _id: "c14",
+  //   author: "user3",
+  //   authorName: "Bob Johnson",
+  //   content: "Let's chat!",
+  //   likes: [],
+  //   createdAt: "2024-06-04T15:10:00Z",
+  //   updatedAt: "2024-06-04T15:10:00Z",
+  // },
+  // {
+  //   _id: "c15",
+  //   author: "user2",
+  //   authorName: "Jane Smith",
+  //   content: "Nice photo!",
+  //   likes: [],
+  //   createdAt: "2024-06-03T10:00:00Z",
+  //   updatedAt: "2024-06-03T10:00:00Z",
+  // },
+  // {
+  //   _id: "c16",
+  //   author: "user4",
+  //   authorName: "Alice Lee",
+  //   content: "Cool!",
+  //   likes: [],
+  //   createdAt: "2024-06-03T10:10:00Z",
+  //   updatedAt: "2024-06-03T10:10:00Z",
+  // },
+  // {
+  //   _id: "c17",
+  //   author: "user5",
+  //   authorName: "Charlie Kim",
+  //   content: "Love it!",
+  //   likes: ["user1"],
+  //   createdAt: "2024-06-03T10:20:00Z",
+  //   updatedAt: "2024-06-03T10:20:00Z",
+  // },
+  // {
+  //   _id: "c18",
+  //   author: "user2",
+  //   authorName: "Jane Smith",
+  //   content: "Congrats on joining!",
+  //   likes: [],
+  //   createdAt: "2024-06-05T09:00:00Z",
+  //   updatedAt: "2024-06-05T09:00:00Z",
+  // },
+  // {
+  //   _id: "c19",
+  //   author: "user3",
+  //   authorName: "Bob Johnson",
+  //   content: "Welcome aboard!",
+  //   likes: [],
+  //   createdAt: "2024-06-05T09:10:00Z",
+  //   updatedAt: "2024-06-05T09:10:00Z",
+  // },
 ];

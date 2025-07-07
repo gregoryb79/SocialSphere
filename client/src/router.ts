@@ -76,7 +76,8 @@ export const router = createBrowserRouter([
                 loader: async () => {
                     const userId = getLoggedInUserId();
 
-                    if (!userId) {
+                    if (!userId || userId === "Guest") {
+                        console.warn("No valid userId was found. Moving to login")
                         return redirect("/login");
                     }
 

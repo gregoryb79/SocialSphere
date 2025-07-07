@@ -98,6 +98,7 @@ router.post('/', async (req, res) => {
 
     if (!content || content.trim() === "") {
         res.status(400).json({ error: "Content cannot be empty" });
+        return;
     }
 
     const newCommentId = `c-${randomUUID()}`; 

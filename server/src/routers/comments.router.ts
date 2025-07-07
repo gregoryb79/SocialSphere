@@ -1,6 +1,7 @@
 import express from 'express';
 export const router = express.Router();
 import { dbClient } from "../models/db";
+import { randomUUID } from 'crypto';
 
 
 router.get('/', async (req, res) => {
@@ -22,7 +23,8 @@ router.get('/', async (req, res) => {
                         u.username as author_name
                   FROM comments c
                   INNER JOIN users u ON c.author_id = u.id
-                  WHERE c.id IN (${placeholders})`,
+                  WHERE c.id IN (${placeholders})
+                  ORDER BY c.created_at DESC`,
             args: commentsIds  
         });
 
@@ -46,7 +48,7 @@ router.get('/', async (req, res) => {
             WHERE parent_id IN (${placeholders})`,
         args: commentsIds
         });
-        console.log(`Found comment results:`,childrenCommentsResult);
+        console.log(`Found children comments results:`,childrenCommentsResult);
 
         const combinedComments = comments.map(comment => {
             const commentLikes = likesResult.rows
@@ -54,10 +56,10 @@ router.get('/', async (req, res) => {
                 .map(like => like.user_id);
 
             const commentComments = childrenCommentsResult.rows
-                .filter(comment => comment.parent_id === comment.id)
-                .map(comment => comment.comment_id);
+                .filter(childComment => childComment.parent_id === comment.id)
+                .map(childComment => childComment.comment_id);
 
-            console.log(`Post ${comment.id} has ${commentLikes.length} likes and ${commentComments.length} comments`);
+            console.log(`Comment ${comment.id} has ${commentLikes.length} likes and ${commentComments.length} comments`);
 
             return {
                 _id: comment.id,
@@ -76,5 +78,53 @@ router.get('/', async (req, res) => {
     } catch (error) {
         console.error("Error fetching comments:", error);
         res.status(500).json({ error: "Failed to fetch comments" });
+    }
+});
+
+router.post('/', async (req, res) => {
+    const { content, parentId } = req.body;
+    // ****************************************************
+    // const authorId = req.user?.id; 
+    // For TESTING !!!!! REMOVE WHEN ID MIDDLEWARE IS IMPLEMENTED!!!!
+    const authorId = "user1"; 
+    // ****************************************************
+
+    console.log(`Posting comment by user ${authorId} with content: ${content}, parentId: ${parentId}`);
+
+    if (!authorId) {
+        res.status(401).json({ error: "Unauthorized" });
+    }
+
+    if (!content || content.trim() === "") {
+        res.status(400).json({ error: "Content cannot be empty" });
+    }
+
+    const newCommentId = `c-${randomUUID()}`; 
+    const newComment = {
+        id: newCommentId,
+        author_id: authorId,
+        content: content,
+        parent_id: parentId,
+        image: null, 
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+    }
+
+    try {
+        const result = await dbClient.execute({
+            sql: `INSERT INTO comments (id, author_id, parent_id, content, image, created_at, updated_at)
+                  VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            args: [newComment.id, newComment.author_id, newComment.parent_id, newComment.content, newComment.image, newComment.created_at, newComment.updated_at]
+        });        
+
+        if (result.rowsAffected === 1) {
+            res.status(201).json({id: newCommentId});
+            console.log(`Comment created successfully with ID: ${newCommentId}`);
+        } else {
+            res.status(500).json({ error: "Failed to create comment" });
+        };
+    } catch (error) {
+        console.error("Error posting comment:", error);
+        res.status(500).json({ error: "Failed to post comment" });
     }
 });

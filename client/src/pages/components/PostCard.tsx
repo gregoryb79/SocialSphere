@@ -58,7 +58,7 @@ export function PostCard({post}: PostCardProps) {
         if (!currUserId.current) {
             console.log("No user logged in, setting like and comment icons color to light text and disabling like and comment actions");
             likeIconColor.current = "var(--light-text)";
-            const commentIconColor = "var(--light-text)";
+            commentIconColor.current = "var(--light-text)";
             setLikeDisable(true);
             setCommentDisable(true);
         }
@@ -126,8 +126,12 @@ export function PostCard({post}: PostCardProps) {
         }
     }
 
-    async function handlePostedComment() {
-        console.log(`PC: New comment posted for post ${post._id}`);
+    async function handlePostedComment(newCommentId: string) {
+        
+        if (newCommentId) {
+            console.log(`PC: New comment ${newCommentId} posted for post ${post._id}`);
+            post.comments.push(newCommentId);
+        }
         setDisplayNewComment(false);
         setLoading(true);
         try{
@@ -174,7 +178,7 @@ export function PostCard({post}: PostCardProps) {
                 {showBookmarkButton && <IconButton title="Bookmark" ariaLabel= "Bookmark post" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>}
                 onClick={() => console.log(`Bookemarked on post ${post._id}`)} />}             
             </section>            
-            { (showComments && comments && comments.length > 0) && (
+            { (showComments && comments) && (
                 <section className={styles.commentsSection}>
                     <h3>Comments:</h3>
                     {displayNewComment && <NewCommentCard post={post} onCommentPosted={handlePostedComment}/>}

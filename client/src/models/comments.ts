@@ -49,33 +49,50 @@ export async function likeComment(commentId: string): Promise<Comment> {
     });
 }
 
-export async function postComment(commentText: string): Promise<string> {
+export async function postComment(commentText: string, parent_id: string): Promise<string> {
     console.log(`Posting comment:`, commentText);
+    console.log(`Parent ID:`, parent_id);
     if (!commentText || commentText.trim() === "") {
         console.error("Comment text cannot be empty");       
         return Promise.reject(new Error("Comment text cannot be empty"));        
     }
-    const comment: Comment = {
-        _id: `c${mockComments.length + 1}`,
-        author: getLoggedInUserId(),
-        authorName: getLoggedInUserName(), // Placeholder, can be fetched from user data
-        content: commentText,
-        image: undefined, // No image for this comment
-        likes: [],
-        comments: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-    };
-    console.log(`Comment object created:`, comment);
-    mockComments.push(comment);
-    console.log(`Comment added to mockComments:`, mockComments);
+    if (!getLoggedInUserId()) {
+        console.error("No user logged in, cannot post comment");
+        return Promise.reject(new Error("No user logged in, cannot post comment"));
+    }
+    try {
+        const response = await apiClient.post("/comments", 
+            {
+                content: commentText,
+                parentId: parent_id
+            });
+        console.log(`Comment posted successfully:`, response.data);
+        return response.data.id as string;
+    } catch (error) {
+        console.error(`Error posting comment:`, error);
+        return Promise.reject(new Error(`Error posting comment: ${error}`));
+    }
+    // const comment: Comment = {
+    //     _id: `c${mockComments.length + 1}`,
+    //     author: getLoggedInUserId(),
+    //     authorName: getLoggedInUserName(), // Placeholder, can be fetched from user data
+    //     content: commentText,
+    //     image: undefined, // No image for this comment
+    //     likes: [],
+    //     comments: [],
+    //     createdAt: new Date().toISOString(),
+    //     updatedAt: new Date().toISOString(),
+    // };
+    // console.log(`Comment object created:`, comment);
+    // mockComments.push(comment);
+    // console.log(`Comment added to mockComments:`, mockComments);
     
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            console.log(`Comment posted:`, comment);            
-            resolve(comment._id);
-        }, 1000);
-    });
+    // return new Promise((resolve) => {
+    //     setTimeout(() => {
+    //         console.log(`Comment posted:`, comment);            
+    //         resolve(comment._id);
+    //     }, 1000);
+    // });
 }
 
 const mockComments: Comment[] = [

@@ -212,6 +212,60 @@ const mockMyPosts: Post[] = [
   },
 ];
 
+
+
+export async function fetchPostsByContent(searchTerm: string): Promise<Post[]> {
+    console.log("Fetching posts by content from backend:", searchTerm);
+
+    if (!searchTerm) {
+        return [];
+    }
+
+    try {
+        const response = await apiClient.get(`/search/posts?q=${encodeURIComponent(searchTerm)}`);
+
+        const backendPosts = response.data;
+
+        if (!backendPosts || backendPosts.length === 0) {
+            return [];
+        }
+        console.log("Fetched posts from backend:", backendPosts);
+        type BackendPost = {
+            id: string;
+            author_id: string;
+            author_name?: string;
+            content: string;
+            image?: string;
+            likes: string[] | string;
+            comments: string[] | string;
+            created_at: string;
+            updated_at: string;
+            parent_id?: string;
+        };
+
+        const clientPosts: Post[] = backendPosts.map((backendPost: BackendPost) => ({
+            _id: backendPost.id,
+            author: backendPost.author_id, 
+            authorName: backendPost.author_name, 
+            content: backendPost.content,
+            image: backendPost.image,
+            likes: Array.isArray(backendPost.likes) ? backendPost.likes : (backendPost.likes ? JSON.parse(backendPost.likes) : []),
+            comments: Array.isArray(backendPost.comments) ? backendPost.comments : (backendPost.comments ? JSON.parse(backendPost.comments) : []),
+            createdAt: backendPost.created_at, 
+            updatedAt: backendPost.updated_at, 
+            parentId: backendPost.parent_id,
+        }));
+
+        console.log("Fetched and mapped posts:", clientPosts);
+        return clientPosts;
+
+    } catch (error) {
+        console.error("Error fetching posts by content:", error);
+        throw error;
+    }
+};
+
+/*
 export async function fetchPostsByContent(searchTerm: string): Promise<Post[]> {
     console.log("fetchPostsByContent called with searchTerm:", searchTerm);
 
@@ -231,3 +285,5 @@ export async function fetchPostsByContent(searchTerm: string): Promise<Post[]> {
 
     return filteredPosts;
 }
+
+*/

@@ -113,6 +113,45 @@ export const mockUser: User = {
 };
 
 
+export async function getUserByName(username: string): Promise<User | null>  {
+    console.log("Searching user by name from backend:", username);
+
+    if (!username) {
+        return null; 
+    }
+
+    try {
+        const response = await apiClient.get(`/search/users?q=${encodeURIComponent(username)}`);
+
+        const users = response.data;
+
+        if (!users || users.length === 0) {
+            return null; 
+        }
+
+         const backendUser = users[0];
+         const clientUser: User = {
+             _id: backendUser.id, 
+             username: backendUser.username,
+             email: backendUser.email, 
+             profilePicture: backendUser.avatar,
+             bio: backendUser.bio,
+             followers: backendUser.followers || [], 
+             following: backendUser.following || [],
+             bookmarks: backendUser.bookmarks || [],
+             createdAt: backendUser.created_at, 
+             updatedAt: backendUser.updated_at, 
+         };
+        return clientUser;
+
+    } catch (error) {
+        console.error("Error searching user by name:", error);
+        throw error;
+    }
+}
+
+
+/*
 
 export async function getUserByName(username: string): Promise<User>  {
     const message = await getUsers();
@@ -140,3 +179,5 @@ return new Promise((resolve) => {
     }, 1000);
 });
 };
+
+*/

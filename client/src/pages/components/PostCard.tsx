@@ -41,7 +41,7 @@ export function PostCard({post}: PostCardProps) {
     console.log(`PostCard rendered for post: ${post._id} with current user: ${currUserId.current}`);  
 
     const filled = (post.likes.includes(currUserId.current) ? "var(--primary-blue)" : "none");
-    const isPost = (post.parentId === null || post.parentId === undefined) && (post.author !== currUserId.current); 
+    const isPost = post.parentId === null || post.parentId === undefined;
     
     useEffect(() => {
         const el = pRef.current;

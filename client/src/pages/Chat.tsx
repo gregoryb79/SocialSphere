@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { socket } from "../socketClient";
 
 import styles from "./Chat.module.scss";
+import { getLoggedInUserName } from "../models/users";
 
 type Messgae = {
     username: string; 
@@ -24,7 +25,8 @@ export function Chat() {
 
     const sendMessage = () => {
         if (!message.trim()) return;
-        const newMessage = { username: "You", text: message };
+        const username = getLoggedInUserName() || "Guest";
+        const newMessage = { username, text: message };
         socket.emit("message", newMessage);
         setMessages((prev) => [...prev, newMessage]);
         setMessage("");
@@ -34,7 +36,7 @@ export function Chat() {
         <div className={styles.chatContainer}>
             <ul className={styles.messages}>
                 {messages.map((msg, i) => (
-                    <li key={i} className={msg.username === "You" ? styles.ownMessage : ""}>
+                    <li key={i} className={msg.username === getLoggedInUserName() ? styles.ownMessage : ""}>
                         <strong>{msg.username}</strong> {msg.text}
                     </li>
                 ))}

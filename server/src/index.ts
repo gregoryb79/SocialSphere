@@ -5,6 +5,7 @@ import { app } from "./app";
 import { dbClient } from "./models/db";
 import { initDb } from "./models/initDb";
 import { seedDatabase } from "./models/generatedBdata";
+import { setupChatSocket } from "./chat";
 
 /* TEMP UNTILL FULL SQL*/
 import mongoose from "mongoose";
@@ -33,6 +34,7 @@ async function init() {
 
         await initDb();
         await seedDatabase();
+        setupChatSocket(server);
 
         /* TEMP UNTILL FULL SQL*/
         await mongoose.connect(process.env.CONNECTION_STRING!, {

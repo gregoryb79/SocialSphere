@@ -113,30 +113,41 @@ export const mockUser: User = {
 };
 
 
+export async function getUserByName(username: string): Promise<User | null>  {
+    console.log("Searching user by name from backend:", username);
 
-export async function getUserByName(username: string): Promise<User>  {
-    const message = await getUsers();
-    console.log("Verifying connection to server:", message);
+    if (!username) {
+        return null; 
+    }
 
-let UserInfo: User | undefined;
-if (mockUser.username.toLowerCase().includes(username.toLowerCase().trim())) {
-    UserInfo = mockUser;
-} else {
-    UserInfo = undefined;
+    try {
+        const response = await apiClient.get(`/search/users?q=${encodeURIComponent(username)}`);
+
+        const users = response.data;
+
+        if (!users || users.length === 0) {
+            return null; 
+        }
+
+         const backendUser = users[0];
+         const clientUser: User = {
+             _id: backendUser.id, 
+             username: backendUser.username,
+             email: backendUser.email, 
+             profilePicture: backendUser.avatar,
+             bio: backendUser.bio,
+             followers: backendUser.followers || [], 
+             following: backendUser.following || [],
+             bookmarks: backendUser.bookmarks || [],
+             createdAt: backendUser.created_at, 
+             updatedAt: backendUser.updated_at, 
+         };
+        return clientUser;
+
+    } catch (error) {
+        console.error("Error searching user by name:", error);
+        throw error;
+    }
 }
-if (!UserInfo) {
-    console.log (`User name:  ${username} not found`);
-    return new Promise((_, reject) => {
-        setTimeout(() => {
-            reject(new Error("User not found"));
-        }, 1000);
-    });
-}
 
 
-return new Promise((resolve) => {
-    setTimeout(() => {
-        resolve(UserInfo as User);
-    }, 1000);
-});
-};

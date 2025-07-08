@@ -14,6 +14,7 @@ import { Notifications } from "./pages/Notifications";
 import { fetchNotifications } from "./models/notifications";
 import { PauseOctagon } from "lucide-react";
 import { getComments } from "./models/comments";
+import { Chat } from "./pages/Chat";
 
 export const router = createBrowserRouter([
     {
@@ -91,8 +92,10 @@ export const router = createBrowserRouter([
                         throw new Response("Failed to load notifications", {status: 500});
                     }
                 }
-            },            
-            
+            },
+            { path: "/chat", 
+                Component: Chat 
+            }    
         ],
     },
 ]);

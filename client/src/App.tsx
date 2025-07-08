@@ -1,7 +1,7 @@
 
 import styles from "./App.module.scss";
 import { Outlet, useLocation, useNavigate} from "react-router";
-import { ArrowLeft, Bell, Home, LogIn, LogOut, Plus, Search, Settings, User } from "lucide-react";
+import { ArrowLeft, Bell, Home, LogIn, LogOut, MessageCircle, Plus, Search, Settings, User } from "lucide-react";
 import { IconButton } from "./pages/components/IconButton";
 import { useEffect, useState } from "react";
 import { Spinner } from "./pages/components/Spinner";
@@ -74,11 +74,16 @@ function Footer() {
               navigate("/notifications");
               setLoading(true);
             }} disabled={username == "Guest"}/>
+        <IconButton title="Chat" ariaLabel="Open Chat Page" icon={<MessageCircle className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-text)"} />} 
+          onClick={() => {
+            navigate("/chat");
+            setLoading(true);
+          }} disabled={username == "Guest"} />
         <IconButton title="Profile" ariaLabel="Configure your profile" icon={<User className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-text)"}/>} onClick={() => {
             navigate("/profile");
             setLoading(true);
           }} disabled={username == "Guest"}/>
-        {(username == "Guest") && <IconButton title="Log In" icon={<LogIn className={styles.lucideIcon} color="var(--primary-blue)" />} ariaLabel="Log In Button" onClick={() => navigate("/login")}/>}
+        {(username == "Guest") && <IconButton title="Log In" icon={<LogIn className={styles.lucideIcon} color="var(--primary-blue)" />} ariaLabel="Log In Button" onClick={() => navigate("/login")} />}
         {(username != "Guest") && <IconButton title="LogOut" ariaLabel="LogOut" icon={<LogOut className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
             doLogOut();
             navigate("/login");

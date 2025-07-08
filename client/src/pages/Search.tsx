@@ -138,7 +138,9 @@ const handlePostClick = (postId: string) => {
           </li>
         )}
         {!userLoading && !userError && !user && searchTerm && (
-          <p>No users found matching "{searchTerm}"</p>
+          <li>
+             <p>No users found matching "{searchTerm}"</p>
+          </li>
         )}
       </ul>
       <ul>
@@ -150,7 +152,9 @@ const handlePostClick = (postId: string) => {
           </li>
         ))}
         {!postLoading && !postError && postResults.length === 0 && searchTerm && (
+          <li>
             <p>No posts found matching "{searchTerm}"</p>
+          </li>
         )}
       </ul>
       </section>

@@ -5,6 +5,7 @@ import type { Post } from "../models/posts";
 import { PostCard } from "./components/PostCard";
 import { Bookmark } from "lucide-react";
 import { IconButton } from "./components/IconButton";
+import { GeneralButton } from "./components/GeneralButton";
 
 
 export function Profile() {
@@ -26,8 +27,8 @@ export function Profile() {
       <h1>{user.username}</h1>
       <p> {user.bio && <p>{user.bio}</p>}</p>
       <div className={styles.followStats}>
-            <p>Followers: {user.followers.length}</p>
-            <p>Following: {user.following.length}</p>
+            <GeneralButton label="Followers:" count={user.followers.length} />
+            <GeneralButton label="Following:" count={user.following.length} />
             <IconButton title="Bookmark" ariaLabel= "Saved Bookmarks" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>} onClick={handleBookmarksClick}/>
       </div>
       </section>

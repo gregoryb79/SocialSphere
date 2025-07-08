@@ -243,14 +243,14 @@ export async function fetchPostsByContent(searchTerm: string): Promise<Post[]> {
             parent_id?: string;
         };
 
-        const clientPosts: Post[] = backendPosts.map((backendPost: BackendPost) => ({
+        const clientPosts = backendPosts.map((backendPost: BackendPost) => ({
             _id: backendPost.id,
             author: backendPost.author_id, 
             authorName: backendPost.author_name, 
             content: backendPost.content,
             image: backendPost.image,
             likes: Array.isArray(backendPost.likes) ? backendPost.likes : (backendPost.likes ? JSON.parse(backendPost.likes) : []),
-            comments: Array.isArray(backendPost.comments) ? backendPost.comments : (backendPost.comments ? JSON.parse(backendPost.comments) : []),
+          comments: Array.isArray(backendPost.comments) ? backendPost.comments : (backendPost.comments ? JSON.parse(backendPost.comments) : []),
             createdAt: backendPost.created_at, 
             updatedAt: backendPost.updated_at, 
             parentId: backendPost.parent_id,
@@ -265,25 +265,4 @@ export async function fetchPostsByContent(searchTerm: string): Promise<Post[]> {
     }
 };
 
-/*
-export async function fetchPostsByContent(searchTerm: string): Promise<Post[]> {
-    console.log("fetchPostsByContent called with searchTerm:", searchTerm);
 
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    if (!searchTerm) {
-        return [];
-    }
-
-    const lowerCaseSearchTerm = searchTerm.toLowerCase().trim();
-
-    const filteredPosts = mockPosts.filter(post =>
-        post.content.toLowerCase().includes(lowerCaseSearchTerm)
-    );
-
-    console.log("Filtered posts:", filteredPosts);
-
-    return filteredPosts;
-}
-
-*/

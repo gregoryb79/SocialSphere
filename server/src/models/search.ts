@@ -33,6 +33,7 @@ export async function searchPostsByContent(searchTerm: string) {
                   FROM comments c
                   INNER JOIN users u ON c.author_id = u.id
                   WHERE c.parent_id IS NULL AND LOWER(c.content) LIKE ?`,
+                  
             args: [lowerCaseSearchTerm],
         });
 

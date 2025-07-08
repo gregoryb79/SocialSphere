@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { socket } from "../socketClient";
 
 import styles from "./Chat.module.scss";
-import { getLoggedInUserName } from "../models/users";
+import { getLoggedInUserId, getLoggedInUserName } from "../models/users";
 
 type Messgae = {
     username: string; 
     text: string;
+    chat_id: string;
+    sender_id: string;
+    receiver_id: string;
 };
 
 export function Chat() {
@@ -25,8 +28,13 @@ export function Chat() {
 
     const sendMessage = () => {
         if (!message.trim()) return;
+
         const username = getLoggedInUserName() || "Guest";
-        const newMessage = { username, text: message };
+        const sender_id = getLoggedInUserId() || "guest-id";
+        const receiver_id = "admin";
+        const chat_id = "general-chat";
+        const newMessage = { username, text: message, chat_id, sender_id, receiver_id };
+        
         socket.emit("message", newMessage);
         setMessages((prev) => [...prev, newMessage]);
         setMessage("");

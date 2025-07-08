@@ -97,6 +97,6 @@ export const router = createBrowserRouter([
             { path: "/chat", 
                 Component: Chat 
             }    
-        ],
-    },
+        ]
+    }
 ]);

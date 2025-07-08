@@ -17,10 +17,14 @@ export function setupChatSocket(server: http.Server) {
         socket.on("message", async (data) => {
             console.log("Message receivrd:", data);
 
-            await dbClient.execute({
-                sql: `INSERT INTO messages (id, chat_id, sender_id, receiver_id, text, created_at) VALUES (?, ?, ?, ?, ?, ?)`,
-                args: [randomUUID(), data.chat_id, data.sender_id, data.receiver_id, data.text, new Date().toISOString()]
-            });
+            try { 
+                await dbClient.execute({
+                    sql: `INSERT INTO messages (id, chat_id, sender_id, receiver_id, text, created_at) VALUES (?, ?, ?, ?, ?, ?)`,
+                    args: [randomUUID(), data.chat_id, data.sender_id, data.receiver_id, data.text, new Date().toISOString()]
+                });    
+            } catch (error) {
+                console.error("Failed to insert message:", error);
+            }
 
             io.emit("message", data);
         });

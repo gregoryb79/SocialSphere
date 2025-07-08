@@ -1,0 +1,65 @@
+@use "../styles/mixins" as *;
+
+.chatContainer {
+    @include pageFrame;
+    display: flex;
+    flex-direction: column;
+    background-color: #f1f5f9;
+    padding: 1rem;
+    font-family: sans-serif;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    li {
+        @include postCardFrame;
+        @include shadowBorder;
+        background-color: #e2e8f0;
+        color: #1e293b;
+        border-radius: 10px;
+        align-self: flex-start;
+    }
+
+    strong {
+        color: #3b82f6;
+    }
+}
+
+.ownMessage {
+    align-self: flex-end;
+    background-color:#3b82f6;
+    color: white;
+
+    strong {
+        color: white;
+    }
+}
+
+.inpurtArea {
+    display: flex;
+    gap: 0.5rem;
+    
+    input {
+        flex: 1;
+        padding: 0.5rem;
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        background: var(--input-bg, #fff);
+        color: #1e293b;
+    }
+    
+    button {
+        background-color:#3b82f6;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+    }
+}

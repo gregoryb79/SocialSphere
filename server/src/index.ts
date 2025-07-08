@@ -5,6 +5,7 @@ import { app } from "./app";
 import { dbClient } from "./models/db";
 import { initDb } from "./models/initDb";
 import { seedDatabase } from "./models/generatedBdata";
+import { setupChatSocket } from "./chat";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ async function init() {
 
         await initDb();
         await seedDatabase();
+        setupChatSocket(server);
 
         server.listen(port, () => {
             console.log(`Server listening on port ${port}`);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { socket } from "../socketClient";
 
 import styles from "./Chat.module.scss";
@@ -15,6 +15,21 @@ type Messgae = {
 export function Chat() {
     const [messages, setMessages] = useState<Messgae[]>([]);
     const [message, setMessage] = useState("");
+
+    useEffect(() => {
+        const fetchMessages = async () => {
+            try {
+                const response = await fetch("http://localhost:5050/chat/messages/general-chat");
+                const data = await response.json();
+
+                setMessages(data);
+            } catch (error) {
+                console.error("Failed to fetch messages:", error);
+            }
+        };
+
+        fetchMessages();
+    }, []);
 
     useEffect(() => {
         socket.on("message", (data: Messgae) => {

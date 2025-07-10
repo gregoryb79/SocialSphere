@@ -18,17 +18,29 @@
     gap: 1rem;
     margin-top: 1rem;
 
+        .UserInfo{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+    }
     img{
-        width: 5rem;
-        height: 5rem;
+        width: 10rem;
+        height: 10rem;
         border-radius: 50%;
         object-fit: cover;
-    }
+    }    
+     .NameBio{
+        flex-direction: column;
+        align-items: center;
 
-    h1{
+           > h1{
         font-size: var(--font-xl);
         color: var(--primary-blue);
     }
+}
 
 }
 .followStats{

@@ -23,9 +23,12 @@ export function Profile() {
   return (
     <main className={styles.profileMain}>
       <section className={styles.profileHeader}>
+          <div className={styles.UserInfo}>
         {user.profilePicture && <img src={user.profilePicture} alt={`${user.username}'s profile`} />}
+      <div  className={styles.NameBio}>
       <h1>{user.username}</h1>
-      <p> {user.bio && <p>{user.bio}</p>}</p>
+       {user.bio && <p>{user.bio}</p>}</div>
+      </div>
       <div className={styles.followStats}>
             <GeneralButton label="Followers:" count={user.followers.length} />
             <GeneralButton label="Following:" count={user.following.length} />
@@ -38,7 +41,7 @@ export function Profile() {
                   <PostCard key={post._id} post={post}/>
               ))
           ) : (
-              <p>No posts found.</p>
+              <li>No posts found.</li>
           )}
       </ul>
     </main>

@@ -20,7 +20,7 @@
 
         .UserInfo{
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
@@ -35,10 +35,13 @@
      .NameBio{
         flex-direction: column;
         align-items: center;
+        font-size: var(--font-lg);
 
            > h1{
-        font-size: var(--font-xl);
+        font-size: 3rem;
         color: var(--primary-blue);
+        margin-bottom: 1.5rem;
+        justify-self: center;
     }
 }
 
@@ -59,7 +62,7 @@
 }
 
 .userPosts{
-    margin-top: 1rem;;
+    margin-top: 2rem;;
     display: flex;
     flex-direction: column;
     align-items: center;

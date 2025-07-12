@@ -30,7 +30,7 @@ export async function fetchPosts(userId: string): Promise<Post[]> {
         throw error;
     }
 }
-
+/* mock function is replaced below
 export async function fetchOwnPosts(userId: string): Promise<Post[]> {
   const message = await getUsers();
   console.log("Verifying connection to server:", message);
@@ -41,6 +41,7 @@ export async function fetchOwnPosts(userId: string): Promise<Post[]> {
         }, 1000);
     });
 }
+*/
 
 export async function getPost(postId: string): Promise<Post> {
     const message = await getUsers();
@@ -159,6 +160,7 @@ const mockPosts: Post[] = [
   },
 ];
 
+/*
 const mockMyPosts: Post[] = [
   {
     _id: "11",
@@ -212,7 +214,7 @@ const mockMyPosts: Post[] = [
   },
 ];
 
-
+*/
 
 export async function fetchPostsByContent(searchTerm: string): Promise<Post[]> {
     console.log("Fetching posts by content from backend:", searchTerm);
@@ -230,30 +232,18 @@ export async function fetchPostsByContent(searchTerm: string): Promise<Post[]> {
             return [];
         }
         console.log("Fetched posts from backend:", backendPosts);
-        type BackendPost = {
-            id: string;
-            author_id: string;
-            author_name?: string;
-            content: string;
-            image?: string;
-            likes: string[] | string;
-            comments: string[] | string;
-            created_at: string;
-            updated_at: string;
-            parent_id?: string;
-        };
 
-        const clientPosts = backendPosts.map((backendPost: BackendPost) => ({
-            _id: backendPost.id,
-            author: backendPost.author_id, 
-            authorName: backendPost.author_name, 
+        const clientPosts = backendPosts.map((backendPost: Post) => ({
+            _id: backendPost._id,
+            author: backendPost.author, 
+            authorName: backendPost.authorName, 
             content: backendPost.content,
             image: backendPost.image,
             likes: Array.isArray(backendPost.likes) ? backendPost.likes : (backendPost.likes ? JSON.parse(backendPost.likes) : []),
-          comments: Array.isArray(backendPost.comments) ? backendPost.comments : (backendPost.comments ? JSON.parse(backendPost.comments) : []),
-            createdAt: backendPost.created_at, 
-            updatedAt: backendPost.updated_at, 
-            parentId: backendPost.parent_id,
+            comments: Array.isArray(backendPost.comments) ? backendPost.comments : (backendPost.comments ? JSON.parse(backendPost.comments) : []),
+            createdAt: backendPost.createdAt, 
+            updatedAt: backendPost.updatedAt, 
+            parentId: backendPost.parentId,
         }));
 
         console.log("Fetched and mapped posts:", clientPosts);
@@ -264,5 +254,18 @@ export async function fetchPostsByContent(searchTerm: string): Promise<Post[]> {
         throw error;
     }
 };
+
+
+
+export async function fetchOwnPosts(userId: string): Promise<Post[]> {
+  try {
+    const { data } = await apiClient.get<Post[]>(`/posts/${userId}`);
+    return data;
+  } catch (error) {
+    console.error("Error fetching own posts:", error);
+    throw error;
+  }
+}
+
 
 

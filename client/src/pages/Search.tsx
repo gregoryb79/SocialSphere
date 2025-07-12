@@ -128,7 +128,7 @@ const handleUserClick = (userId: string) => {
             key={user._id}
             onClick={() => handleUserClick(user._id)} 
           >
-            {user.profilePicture && <img src={user.profilePicture} alt={`${user.username}'s profile`} className={styles.userAvatar}/>}
+            {user.avatar && <img src={user.avatar} alt={`${user.username}'s profile`} className={styles.userAvatar}/>}
             <div className={styles.userInfo}>
             <h2 className={styles.userName}>@{user.username}</h2>
             {user.bio && <p className={styles.userBio}>{user.bio}</p>}
@@ -136,21 +136,21 @@ const handleUserClick = (userId: string) => {
           </li>
         )}
         {!userLoading && !userError && !user && searchTerm && (
-          <li>
+          <div>
              <p className={styles.noResults}>No users found matching "{searchTerm}"</p>
-          </li>
+          </div>
         )}
       </ul>
       <ul className={styles.searchResultsPosts}> 
         {postLoading && <Spinner />}
         {postError && <div>{postError}</div>}
         {postResults.map((post) => (
-            <PostCard post={post} key={post._id}/>
+            <PostCard key={post._id} post={post}/>
         ))}
         {!postLoading && !postError && postResults.length === 0 && searchTerm && (
-          <li>
+          <div>
             <p className={styles.noResults}>No posts found matching "{searchTerm}"</p>
-          </li>
+          </div>
         )}
       </ul>
       </section>

@@ -4,7 +4,7 @@ export type User = {
     _id: string;
     username: string;
     email: string;
-    profilePicture?: string;
+    avatar?: string;
     bio?: string;
     followers: string[];
     following: string[];
@@ -52,8 +52,9 @@ export function getLoggedInUserId(): string {
         return "Guest";
     }
     return loggedUser._id;
+    
 }
-
+/*  mock function is replaced below
 export async function fetchUser(userId: string): Promise<User> {
     const message = await getUsers();
     console.log("Verifying connection to server:", message);
@@ -64,6 +65,7 @@ export async function fetchUser(userId: string): Promise<User> {
         }, 1000);
     });
 }
+*/
 
 export async function fetchLoggedInUser(): Promise<User> {
     const message = await getUsers();
@@ -103,7 +105,7 @@ export const mockUser: User = {
     _id: "user1",
     username: "johnDoe",
     email: "johndoe@example.com",
-    profilePicture: "https://placehold.co/100x100",
+    avatar: "https://placehold.co/100x100",
     bio: "Just another SocialSphere user.",
     followers: ["user2", "user3"],
     following: ["user2"],
@@ -134,7 +136,7 @@ export async function getUserByName(username: string): Promise<User | null>  {
              _id: backendUser.id, 
              username: backendUser.username,
              email: backendUser.email, 
-             profilePicture: backendUser.avatar,
+             avatar: backendUser.avatar,
              bio: backendUser.bio,
              followers: backendUser.followers || [], 
              following: backendUser.following || [],
@@ -150,4 +152,16 @@ export async function getUserByName(username: string): Promise<User | null>  {
     }
 }
 
+
+
+
+export async function fetchUser(userId: string): Promise<User> {
+  try {
+    const response = await apiClient.get(`/users/${userId}`);
+    return response.data as User;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw error;
+  }
+}
 

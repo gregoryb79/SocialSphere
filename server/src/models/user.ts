@@ -17,7 +17,7 @@ export async function listUsers() {
 }
 
 export async function getUserById(id: string) {
-    const result = await dbClient.execute(`SELECT *FROM useers WHERE id = '${id}'`);
+    const result = await dbClient.execute(`SELECT *FROM users WHERE id = '${id}'`);
     return result.rows[0];
 }
 

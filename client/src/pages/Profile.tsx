@@ -23,17 +23,18 @@ export function Profile() {
   return (
     <main className={styles.profileMain}>
       <section className={styles.profileHeader}>
-          <div className={styles.UserInfo}>
-        {user.profilePicture && <img src={user.profilePicture} alt={`${user.username}'s profile`} />}
-      <div  className={styles.NameBio}>
-      <h1>{user.username}</h1>
-       {user.bio && <p>{user.bio}</p>}</div>
-      </div>
-      <div className={styles.followStats}>
-            <GeneralButton label="Followers:" count={user.followers.length} />
-            <GeneralButton label="Following:" count={user.following.length} />
+         <div className={styles.UserInfo}>
+            {user.avatar && (<img src={user.avatar} alt={`${user.username}'s profile`} />)}
+            <div  className={styles.NameBio}>
+              <h1>{user.username}</h1>
+              {user.bio && <p>{user.bio}</p>}
+            </div>
+         </div>
+         <div className={styles.followStats}>
+            <GeneralButton label="Followers:" {...user.followers} />
+            <GeneralButton label="Following:" {...user.following} />
             <IconButton title="Bookmark" ariaLabel= "Saved Bookmarks" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>} onClick={handleBookmarksClick}/>
-      </div>
+         </div>
       </section>
       <ul className={styles.userPosts}>
           {posts.length > 0 ? (

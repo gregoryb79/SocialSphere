@@ -81,7 +81,11 @@ export async function initDb() {
     );`,
     `CREATE TABLE IF NOT EXISTS chats (
       id TEXT PRIMARY KEY,
-      created_at TEXT
+      user1_id TEXT NOT NULL,
+      user2_id TEXT NOT NULL,
+      created_at TEXT,
+      FOREIGN KEY(user1_id) REFERENCES users(id),
+      FOREIGN KEY(user2_id) REFERENCES users(id)
     );`,
     `CREATE TABLE IF NOT EXISTS chat_participants (
       chat_id TEXT NOT NULL,
@@ -100,6 +104,13 @@ export async function initDb() {
       FOREIGN KEY (chat_id) REFERENCES chats(id),
       FOREIGN KEY (sender_id) REFERENCES users(id),
       FOREIGN KEY (receiver_id) REFERENCES users(id)
+    );`,
+    `CREATE TABLE friends (
+    id TEXT PRIMARY KEY,
+    user1_id TEXT NOT NULL,
+    user2_id TEXT NOT NULL,
+    FOREIGN KEY(user1_id) REFERENCES users(id),
+    FOREIGN KEY(user2_id) REFERENCES users(id)
     );`,
   ]);
 

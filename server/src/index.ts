@@ -5,7 +5,7 @@ import { app } from "./app";
 import { dbClient } from "./models/db";
 import { initDb } from "./models/initDb";
 import { seedDatabase } from "./models/generatedBdata";
-import { setupChatSocket } from "./chat";
+import { setupChatSocket } from "./sockets/chat";
 
 /* TEMP UNTILL FULL SQL*/
 import mongoose from "mongoose";

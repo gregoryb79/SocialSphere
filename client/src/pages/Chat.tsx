@@ -5,7 +5,7 @@ import { socket } from "../socketClient";
 import styles from "./Chat.module.scss";
 import { getLoggedInUserId, getLoggedInUserName } from "../models/users";
 
-type Messgae = {
+type Message = {
     username: string;
     text: string;
     chat_id: string;
@@ -19,7 +19,7 @@ type Friend = {
 };
 
 export function Chat() {
-    const [messages, setMessages] = useState<Messgae[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [message, setMessage] = useState("");
     const [friends, setFriends] = useState<Friend[]>([]);
     const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
@@ -55,7 +55,7 @@ export function Chat() {
         if (!message.trim() || !selectedFriend) return;
 
         const chat_id = getChatId(selectedFriend.id);
-        const newMessage: Messgae = {
+        const newMessage: Message = {
             username,
             text: message,
             chat_id,
@@ -64,13 +64,12 @@ export function Chat() {
         };
 
         socket.emit("message", newMessage);
-        setMessages((prev) => [...prev, newMessage]);
         setMessage("");
     };
 
     useEffect(() => {
         fetchFriends();
-    }, [fetchFriends]);
+    }, []);
 
     useEffect(() => {
         if (selectedFriend) {
@@ -80,7 +79,7 @@ export function Chat() {
     }, [selectedFriend]);
 
     useEffect(() => {
-        const handleMessage = (data: Messgae) => {
+        const handleMessage = (data: Message) => {
             if (!selectedFriend) return;
             const chat_id = getChatId(selectedFriend.id);
             if (data.chat_id === chat_id) {
@@ -99,8 +98,8 @@ export function Chat() {
             <div className={styles.friendsList}>
                 <h3>Choose friend to chat:</h3>
                 {friends.length === 0 && <p>No friends avialable</p>}
-                {friends.map((friend) => (
-                    <button key={friend.id} onClick={() => setSelectedFriend(friend)} className={selectedFriend?.id === friend.id ? styles.selected : ""}>
+                {friends.map((friend, index) => (
+                    <button key={`${friend.id}-${index}`} onClick={() => setSelectedFriend(friend)} className={selectedFriend?.id === friend.id ? styles.selected : ""}>
                         {friend.username}
                     </button>
                 ))}

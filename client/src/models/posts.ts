@@ -1,11 +1,11 @@
-import type { ReactNode } from "react";
 import { apiClient } from "./apiClient";
 import { getLoggedInUserId, getUsers } from "./users";
 
 export type Post = {
     _id: string;
     author: string; 
-    authorName?: string; // Optional, can be fetched separately
+    authorName?: string; 
+    parentId?: string; 
     content: string;
     image?: string;
     likes: string[]; 
@@ -20,14 +20,15 @@ export type Post = {
 // Fetches feed for the user == all posts of the users in his following list,
 // if Guest = latest posts of all users
 export async function fetchPosts(userId: string): Promise<Post[]> {
-    const message = await getUsers();
-    console.log("Verifying connection to server:", message);
-    
-    return new Promise((resolve) => {
-        setTimeout(() => {
-        resolve(mockPosts);
-        }, 1000);
-    });
+  console.log("Fetching posts for user:", userId);
+   try {
+        const response = await apiClient.get(`/posts/${userId}`);
+        console.log("Fetched posts:", response.data);
+        return response.data as Post[];
+    } catch (error) {
+        console.error("Error fetching posts:", error);
+        throw error;
+    }
 }
 
 export async function fetchOwnPosts(userId: string): Promise<Post[]> {
@@ -210,4 +211,58 @@ const mockMyPosts: Post[] = [
     updatedAt: "2024-06-05T08:20:00Z",
   },
 ];
+
+
+
+export async function fetchPostsByContent(searchTerm: string): Promise<Post[]> {
+    console.log("Fetching posts by content from backend:", searchTerm);
+
+    if (!searchTerm) {
+        return [];
+    }
+
+    try {
+        const response = await apiClient.get(`/search/posts?q=${encodeURIComponent(searchTerm)}`);
+
+        const backendPosts = response.data;
+
+        if (!backendPosts || backendPosts.length === 0) {
+            return [];
+        }
+        console.log("Fetched posts from backend:", backendPosts);
+        type BackendPost = {
+            id: string;
+            author_id: string;
+            author_name?: string;
+            content: string;
+            image?: string;
+            likes: string[] | string;
+            comments: string[] | string;
+            created_at: string;
+            updated_at: string;
+            parent_id?: string;
+        };
+
+        const clientPosts = backendPosts.map((backendPost: BackendPost) => ({
+            _id: backendPost.id,
+            author: backendPost.author_id, 
+            authorName: backendPost.author_name, 
+            content: backendPost.content,
+            image: backendPost.image,
+            likes: Array.isArray(backendPost.likes) ? backendPost.likes : (backendPost.likes ? JSON.parse(backendPost.likes) : []),
+          comments: Array.isArray(backendPost.comments) ? backendPost.comments : (backendPost.comments ? JSON.parse(backendPost.comments) : []),
+            createdAt: backendPost.created_at, 
+            updatedAt: backendPost.updated_at, 
+            parentId: backendPost.parent_id,
+        }));
+
+        console.log("Fetched and mapped posts:", clientPosts);
+        return clientPosts;
+
+    } catch (error) {
+        console.error("Error fetching posts by content:", error);
+        throw error;
+    }
+};
+
 

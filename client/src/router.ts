@@ -74,6 +74,7 @@ export const router = createBrowserRouter([
                 Component: Notifications,
                 loader: async () => {
                     const userId = getLoggedInUserId();
+                    console.log("Loading notifications for userId:", userId);
 
                     if (!userId || userId === "Guest") {
                         console.warn("No valid userId was found. Moving to login")

@@ -6,6 +6,7 @@ export const router = Router();
 router.get("/:userId", async (req, res) => {
     try {
         const { userId } = req.params;
+        console.log("Fetching notifications for userId:", userId);
         const notifications = await getNotificationsByUser(userId);
         res.json(notifications);
     } catch (error) {

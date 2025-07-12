@@ -1,3 +1,5 @@
+import { apiClient } from "./apiClient";
+
 export type Notification = {
   id: string;
   recipient_id: string;
@@ -9,14 +11,15 @@ export type Notification = {
 };
 
 export async function fetchNotifications(userId: string) {
-  const res = await fetch(`/api/notifications/${userId}`);
+  
+  const res = await apiClient.get(`/api/notifications/${userId}`);
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch notifications");
-  }
+  // if (!res.ok) {
+  //   throw new Error("Failed to fetch notifications");
+  // }
 
-  const data = await res.json();
-  return data;
+  // const data = await res.json();
+  return res.data;
 }
 
 // export type Notification = {

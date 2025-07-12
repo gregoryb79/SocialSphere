@@ -8,6 +8,7 @@ import { PostCard } from "./components/PostCard";
 export function Home() {
     console.log("Home component rendered");
     const {username, posts} = useLoaderData() as {username: string, posts: Post[]};
+    console.log(posts)
     console.log(`Array of ${posts.length} retured from server`); 
     console.log(`User:`, username);
     

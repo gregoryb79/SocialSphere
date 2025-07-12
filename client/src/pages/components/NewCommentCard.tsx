@@ -15,7 +15,7 @@ import { ErrorMsg } from "./ErrorMsg";
 
 type CommentProps = {
     post: Post;
-    onCommentPosted: () => void;
+    onCommentPosted: (newCommentId: string) => void;
 }
 export function NewCommentCard({post, onCommentPosted}: CommentProps){  
 
@@ -38,8 +38,8 @@ export function NewCommentCard({post, onCommentPosted}: CommentProps){
         
         doAddComment(commentContent, post._id);
     }
-    const { error, loading, doAddComment } = useAddComment(() => {
-        onCommentPosted();}
+    const { error, loading, doAddComment } = useAddComment((newCommentId: string) => {
+        onCommentPosted(newCommentId);}
     );
       
     const [showError, setShowError] = useState(false);
@@ -60,7 +60,7 @@ export function NewCommentCard({post, onCommentPosted}: CommentProps){
                     rows={5} required className={styles.commentTtext}/>
                 <section className={styles.buttonsSection}>
                     <GeneralButton label="Post Comment" disabled={disable}/>            
-                    <GeneralButton label="Cancel" disabled={disable} onClick={onCommentPosted}/>
+                    <GeneralButton label="Cancel" disabled={disable} onClick={() => onCommentPosted("")}/>
                 </section>                
             </form> 
             {loading && <Spinner />}

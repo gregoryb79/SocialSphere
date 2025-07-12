@@ -114,7 +114,7 @@ export function Chat() {
                         ))}
                     </ul>
                     <div className={styles.inputArea}>
-                        <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Write message here..." />
+                        <input value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={(e) => {if (e.key === "Enter") sendMessage();}} placeholder="Write message here..." />
                         <button onClick={sendMessage}>Send</button>
                     </div>
                 </>

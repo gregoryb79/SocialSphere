@@ -17,11 +17,12 @@ router.get('/:userId', async (req, res) => {
 
   try {
     const userProfile = await getUserById(userId);
-    res.json(userProfile);
+    res.json(userProfile ?? { error: 'User not found', status: 404 });
   } catch (error) {
     console.error("Error fetching user profile:", error);
     res.status(500).json({ error: "Failed to fetch user profile" });
   }
 });
+
 router.post("/:id/follow", authenticate, followUser);
 router.post("/:id/unfollow", authenticate, unfollowUser);

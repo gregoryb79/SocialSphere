@@ -50,10 +50,6 @@ export function getLoggedInUserId(): string {
     if (!token) {
         return "Guest";
     }
-<<<<<<< HEAD
-    return loggedUser._id;
-    
-=======
     const payload = token.split('.')[1];
     const decoded = JSON.parse(atob(payload));
     console.log("Decoded token payload:", decoded);
@@ -63,7 +59,6 @@ export function getLoggedInUserId(): string {
     }
     console.log("UserId:", decoded.userId);    
     return decoded.userId;    
->>>>>>> 591b424023f56ea7ffede8befa599501a9b18375
 }
 /*  mock function is replaced below
 export async function fetchUser(userId: string): Promise<User> {

@@ -25,6 +25,7 @@ const [postError, setPostError] = useState<string | null>(null);
 const [searchTerm, setSearchTerm] = useState<string>("");
 
 const navigate = useNavigate();
+const noResults = 'no-users-found';
 
 
 useEffect(() => {
@@ -137,9 +138,9 @@ const handleUserClick = (userId: string) => {
           </li>
         )}
         {!userLoading && !userError && !user && searchTerm && (
-          <div>
+          <li key={noResults}>
              <p className={styles.noResults}>No users found matching "{searchTerm}"</p>
-          </div>
+          </li>
         )}
       </ul>
       <ul className={styles.searchResultsPosts}> 
@@ -149,9 +150,9 @@ const handleUserClick = (userId: string) => {
             <PostCard key={post._id} post={post}/>
         ))}
         {!postLoading && !postError && postResults.length === 0 && searchTerm && (
-          <div>
+          <li key={noResults}>
             <p className={styles.noResults}>No posts found matching "{searchTerm}"</p>
-          </div>
+          </li>
         )}
       </ul>
       </section>

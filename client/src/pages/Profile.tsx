@@ -15,25 +15,22 @@ export function Profile() {
   console.log(`Posts:`, posts);
 
   const navigate = useNavigate();
-
-  const handleBookmarksClick = () => {
-    navigate('/bookmarks');
-  };
+  const noResults = 'no-users-found';
 
   return (
     <main className={styles.profileMain}>
       <section className={styles.profileHeader}>
-         <div className={styles.UserInfo}>
+         <div className={styles.userInfo}>
             {user.avatar && (<img src={user.avatar} alt={`${user.username}'s profile`} />)}
-            <div  className={styles.NameBio}>
+            <div  className={styles.nameBio}>
               <h1>{user.username}</h1>
               {user.bio && <p>{user.bio}</p>}
             </div>
          </div>
          <div className={styles.followStats}>
             <GeneralButton label="Followers:" {...user.followers} />
-            <GeneralButton label="Following:" {...user.following} />
-            <IconButton title="Bookmark" ariaLabel= "Saved Bookmarks" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>} onClick={handleBookmarksClick}/>
+            <GeneralButton label="Following:" {...user.following}  />
+            <IconButton title="Bookmark" ariaLabel= "Saved Bookmarks" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>} onClick={() => navigate("/Bookmarks")}/>
          </div>
       </section>
       <ul className={styles.userPosts}>
@@ -42,7 +39,7 @@ export function Profile() {
                   <PostCard key={post._id} post={post}/>
               ))
           ) : (
-              <li>No posts found.</li>
+              <li key={noResults}>No posts found.</li>
           )}
       </ul>
     </main>

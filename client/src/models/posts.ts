@@ -30,13 +30,8 @@ export async function fetchPosts(userId: string): Promise<Comment[]> {
         throw error;
     }
 }
-<<<<<<< HEAD
-/* mock function is replaced below
-export async function fetchOwnPosts(userId: string): Promise<Post[]> {
-=======
-
+/*
 export async function fetchOwnPosts(userId: string): Promise<Comment[]> {
->>>>>>> 591b424023f56ea7ffede8befa599501a9b18375
   const message = await getUsers();
   console.log("Verifying connection to server:", message);
     
@@ -166,13 +161,8 @@ const mockPosts: Comment[] = [
     updatedAt: "2024-06-05T08:20:00Z",
   },
 ];
-
-<<<<<<< HEAD
 /*
-const mockMyPosts: Post[] = [
-=======
 const mockMyPosts: Comment[] = [
->>>>>>> 591b424023f56ea7ffede8befa599501a9b18375
   {
     _id: "11",
     author: "user1",
@@ -244,7 +234,7 @@ export async function fetchPostsByContent(searchTerm: string): Promise<Comment[]
         }
         console.log("Fetched posts from backend:", backendPosts);
 
-        const clientPosts = backendPosts.map((backendPost: Post) => ({
+        const clientPosts = backendPosts.map((backendPost: Comment) => ({
             _id: backendPost._id,
             author: backendPost.author, 
             authorName: backendPost.authorName, 
@@ -268,9 +258,9 @@ export async function fetchPostsByContent(searchTerm: string): Promise<Comment[]
 
 
 
-export async function fetchOwnPosts(userId: string): Promise<Post[]> {
+export async function fetchOwnPosts(userId: string): Promise<Comment[]> {
   try {
-    const { data } = await apiClient.get<Post[]>(`/posts/${userId}`);
+    const { data } = await apiClient.get<Comment[]>(`/posts/${userId}`);
     return data;
   } catch (error) {
     console.error("Error fetching own posts:", error);

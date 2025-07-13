@@ -31,10 +31,10 @@ export const router = createBrowserRouter([
                     return {username, posts};
                 }
              },      
-           { path: "/profile",
+           { path: "/profile/:userId",
                 Component: Profile,                
-                loader: async () => {
-                    const userId = getCurrentUserId();
+                loader: async ({ params }) => {
+                    const userId = params.userId ? params.userId : getCurrentUserId();
                     const user = await fetchUser(userId);
                     const posts = await fetchOwnPosts(userId);
                     return {user, posts};

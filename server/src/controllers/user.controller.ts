@@ -8,18 +8,21 @@ export const followUser = async (req: AuthRequest, res: Response) => {
   const currentUserId = req.user?.userId;
 
   if (targetUserId === currentUserId) {
-    return res.status(400).json({ error: "You cannot follow yourself" });
+    res.status(400).json({ error: "You cannot follow yourself" });
+    return;
   }
 
   const targetUser = await User.findById(targetUserId);
   const currentUser = await User.findById(currentUserId);
 
   if (!targetUser || !currentUser) {
-    return res.status(404).json({ error: "User not found" });
+    res.status(404).json({ error: "User not found" });
+    return;
   }
 
   if (targetUser.followers.includes(currentUser._id as Types.ObjectId)) {
-    return res.status(400).json({ error: "Already following this user" });
+    res.status(400).json({ error: "Already following this user" });
+    return;
   }
 
   targetUser.followers.push(currentUser._id as Types.ObjectId);
@@ -36,14 +39,16 @@ export const unfollowUser = async (req: AuthRequest, res: Response) => {
   const currentUserId = req.user?.userId;
 
   if (targetUserId === currentUserId) {
-    return res.status(400).json({ error: "You cannot unfollow yourself" });
+    res.status(400).json({ error: "You cannot unfollow yourself" });
+    return;
   }
 
   const targetUser = await User.findById(targetUserId);
   const currentUser = await User.findById(currentUserId);
 
   if (!targetUser || !currentUser) {
-    return res.status(404).json({ error: "User not found" });
+    res.status(404).json({ error: "User not found" });
+    return;
   }
 
   targetUser.followers = targetUser.followers.filter(

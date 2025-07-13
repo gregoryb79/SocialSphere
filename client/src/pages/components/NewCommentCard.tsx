@@ -3,18 +3,18 @@
 import { Heart } from "lucide-react";
 import { IconButton } from "./IconButton";
 import styles from "./NewCommentCard.module.scss";
-import { likeComment, postComment, type Comment } from "../../models/comments";
+// import { likeComment, postComment, type Comment } from "../../models/comments";
 import { getLoggedInUserId } from "../../models/users";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./Spinner";
-import { type Post, addComment } from "../../models/posts";
+import { type Comment } from "../../models/comments";
 import { Input } from "./Input";
 import { GeneralButton } from "./GeneralButton";
 import { useAddComment } from "../../hooks/usePosts";
 import { ErrorMsg } from "./ErrorMsg";
 
 type CommentProps = {
-    post: Post;
+    post: Comment;
     onCommentPosted: (newCommentId: string) => void;
 }
 export function NewCommentCard({post, onCommentPosted}: CommentProps){  

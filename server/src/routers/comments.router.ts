@@ -2,6 +2,7 @@ import express from 'express';
 export const router = express.Router();
 import { dbClient } from "../models/db";
 import { randomUUID } from 'crypto';
+import { authenticate, AuthRequest } from '../middlewares/auth.middleware';
 
 
 router.get('/', async (req, res) => {
@@ -81,13 +82,9 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
-    const { content, parentId } = req.body;
-    // ****************************************************
-    // const authorId = req.user?.id; 
-    // For TESTING !!!!! REMOVE WHEN ID MIDDLEWARE IS IMPLEMENTED!!!!
-    const authorId = "user1"; 
-    // ****************************************************
+router.post('/',authenticate, async (req, res) => {
+    const { content, parentId } = req.body;    
+    const authorId = (req as AuthRequest).user?.userId;     
 
     console.log(`Posting comment by user ${authorId} with content: ${content}, parentId: ${parentId}`);
 
@@ -129,4 +126,60 @@ router.post('/', async (req, res) => {
         console.error("Error posting comment:", error);
         res.status(500).json({ error: "Failed to post comment" });
     }
+});
+
+router.post('/like',authenticate, async (req, res) => {
+    const { postId, userId } = req.body; 
+    const getLoggedInUserId = (req as AuthRequest).user?.userId; 
+    console.log(`Liking post/comment ${postId} by user ${userId}.`);  
+
+    if (userId !== getLoggedInUserId) {
+        console.error(`User ID mismatch: ${userId} !== ${getLoggedInUserId}`);
+        res.status(403).json({ error: "Identities do not match" });
+        return; 
+    }       
+    if (!postId || !userId) {
+        res.status(400).json({ error: "Post ID and User ID are required" });
+        return;
+    }
+
+    try {
+        const existingLikeResult = await dbClient.execute({
+            sql: `SELECT * FROM comment_likes WHERE comment_id = ? AND user_id = ?`,
+            args: [postId, userId]
+        });
+
+        if (existingLikeResult.rows.length > 0) {
+            console.log(`User ${userId} already liked post/comment ${postId} - unliking ${postId}.`);
+            const unlikeResult = await dbClient.execute({
+                sql: `DELETE FROM comment_likes WHERE comment_id = ? AND user_id = ?`,
+                args: [postId, userId]
+            });
+            if (unlikeResult.rowsAffected === 1) {                
+                console.log(`Comment/post ${postId} unliked by user ${userId}.`);
+            } else {
+                res.status(500).json({ error: "Failed to unlike comment" });
+            }          
+            res.status(200).json({ message: "Comment unliked successfully" });
+            return;
+        } 
+
+        console.log(`Adding like by ${userId} to post/comment ${postId}.`);
+        const result = await dbClient.execute({
+            sql: `INSERT INTO comment_likes (comment_id, user_id) VALUES (?, ?)`,
+            args: [postId, userId]
+        }); 
+
+        if (result.rowsAffected === 1) {
+            console.log(`Comment ${postId} liked by user ${userId}.`);
+            res.status(201).json({ message: "Comment liked successfully" });
+        } else {
+            res.status(500).json({ error: "Failed to like comment" });
+        }
+    
+    } catch (error) {
+        console.error("Error liking comment:", error);
+        res.status(500).json({ error: "Failed to like/unlike comment" });
+    }
+
 });

@@ -55,7 +55,7 @@ export function PostCard({post}: PostCardProps) {
     const [likeDisable,setLikeDisable] = useState<boolean>(false); 
     const [commentDisable,setCommentDisable] = useState<boolean>(false);
     useEffect(() => {
-        if (!currUserId.current) {
+        if (!currUserId.current || currUserId.current === "Guest") {
             console.log("No user logged in, setting like and comment icons color to light text and disabling like and comment actions");
             likeIconColor.current = "var(--light-text)";
             commentIconColor.current = "var(--light-text)";

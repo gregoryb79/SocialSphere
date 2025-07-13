@@ -41,7 +41,7 @@ export function getLoggedInUserName(): string {
         console.warn("No user is logged in, returning 'Guest'");
         return "Guest";
     }
-    console.log("Logged in user:", loggedUser);
+    console.log("Logged in user:", loggedUser.username);
     return loggedUser.username;
 }
 
@@ -52,12 +52,13 @@ export function getLoggedInUserId(): string {
     }
     const payload = token.split('.')[1];
     const decoded = JSON.parse(atob(payload));
-    if (!decoded || !decoded.sub) {
+    console.log("Decoded token payload:", decoded);
+    if (!decoded || !decoded.userId) {
         console.warn("Token does not contain a valid user ID, returning 'Guest'");
         return "Guest";
     }
-    console.log("UserId:", decoded.sub);    
-    return decoded.sub;    
+    console.log("UserId:", decoded.userId);    
+    return decoded.userId;    
 }
 
 export async function fetchUser(userId: string): Promise<User> {
@@ -85,7 +86,7 @@ export async function fetchLoggedInUser(): Promise<User> {
 export async function putLogIn(email: string, password: string): Promise<boolean> {
     console.log("putLogIn called with email:", email, "and password:", password);
     try {
-        const response = await apiClient.put("/auth/login", {
+        const response = await apiClient.post("/auth/login", {
             email,
             password
         });

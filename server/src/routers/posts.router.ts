@@ -12,7 +12,7 @@ router.get('/:userId', async (req, res) => {
         return;
     }
 
-    if (userId === "guest") {
+    if (userId === "guest" || userId === "Guest") {
         try {
             const allPostsResult = await dbClient.execute({
                 sql: `SELECT c.id, c.author_id, c.content, c.image, c.created_at, c.updated_at,

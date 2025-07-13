@@ -21,6 +21,12 @@ export function Home() {
             </section>
             <ul className={styles.postsFeed}>
                 {posts.map((post) => (<PostCard post={post} />))}
+                {posts.length === 0 && (
+                    <div>
+                        <h2>Nothing to display.</h2>
+                        <h3>Make some posts or follow some users...</h3>
+                    </div>
+                    )}
             </ul>
             
         </main>

@@ -53,7 +53,7 @@ export function useDoRegister(onSuccess: () => void) {
     const isCanceled = useRef(false);
     isCanceled.current = false;
 
-        async function doRegister(email: string, username: string, password: string, repeatPassword: string) {
+        async function doRegister(email: string, username: string, password: string, repeatPassword: string, avatarURL: string, bio: string) {
             setError(undefined);
             setLoading(true);
 
@@ -73,7 +73,7 @@ export function useDoRegister(onSuccess: () => void) {
 
             try {
                 console.log("registering user"); 
-                const registered = await postRegister(email, username, password);               
+                const registered = await postRegister(email, username, password, avatarURL, bio);               
                 if (!isCanceled.current && registered) {                                      
                     console.log("user registered");
                     onSuccess();                    

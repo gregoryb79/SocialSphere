@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { getLoggedInUserId } from "../models/users";
 import { postComment } from "../models/comments";
-import { addComment } from "../models/posts";
+// import { addComment } from "../models/posts";
 
 export function useAddComment(onSuccess: (newCommentId: string) => void) {
     const [error, setError] = useState<string>();

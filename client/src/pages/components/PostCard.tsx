@@ -13,18 +13,18 @@
  */
 
 import { Bookmark, Heart,MessageCircle } from "lucide-react";
-import { likePost, type Post } from "../../models/posts";
+import { likePost} from "../../models/posts";
 import { getComments,type Comment} from "../../models/comments";
 import { IconButton } from "./IconButton";
 import styles from "./PostCard.module.scss";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./Spinner";
-import { CommentCard } from "./CommentCard";
+// import { CommentCard } from "./CommentCard";
 import { getLoggedInUserId } from "../../models/users";
 import { NewCommentCard } from "./NewCommentCard";
 
 type PostCardProps = {
-    post: Post | Comment;    
+    post: Comment;    
 };
 export function PostCard({post}: PostCardProps) {
     const pRef = useRef<HTMLParagraphElement>(null);

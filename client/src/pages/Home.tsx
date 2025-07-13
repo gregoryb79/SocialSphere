@@ -1,13 +1,13 @@
 import styles from "./Home.module.scss";
 import { useLoaderData } from "react-router";
-import type { Post } from "../models/posts";
+import type { Comment } from "../models/comments";
 import { User } from "lucide-react";
 import { PostCard } from "./components/PostCard";
 
 
 export function Home() {
     console.log("Home component rendered");
-    const {username, posts} = useLoaderData() as {username: string, posts: Post[]};
+    const {username, posts} = useLoaderData() as {username: string, posts: Comment[]};
     console.log(posts)
     console.log(`Array of ${posts.length} retured from server`); 
     console.log(`User:`, username);

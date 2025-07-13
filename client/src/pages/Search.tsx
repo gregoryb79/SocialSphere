@@ -6,7 +6,8 @@ import { SearchIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getUserByName, type User } from "../models/users";
 import { Spinner } from "./components/Spinner";
-import { fetchPostsByContent, type Post } from "../models/posts";
+import { fetchPostsByContent } from "../models/posts";
+import { type Comment } from "../models/comments";
 import { PostCard } from "./components/PostCard";
 
 
@@ -16,7 +17,7 @@ const [user, setUser] = useState<User | null>(UserInfo || null);
 const [userLoading, setUserLoading] = useState<boolean>(false);
 const [userError, setUserError] = useState<string | null>(null);
 
-const [postResults, setPostResults] = useState<Post[]>([]);
+const [postResults, setPostResults] = useState<Comment[]>([]);
 const [postLoading, setPostLoading] = useState<boolean>(false);
 const [postError, setPostError] = useState<string | null>(null);
 

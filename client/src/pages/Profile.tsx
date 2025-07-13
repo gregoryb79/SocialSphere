@@ -1,7 +1,7 @@
 import { useLoaderData, useNavigate } from "react-router";
 import styles from "./Profile.module.scss";
 import type { User } from "../models/users";
-import type { Post } from "../models/posts";
+import type { Comment } from "../models/comments";
 import { PostCard } from "./components/PostCard";
 import { Bookmark } from "lucide-react";
 import { IconButton } from "./components/IconButton";
@@ -10,7 +10,7 @@ import { GeneralButton } from "./components/GeneralButton";
 
 export function Profile() {
 
-  const {user, posts} = useLoaderData() as {user: User, posts: Post[]};
+  const {user, posts} = useLoaderData() as {user: User, posts: Comment[]};
   console.log(`User:`, user);
   console.log(`Posts:`, posts);
 

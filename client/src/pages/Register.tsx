@@ -19,7 +19,7 @@ export function Register() {
     
     const username = useLoaderData<string>();
     useEffect(() => {
-        if (username) {
+        if (username && username !== "Guest") {
             console.log(`User is already logged in as ${username}. Redirecting to home page...`);
             navigate("/");
         }
@@ -32,9 +32,11 @@ export function Register() {
         const email = formData.get("email") as string;
         const username = formData.get("username") as string;
         const password = formData.get("password") as string; 
+        const avatarURL = formData.get("avatarURL") as string;
+        const bio = formData.get("bio") as string;
         const repeatPassword = formData.get("repeatPassword") as string;       
         console.log(`email = ${email}, username = ${username}, password = ${password}, repeatPassword = ${repeatPassword}`);            
-        doRegister(email, username, password, repeatPassword);
+        doRegister(email, username, password, repeatPassword, avatarURL, bio);
     }
 
     const {error,loading: loadingRegister, doRegister } = useDoRegister(() => {

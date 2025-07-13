@@ -25,16 +25,16 @@ export const router = createBrowserRouter([
                 Component: Home,                
                 loader: async () => {
                     console.log("Fetching posts for home page");
-                    const userId = getCurrentUserId();
+                    const userId = getLoggedInUserId();
                     const username = getLoggedInUserName() || "Guest";
                     const posts = await fetchPosts(userId);
                     return {username, posts};
                 }
              },      
-           { path: "/profile",
+           { path: "/profile/:userId",
                 Component: Profile,                
-                loader: async () => {
-                    const userId = getCurrentUserId();
+                loader: async ({ params }) => {
+                    const userId = params.userId ? params.userId : getCurrentUserId();
                     const user = await fetchUser(userId);
                     const posts = await fetchOwnPosts(userId);
                     return {user, posts};

@@ -33,6 +33,7 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
+    console.log(`Logging in user with email ${email} and password ${password}`);
 
     const user = await User.findOne({ email }) as IUser;
     if (!user || !(await user.comparePassword(password))) {

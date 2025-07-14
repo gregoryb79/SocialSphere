@@ -13,18 +13,18 @@
  */
 
 import { Bookmark, Heart,MessageCircle } from "lucide-react";
-import { likePost, type Post } from "../../models/posts";
+import { likePost} from "../../models/posts";
 import { getComments,type Comment} from "../../models/comments";
 import { IconButton } from "./IconButton";
 import styles from "./PostCard.module.scss";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./Spinner";
-import { CommentCard } from "./CommentCard";
+// import { CommentCard } from "./CommentCard";
 import { getLoggedInUserId } from "../../models/users";
 import { NewCommentCard } from "./NewCommentCard";
 
 type PostCardProps = {
-    post: Post | Comment;    
+    post: Comment;    
 };
 export function PostCard({post}: PostCardProps) {
     const pRef = useRef<HTMLParagraphElement>(null);
@@ -55,7 +55,7 @@ export function PostCard({post}: PostCardProps) {
     const [likeDisable,setLikeDisable] = useState<boolean>(false); 
     const [commentDisable,setCommentDisable] = useState<boolean>(false);
     useEffect(() => {
-        if (!currUserId.current) {
+        if (!currUserId.current || currUserId.current === "Guest") {
             console.log("No user logged in, setting like and comment icons color to light text and disabling like and comment actions");
             likeIconColor.current = "var(--light-text)";
             commentIconColor.current = "var(--light-text)";

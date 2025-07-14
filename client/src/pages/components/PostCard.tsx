@@ -2,6 +2,7 @@
  * A post card component displaying post content, actions, and comments.
  *
  * @param post The post object to display.
+ * @param onDelete Optional callback to notify parent when this post/comment is deleted.
  * @example
  * <PostCard post={post} />
  *
@@ -10,6 +11,7 @@
  * - Truncates content to 2 lines with "See more"/"See less" toggle if clamped.
  * - Shows a spinner while loading comments.
  * - Displays comments section with CommentCard components when expanded.
+ * - Handles like, comment, and delete actions with proper state updates.
  */
 
 import { Bookmark, Delete, Heart,MessageCircle, Trash } from "lucide-react";
@@ -19,7 +21,6 @@ import { IconButton } from "./IconButton";
 import styles from "./PostCard.module.scss";
 import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./Spinner";
-// import { CommentCard } from "./CommentCard";
 import { getLoggedInUserId } from "../../models/users";
 import { NewCommentCard } from "./NewCommentCard";
 
@@ -186,7 +187,7 @@ export function PostCard({post, onDelete}: PostCardProps) {
         }        
     }
 
-    // console.log("RENDER: showComments:", showComments, "comments:", comments);
+    
     if (deleted) {
         console.log(`Post/comment ${post._id} is deleted, not rendering`);
         return null;

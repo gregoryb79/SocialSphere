@@ -4,11 +4,15 @@ import styles from './Register.module.scss';
 import { useLoaderData, useNavigate, useRevalidator } from 'react-router';
 import { useDoRegister } from '../hooks/useLogIn';
 import { Spinner } from './components/Spinner';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { ErrorMsg } from './components/ErrorMsg';
 
 import { PasswordInput } from './components/PasswordInput';
 import { Input } from './components/Input';
+import { IconButton } from './components/IconButton';
+import { Upload } from 'lucide-react';
+import { uploadToImgbb } from '../models/images';
+import { URLorFileUploadInput } from './components/URLorFileUploadInput';
 
 
 export function Register() {   
@@ -16,7 +20,11 @@ export function Register() {
     const navigate = useNavigate();
     const { revalidate } = useRevalidator();
     const [showError, setShowError] = useState(false);
-    
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [avatarPath, setAvatarPath] = useState<string>("");
+    const [avatarHostURL, setAvatarHostURL] = useState<string>("");
+    const [isAvatarUploaded, setIsAvatarUploaded] = useState(false);
+
     const username = useLoaderData<string>();
     useEffect(() => {
         if (username && username !== "Guest") {
@@ -32,11 +40,33 @@ export function Register() {
         const email = formData.get("email") as string;
         const username = formData.get("username") as string;
         const password = formData.get("password") as string; 
-        const avatarURL = formData.get("avatarURL") as string;
+        const avatarURL = isAvatarUploaded ? avatarHostURL : formData.get("avatarURL") as string;
         const bio = formData.get("bio") as string;
         const repeatPassword = formData.get("repeatPassword") as string;       
         console.log(`email = ${email}, username = ${username}, password = ${password}, repeatPassword = ${repeatPassword}`);            
         doRegister(email, username, password, repeatPassword, avatarURL, bio);
+    }
+
+    function handleAvatarUpload() {        
+        console.log("Avatar upload button clicked");        
+        fileInputRef.current?.click();
+    }
+
+    async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0];
+        if (file) {            
+            console.log("Selected file:", file);
+            setAvatarPath(file.name);
+            try{
+                const result = await uploadToImgbb(file);
+                console.log("File uploaded successfully:", result);
+                setAvatarHostURL(result);
+                setIsAvatarUploaded(true);
+            }catch (error) {
+                console.error("Error uploading file:", error);
+                // setShowError(true);
+            }
+        }
     }
 
     const {error,loading: loadingRegister, doRegister } = useDoRegister(() => {
@@ -60,13 +90,20 @@ export function Register() {
             <form className={styles.registerForm} onSubmit={handleRegister}>                
                 <Input type="email" id="email" label="Email" name="email" placeholder="Enter your e-mail" required />
                 <Input type="username" id="username" label="Username" name="username" placeholder="Select username" required />
-                <Input type="text" id="avatarURL" label="Profile Picture" name="avatarURL" placeholder="link to your picture" />
+                <URLorFileUploadInput 
+                    setImageHostURL={setAvatarHostURL} 
+                    setIsImageUploaded={setIsAvatarUploaded}                                         
+                    type="text" 
+                    id="avatarURL" 
+                    label="Profile Picture" 
+                    name="avatarURL" 
+                    placeholder="put link or upload"/>               
                 <textarea name="bio" id="bio" rows={3} placeholder='say something about you' className={styles.bioTtext}/>
                 <PasswordInput id="password" label="Password" name="password" placeholder="Enter your password" 
                 required minLength={8} onInput={(e) => setPassword(e.currentTarget.value)} value={password}/>
                 <PasswordInput id="password" label="Repeat password:" name="repeatPassword" placeholder="Repeat password" required />
                 <GeneralButton label="Register"/>     
-                <section>
+                <section className={styles.passwordRulesSection}>
                     <h6>Password Rules:</h6>
                     <PasswordRules password={password} />  
                 </section>                       

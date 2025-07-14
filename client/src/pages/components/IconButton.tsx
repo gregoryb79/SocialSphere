@@ -24,7 +24,7 @@ type NavButtonProps = {
 export function IconButton({disabled, title, label, ariaLabel, icon, onClick}: NavButtonProps) {
 
     return (
-    <button className={styles.iconButton} onClick={onClick} aria-label={ariaLabel} title={title} disabled={disabled}>
+    <button className={styles.iconButton} onClick={onClick} aria-label={ariaLabel} title={title} disabled={disabled} type="button">
       {icon}
       {label}
     </button>

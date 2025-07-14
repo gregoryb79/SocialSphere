@@ -183,3 +183,67 @@ router.post('/like',authenticate, async (req, res) => {
     }
 
 });
+
+router.delete('/:id', authenticate, async (req, res) => {
+    const commentId = req.params.id;
+    const authorId = (req as AuthRequest).user?.userId;
+
+    console.log(`Deleting comment ${commentId} by user ${authorId} with its children`);
+
+    if (!authorId) {
+        res.status(401).json({ error: "Unauthorized" });
+        return;
+    }
+
+    try {
+        await deleteChildren(commentId, authorId);
+        const result = await dbClient.execute({
+            sql: `DELETE FROM comments WHERE id = ? AND author_id = ?`,
+            args: [commentId, authorId]
+        });
+        res.status(200).json({ message: "Comment and its children deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting comment:", error);
+        res.status(500).json({ error: "Failed to delete comment" });
+    }
+});
+
+async function deleteChildren (commentId: string, authorId: string) {
+    // console.log(`Deleting children comments for comment ${commentId} by user ${authorId}`);
+    
+    try {
+        const result = await dbClient.execute({
+            sql: `SELECT id FROM comments WHERE parent_id = ? AND author_id = ?`,
+            args: [commentId, authorId]
+        });
+        // console.log(result);
+        if (result.rows.length === 0) {
+            // console.log(`No child comments found for comment ${commentId}`);
+            const result = await dbClient.execute({
+                sql: `DELETE FROM comments WHERE id = ? AND author_id = ?`,
+                args: [commentId, authorId]
+            });
+            if (result.rowsAffected = 1) {
+                console.log(`Comment with ID ${commentId} of user ${authorId} is "DELETED"`);
+            } 
+            const likeResult = await dbClient.execute({
+                sql: `DELETE FROM comment_likes WHERE comment_id = ?`,
+                args: [commentId]
+            });
+            console.log(`${likeResult.rowsAffected} likes for comment with ID ${commentId} are "DELETED"`);
+
+            return;
+        }else{
+            const childIds = result.rows.map(row => row.id) as string[];
+            // console.log(childIds);
+            for (const childId of childIds) {
+                // const childCommentId = row as unknown as string;
+                // console.log(`Deleting child comment ${childCommentId}`);
+                await deleteChildren(childId, authorId);                
+            }
+            return;
+        }        
+    } catch (error) {
+        console.error("Error deleting child comments:", error);
+    }
+}

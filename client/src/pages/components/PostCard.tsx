@@ -12,9 +12,9 @@
  * - Displays comments section with CommentCard components when expanded.
  */
 
-import { Bookmark, Heart,MessageCircle } from "lucide-react";
+import { Bookmark, Delete, Heart,MessageCircle, Trash } from "lucide-react";
 import { likePost} from "../../models/posts";
-import { getComments,type Comment} from "../../models/comments";
+import { deleteCommentWithChildren, getComments,type Comment} from "../../models/comments";
 import { IconButton } from "./IconButton";
 import styles from "./PostCard.module.scss";
 import { useEffect, useRef, useState } from "react";
@@ -24,9 +24,10 @@ import { getLoggedInUserId } from "../../models/users";
 import { NewCommentCard } from "./NewCommentCard";
 
 type PostCardProps = {
-    post: Comment;    
+    post: Comment; 
+    onDelete?: (childID: string) => void; 
 };
-export function PostCard({post}: PostCardProps) {
+export function PostCard({post, onDelete}: PostCardProps) {
     const pRef = useRef<HTMLParagraphElement>(null);
     const [clamped, setClamped] = useState(false);
     const [showMore, setShowMore] = useState(false);
@@ -34,6 +35,7 @@ export function PostCard({post}: PostCardProps) {
     const [comments, setComments] = useState<Comment[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [displayNewComment, setDisplayNewComment] = useState<boolean>(false);  
+    const [deleteEnable, setDeleteEnable] = useState<boolean>(false);
     console.log(`displayNewComment state: ${displayNewComment}`);
      
     
@@ -52,6 +54,7 @@ export function PostCard({post}: PostCardProps) {
 
     const likeIconColor = useRef<string>("var(--primary-blue)");
     const commentIconColor = useRef<string>("var(--primary-blue)");
+    const deleteIconStyle = useRef<string>("deleteIconDisabled");
     const [likeDisable,setLikeDisable] = useState<boolean>(false); 
     const [commentDisable,setCommentDisable] = useState<boolean>(false);
     useEffect(() => {
@@ -65,18 +68,22 @@ export function PostCard({post}: PostCardProps) {
         else if (currUserId.current === post.author) {
             console.log("User is the author of the post, setting like icon color to light text  and disabling like action");
             likeIconColor.current = "var(--light-text)";
+            deleteIconStyle.current = "deleteIconEnabled";
             setLikeDisable(true);
+            setDeleteEnable(true);
         }
     }, []);
+
+
 
     async function displayComments() {
         
         if (!showComments) {
             setShowComments(true);
-            console.log(`showComments state is ${showComments}`);
+            console.log(`Showing comments for post ${post._id}`);
         } else {
             setShowComments(false);                                
-            console.log(`showComments state is ${showComments}`);
+            console.log(`Hiding comments for post ${post._id}`);
         }
         console.log(`Clicked to see comments for post ${post._id} with showComments state in now: ${showComments}`);                            
         if (!showComments && comments.length === 0) {
@@ -147,11 +154,51 @@ export function PostCard({post}: PostCardProps) {
         }       
     }
 
-    console.log("RENDER: showComments:", showComments, "comments:", comments);
+    function handleDelete(childID: string) {
+        console.log(`Child with ID ${childID} deleted`);
+        const updatedComments = comments.filter(comment => comment._id !== childID);
+        post.comments = updatedComments.map(comment => comment._id);
+        console.log(`Comments length in post ${post._id} before delete:`, comments.length);        
+        console.log(`Comments length in post ${post._id} after delete:`, updatedComments.length);        
+        setComments(updatedComments);
+        setShowComments(updatedComments.length > 0);        
+    }
+
+    const [deleted, setDeleted] = useState<boolean>(false);
+    async function handleDeleteWithCildren() {
+        setLoading(true);
+        console.log(`Delete post/comment with ID: ${post._id}`);
+        try {
+            await deleteCommentWithChildren(post._id);
+            console.log(`Post/comment ${post._id} deleted successfully`);                        
+            setDeleted(true);            
+            if (post.parentId) {
+                console.log(`Post/comment ${post._id} is a comment, notifying parent ${post.parentId} to delete`);
+                onDelete?.(post._id);
+            } else {
+                console.log(`Post/comment ${post._id} is a post, no parent to notify`);
+            }
+        } catch (error) {
+            console.error(`Error deleting post/comment ${post._id}:`, error);
+            return;
+        }finally {
+            setLoading(false);
+        }        
+    }
+
+    // console.log("RENDER: showComments:", showComments, "comments:", comments);
+    if (deleted) {
+        console.log(`Post/comment ${post._id} is deleted, not rendering`);
+        return null;
+    }
     return (
-        <li key={post._id} className={styles.postCard}> 
-            {loading && <Spinner/>}
-            <p ref={pRef} className={!showMore ? styles.twoLineClamp : ""}>{post.content}</p>            
+       <li key={post._id} className={styles.postCard} > 
+            {loading && <Spinner/>}                           
+            <div className={styles.deleteButtonContainer}>
+                <IconButton title="Delete" ariaLabel="delete post/comment" icon={<Trash className={deleteEnable ? styles.deleteEnable : styles.deleteDisable} />}
+                onClick={handleDeleteWithCildren} disabled={!deleteEnable}/>
+            </div>
+            <p ref={pRef} className={!showMore ? styles.twoLineClamp : ""}>{post.content}</p>                                                              
             {clamped && !showMore && <button className={styles.textButton} onClick={() => setShowMore(true)}>See more</button>}
             {showMore && <button className={styles.textButton} onClick={() => setShowMore(false)}>See less</button>}
             {post.image && <img src={post.image} alt="Post visual content" className={styles.postImage} />}
@@ -185,7 +232,7 @@ export function PostCard({post}: PostCardProps) {
                     {displayNewComment && <NewCommentCard post={post} onCommentPosted={handlePostedComment}/>}
                     <ul className={styles.commentsList}>
                         {comments.map((comment) => (
-                            <PostCard key={comment._id} post={comment} />
+                            <PostCard key={comment._id} post={comment} onDelete={handleDelete}/>
                         ))}
                     </ul>
                 </section>

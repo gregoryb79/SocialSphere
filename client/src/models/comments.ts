@@ -30,6 +30,17 @@ export async function getComments(commentsId: string[]): Promise<Comment[]> {
     }
 }
 
+export async function deleteCommentWithChildren(commentId: string): Promise<void> {
+    console.log(`Deleting comment with ID: ${commentId}`);
+    try {
+        const response = await apiClient.delete(`/comments/${commentId}`);
+        console.log(`Comment with ID ${commentId} deleted successfully`, response.data);
+    } catch (error) {
+        console.error(`Error deleting comment with ID ${commentId}:`, error);
+        throw error;
+    }
+}
+
 // export async function likeComment(commentId: string): Promise<Comment> {
 //     const comment = mockComments.find(c => c._id === commentId);
 //     const currentUserId = getLoggedInUserId();

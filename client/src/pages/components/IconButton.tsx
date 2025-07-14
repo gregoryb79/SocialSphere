@@ -13,7 +13,7 @@
 import React from 'react';
 import styles from "./IconButton.module.scss";
 
-type NavButtonProps = {
+type IconButtonProps = {
   disabled?: boolean;
   title?: string;
   label?: string;
@@ -21,7 +21,7 @@ type NavButtonProps = {
   ariaLabel?: string;
   onClick?: () => void;    
 };
-export function IconButton({disabled, title, label, ariaLabel, icon, onClick}: NavButtonProps) {
+export function IconButton({disabled, title, label, ariaLabel, icon, onClick}: IconButtonProps) {
 
     return (
     <button className={styles.iconButton} onClick={onClick} aria-label={ariaLabel} title={title} disabled={disabled} type="button">

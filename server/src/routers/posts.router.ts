@@ -58,7 +58,7 @@ router.get('/:userId', async (req, res) => {
 
             const posts = postsResult.rows;
             const postIds = posts.map(post => post.id as string);
-            console.log(`Found ${postIds} posts for guest user`);
+            console.log(`Found ${postIds} posts for user ${userId}`);
 
             if (postIds.length === 0) {
                 console.log("No posts found for user:", userId);

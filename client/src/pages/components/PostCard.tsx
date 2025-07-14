@@ -23,6 +23,7 @@ import { useEffect, useRef, useState } from "react";
 import { Spinner } from "./Spinner";
 import { getLoggedInUserId } from "../../models/users";
 import { NewCommentCard } from "./NewCommentCard";
+import { Confirm } from "./Confirm";
 
 type PostCardProps = {
     post: Comment; 
@@ -37,6 +38,7 @@ export function PostCard({post, onDelete}: PostCardProps) {
     const [loading, setLoading] = useState<boolean>(false);
     const [displayNewComment, setDisplayNewComment] = useState<boolean>(false);  
     const [deleteEnable, setDeleteEnable] = useState<boolean>(false);
+    const [showConfirm, setShowConfirm] = useState<boolean>(false);
     console.log(`displayNewComment state: ${displayNewComment}`);
      
     
@@ -167,6 +169,7 @@ export function PostCard({post, onDelete}: PostCardProps) {
 
     const [deleted, setDeleted] = useState<boolean>(false);
     async function handleDeleteWithCildren() {
+        setShowConfirm(false);
         setLoading(true);
         console.log(`Delete post/comment with ID: ${post._id}`);
         try {
@@ -194,10 +197,12 @@ export function PostCard({post, onDelete}: PostCardProps) {
     }
     return (
        <li key={post._id} className={styles.postCard} > 
-            {loading && <Spinner/>}                           
+            {loading && <Spinner/>}    
+            {showConfirm && <Confirm question="Are you sure you want to delete?" onYes={handleDeleteWithCildren} onNo={()=>{setShowConfirm(false)}}/> }                       
             <div className={styles.deleteButtonContainer}>
                 <IconButton title="Delete" ariaLabel="delete post/comment" icon={<Trash className={deleteEnable ? styles.deleteEnable : styles.deleteDisable} />}
-                onClick={handleDeleteWithCildren} disabled={!deleteEnable}/>
+                disabled={!deleteEnable}
+                onClick={()=>{setShowConfirm(true)}} />
             </div>
             <p ref={pRef} className={!showMore ? styles.twoLineClamp : ""}>{post.content}</p>                                                              
             {clamped && !showMore && <button className={styles.textButton} onClick={() => setShowMore(true)}>See more</button>}

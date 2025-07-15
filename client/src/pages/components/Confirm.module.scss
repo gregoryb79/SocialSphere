@@ -1,0 +1,29 @@
+@use '../../styles/mixins' as *;
+
+.confirmContainer{
+    position: absolute;
+    top: 50%;
+    // left: 50%;
+    // transform: translateX(50%);
+    transform: translateY(-50%);   
+    background-color: var(--light-gray-bg);
+    @include shadowBorder;
+    border: 2px solid var(--yellow-warning);
+    width: 80%;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    font-size: var(--font-lg);
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    text-align: center;
+}
+
+.confirmButtons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 80%;    
+}

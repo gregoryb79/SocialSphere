@@ -4,6 +4,7 @@
 .postCard{
     @include postCardFrame;
     @include shadowBorder;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -117,4 +118,29 @@
     width: var(--font-sm);
     height: var(--font-sm);  
     background-color: var(--light-gray-bg);     
+}
+
+.deleteEnable {    
+    width: var(--font-sm);
+    height: var(--font-sm);
+    
+    &:hover {
+        color: var(--red-error);       
+    }    
+}
+
+.deleteDisable {    
+    
+    width: var(--font-sm);
+    height: var(--font-sm);
+    
+    // &:hover {
+    //     color: var(--red-error);       
+    // }    
+}
+
+.deleteButtonContainer{
+    position: absolute;
+    top: calc(var(--font-sm)/4);
+    right: calc(var(--font-sm)/4);
 }

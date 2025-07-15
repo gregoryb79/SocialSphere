@@ -30,24 +30,35 @@ export async function getComments(commentsId: string[]): Promise<Comment[]> {
     }
 }
 
-export async function likeComment(commentId: string): Promise<Comment> {
-    const comment = mockComments.find(c => c._id === commentId);
-    const currentUserId = getLoggedInUserId();
-    console.log(`Toggling like for comment with ID: ${commentId}, likes before toggle:`, comment?.likes);
-    if (!comment) {
-        console.error(`Comment with ID ${commentId} not found`);
-        return Promise.reject(new Error(`Comment with ID ${commentId} not found`));
+export async function deleteCommentWithChildren(commentId: string): Promise<void> {
+    console.log(`Deleting comment with ID: ${commentId}`);
+    try {
+        const response = await apiClient.delete(`/comments/${commentId}`);
+        console.log(`Comment with ID ${commentId} deleted successfully`, response.data);
+    } catch (error) {
+        console.error(`Error deleting comment with ID ${commentId}:`, error);
+        throw error;
     }
-    comment.likes = comment.likes.includes(currentUserId) ? comment.likes.filter(like => like !== currentUserId) : [...comment.likes, currentUserId];
-    console.log(`Likes after toggle:`, comment.likes);
-    comment.updatedAt = new Date().toISOString();
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            console.log(`Comment with ID ${commentId} liked`);
-            resolve(comment);
-        }, 1000);
-    });
 }
+
+// export async function likeComment(commentId: string): Promise<Comment> {
+//     const comment = mockComments.find(c => c._id === commentId);
+//     const currentUserId = getLoggedInUserId();
+//     console.log(`Toggling like for comment with ID: ${commentId}, likes before toggle:`, comment?.likes);
+//     if (!comment) {
+//         console.error(`Comment with ID ${commentId} not found`);
+//         return Promise.reject(new Error(`Comment with ID ${commentId} not found`));
+//     }
+//     comment.likes = comment.likes.includes(currentUserId) ? comment.likes.filter(like => like !== currentUserId) : [...comment.likes, currentUserId];
+//     console.log(`Likes after toggle:`, comment.likes);
+//     comment.updatedAt = new Date().toISOString();
+//     return new Promise((resolve) => {
+//         setTimeout(() => {
+//             console.log(`Comment with ID ${commentId} liked`);
+//             resolve(comment);
+//         }, 1000);
+//     });
+// }
 
 export async function postComment(commentText: string, parent_id: string): Promise<string> {
     console.log(`Posting comment:`, commentText);

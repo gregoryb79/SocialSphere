@@ -1,13 +1,13 @@
 import styles from "./Home.module.scss";
 import { useLoaderData } from "react-router";
-import type { Post } from "../models/posts";
+import type { Comment } from "../models/comments";
 import { User } from "lucide-react";
 import { PostCard } from "./components/PostCard";
 
 
 export function Home() {
     console.log("Home component rendered");
-    const {username, posts} = useLoaderData() as {username: string, posts: Post[]};
+    const {username, posts} = useLoaderData() as {username: string, posts: Comment[]};
     console.log(posts)
     console.log(`Array of ${posts.length} retured from server`); 
     console.log(`User:`, username);
@@ -21,6 +21,12 @@ export function Home() {
             </section>
             <ul className={styles.postsFeed}>
                 {posts.map((post) => (<PostCard post={post} />))}
+                {posts.length === 0 && (
+                    <div>
+                        <h2>Nothing to display.</h2>
+                        <h3>Make some posts or follow some users...</h3>
+                    </div>
+                    )}
             </ul>
             
         </main>

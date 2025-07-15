@@ -1,10 +1,10 @@
-import { apiClient, clearToken } from "./apiClient";
+import { apiClient, clearToken, getToken, setToken } from "./apiClient";
 
 export type User = {
     _id: string;
     username: string;
     email: string;
-    profilePicture?: string;
+    avatar?: string;
     bio?: string;
     followers: string[];
     following: string[];
@@ -36,7 +36,7 @@ export function getCurrentUserId(): string {
 
 //returns the username of the logged in user
 export function getLoggedInUserName(): string {
-    const loggedUser = JSON.parse(localStorage.getItem("loggeduser")!) as User | null;
+    const loggedUser = JSON.parse(localStorage.getItem("loggeduser")!);
     if (!loggedUser) {
         console.warn("No user is logged in, returning 'Guest'");
         return "Guest";
@@ -45,15 +45,22 @@ export function getLoggedInUserName(): string {
     return loggedUser.username;
 }
 
-export function getLoggedInUserId(): string {    
-    const loggedUser = JSON.parse(localStorage.getItem("loggeduser")!) as User | null;
-    if (!loggedUser) {
-        console.warn("No user is logged in, returning 'Guest'");
+export function getLoggedInUserId(): string {        
+    const token = getToken();
+    if (!token) {
         return "Guest";
     }
-    return loggedUser._id;
+    const payload = token.split('.')[1];
+    const decoded = JSON.parse(atob(payload));
+    console.log("Decoded token payload:", decoded);
+    if (!decoded || !decoded.userId) {
+        console.warn("Token does not contain a valid user ID, returning 'Guest'");
+        return "Guest";
+    }
+    console.log("UserId:", decoded.userId);    
+    return decoded.userId;    
 }
-
+/*  mock function is replaced below
 export async function fetchUser(userId: string): Promise<User> {
     const message = await getUsers();
     console.log("Verifying connection to server:", message);
@@ -64,6 +71,7 @@ export async function fetchUser(userId: string): Promise<User> {
         }, 1000);
     });
 }
+*/
 
 export async function fetchLoggedInUser(): Promise<User> {
     const message = await getUsers();
@@ -76,34 +84,61 @@ export async function fetchLoggedInUser(): Promise<User> {
     });
 }
 
-export async function putLogIn(username: string, password: string): Promise<boolean> {
-    console.log("putLogIn called with username:", username, "and password:", password);
+export async function putLogIn(email: string, password: string): Promise<boolean> {
+    console.log("putLogIn called with email:", email, "and password:", password);
+    try {
+        const response = await apiClient.post("/auth/login", {
+            email,
+            password
+        });
 
-    localStorage.setItem("loggeduser", JSON.stringify(mockUser));
-    sessionStorage.setItem("currentuser", mockUser._id);
-        
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(true);
-        }, 1000);
-    });
+        if (response.status !== 200) {
+            console.error("Login failed with status:", response.status);
+            return false; 
+        }
+        const { token, username } = response.data;
+        setToken(token);
+        localStorage.setItem("loggeduser", JSON.stringify({ username }));
+        console.log("Login successful, token received");
+        return true; 
+    } catch (error) {
+        console.error("Error during login:", error);
+        return false; 
+    }
 }
 
-export async function postRegister(email: string, username: string, password: string): Promise<boolean> {
-    console.log("postRegister called with email:", email, "username:", username, "and password:", password);
-        
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(true);
-        }, 1000);
-    });
+export async function postRegister(email: string, username: string, password: string, avatarURL: string, bio : string): Promise<boolean> {
+    console.log("postRegister called with email:", email, "username:", username, "password:", password, "avatarURL:", avatarURL, "bio:", bio);
+    
+    try{
+        const response = await apiClient.post("/auth/register", {
+            email,
+            username,
+            password,
+            avatar: avatarURL,
+            bio
+        });
+
+        if (response.status !== 201) {
+            console.error("Registration failed with status:", response.status);
+            return false; 
+        }
+        const { token } = response.data;
+        setToken(token);
+        console.log("Registration successful, token received");
+        localStorage.setItem("loggeduser", JSON.stringify({ username }));
+        return true; 
+    } catch (error) {
+        console.error("Error during registration:", error);
+        return false; 
+    }    
 }
 
 export const mockUser: User = {
     _id: "user1",
     username: "johnDoe",
     email: "johndoe@example.com",
-    profilePicture: "https://placehold.co/100x100",
+    avatar: "https://placehold.co/100x100",
     bio: "Just another SocialSphere user.",
     followers: ["user2", "user3"],
     following: ["user2"],
@@ -134,7 +169,7 @@ export async function getUserByName(username: string): Promise<User | null>  {
              _id: backendUser.id, 
              username: backendUser.username,
              email: backendUser.email, 
-             profilePicture: backendUser.avatar,
+             avatar: backendUser.avatar,
              bio: backendUser.bio,
              followers: backendUser.followers || [], 
              following: backendUser.following || [],
@@ -150,4 +185,16 @@ export async function getUserByName(username: string): Promise<User | null>  {
     }
 }
 
+
+
+
+export async function fetchUser(userId: string): Promise<User> {
+  try {
+    const response = await apiClient.get(`/users/${userId}`);
+    return response.data as User;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw error;
+  }
+}
 

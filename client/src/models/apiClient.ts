@@ -7,23 +7,23 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-    // const token = getToken();
+    const token = getToken();
 
-    // if (token) {
-    //     config.headers.set("Authorization", `Bearer ${token}`);
-    // }
+    if (token) {
+        config.headers.set("Authorization", `Bearer ${token}`);
+    }
 
     return config;
 });
 
 
-// export function getToken() {
-//     return sessionStorage.getItem(tokenKeyName);
-// }
+export function getToken() {
+    return sessionStorage.getItem(tokenKeyName);
+}
 
-// export function setToken(token: string) {
-//     sessionStorage.setItem(tokenKeyName, token);
-// }
+export function setToken(token: string) {
+    sessionStorage.setItem(tokenKeyName, token);
+}
 
 export function clearToken() {
     sessionStorage.removeItem(tokenKeyName);

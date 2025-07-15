@@ -12,7 +12,7 @@ router.get('/:userId', async (req, res) => {
         return;
     }
 
-    if (userId === "guest") {
+    if (userId === "guest" || userId === "Guest") {
         try {
             const allPostsResult = await dbClient.execute({
                 sql: `SELECT c.id, c.author_id, c.content, c.image, c.created_at, c.updated_at,
@@ -58,7 +58,7 @@ router.get('/:userId', async (req, res) => {
 
             const posts = postsResult.rows;
             const postIds = posts.map(post => post.id as string);
-            console.log(`Found ${postIds} posts for guest user`);
+            console.log(`Found ${postIds} posts for user ${userId}`);
 
             if (postIds.length === 0) {
                 console.log("No posts found for user:", userId);

@@ -130,7 +130,6 @@
 }
 
 .deleteDisable {    
-    
     width: var(--font-sm);
     height: var(--font-sm);
     
@@ -139,8 +138,14 @@
     // }    
 }
 
+.editIcon {        
+    width: var(--font-sm);
+    height: var(--font-sm);   
+}
+
 .deleteButtonContainer{
     position: absolute;
     top: calc(var(--font-sm)/4);
     right: calc(var(--font-sm)/4);
+    display: flex;
 }

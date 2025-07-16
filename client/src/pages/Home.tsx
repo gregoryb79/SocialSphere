@@ -20,7 +20,7 @@ export function Home() {
                 <h2>{username}</h2>
             </section>
             <ul className={styles.postsFeed}>
-                {posts.map((post) => (<PostCard post={post} />))}
+                {posts.map((post) => (<PostCard postInput={post} />))}
                 {posts.length === 0 && (
                     <div>
                         <h2>Nothing to display.</h2>

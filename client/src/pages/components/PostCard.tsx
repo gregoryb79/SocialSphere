@@ -14,7 +14,7 @@
  * - Handles like, comment, and delete actions with proper state updates.
  */
 
-import { Bookmark, Delete, Heart,MessageCircle, Trash } from "lucide-react";
+import { Bookmark, Delete, Edit, Heart,MessageCircle, Trash } from "lucide-react";
 import { likePost} from "../../models/posts";
 import { deleteCommentWithChildren, getComments,type Comment} from "../../models/comments";
 import { IconButton } from "./IconButton";
@@ -26,10 +26,10 @@ import { NewCommentCard } from "./NewCommentCard";
 import { Confirm } from "./Confirm";
 
 type PostCardProps = {
-    post: Comment; 
+    postInput: Comment; 
     onDelete?: (childID: string) => void; 
 };
-export function PostCard({post, onDelete}: PostCardProps) {
+export function PostCard({postInput, onDelete}: PostCardProps) {
     const pRef = useRef<HTMLParagraphElement>(null);
     const [clamped, setClamped] = useState(false);
     const [showMore, setShowMore] = useState(false);
@@ -39,6 +39,7 @@ export function PostCard({post, onDelete}: PostCardProps) {
     const [displayNewComment, setDisplayNewComment] = useState<boolean>(false);  
     const [deleteEnable, setDeleteEnable] = useState<boolean>(false);
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
+    const [post, setPost] = useState<Comment>(postInput);
     console.log(`displayNewComment state: ${displayNewComment}`);
      
     
@@ -135,14 +136,46 @@ export function PostCard({post, onDelete}: PostCardProps) {
             setLoading(false);
         }
     }
-
+    
+    const [editing, setEditing] = useState<boolean>(false);
     async function handlePostedComment(newCommentId: string) {
         
-        if (newCommentId) {
-            console.log(`PC: New comment ${newCommentId} posted for post ${post._id}`);
-            post.comments.push(newCommentId);
+        // if (editing) {
+        //     console.log(`PC: comment ${newCommentId} was edited`);            
+        //     setEditing(false);
+        //     setDisplayNewComment(false);
+        //     return;
+        // }
+            
+        if (newCommentId) {            
+            if (newCommentId != post._id) {
+                console.log(`PC: New comment ${newCommentId} posted for post ${post._id}`);
+                post.comments.push(newCommentId);
+            }else {
+                console.log(`PC: ${newCommentId} was edited`);
+            }
+        }else {
+            console.log(`PC: New comment posting for ${post._id} was canceled`);
+            if (post.comments.length == 0)setShowComments(false);
         }
+        if (post.comments.length == 0) setShowComments(false);
         setDisplayNewComment(false);
+
+        if (editing && newCommentId === post._id) {
+            console.log(`PC: comment ${newCommentId} was edited`);
+            setEditing(false);
+            setLoading(true);
+            try{
+                const updatedPost = await getComments([post._id]);
+                setPost(updatedPost[0]);
+            }catch (error) {
+                console.error(`Error fetching updated post ${post._id}:`, error);
+            }finally {
+                setLoading(false);
+                return;
+            }                      
+        }
+        
         setLoading(true);
         try{
             console.log(`comment to fetch`, post.comments);
@@ -190,6 +223,18 @@ export function PostCard({post, onDelete}: PostCardProps) {
         }        
     }
 
+    async function handleEdit() {
+        console.log(`Edit post/comment with ID: ${post._id}`);
+        if (post.parentId) {
+            console.log(`Post/comment ${post._id} is a comment`);
+            if(!showComments) displayComments();
+            setEditing(true);
+            setDisplayNewComment(true);
+        }else {
+            console.log(`Post/comment ${post._id} is a post`);
+        }
+    }
+
     
     if (deleted) {
         console.log(`Post/comment ${post._id} is deleted, not rendering`);
@@ -200,17 +245,20 @@ export function PostCard({post, onDelete}: PostCardProps) {
             {loading && <Spinner/>}    
             {showConfirm && <Confirm question="Are you sure you want to delete?" onYes={handleDeleteWithCildren} onNo={()=>{setShowConfirm(false)}}/> }                       
             <div className={styles.deleteButtonContainer}>
+                <IconButton title="Edit" ariaLabel="edit post/comment" icon={<Edit className={styles.editIcon} />}
+                disabled={!deleteEnable}
+                onClick={handleEdit} />
                 <IconButton title="Delete" ariaLabel="delete post/comment" icon={<Trash className={deleteEnable ? styles.deleteEnable : styles.deleteDisable} />}
                 disabled={!deleteEnable}
                 onClick={()=>{setShowConfirm(true)}} />
-            </div>
+            </div>            
             <p ref={pRef} className={!showMore ? styles.twoLineClamp : ""}>{post.content}</p>                                                              
             {clamped && !showMore && <button className={styles.textButton} onClick={() => setShowMore(true)}>See more</button>}
             {showMore && <button className={styles.textButton} onClick={() => setShowMore(false)}>See less</button>}
             {post.image && <img src={post.image} alt="Post visual content" className={styles.postImage} />}
             <p><strong>Author:</strong> {post.authorName}</p>
             {isPost && <p><strong>Created at:</strong> {new Date(post.createdAt).toLocaleString()}</p>}
-            {!isPost && <p>{commentAge(post.createdAt)}</p>}
+            {!isPost && <p>{commentAge(post.createdAt,post.updatedAt)}</p>}
             <section className={styles.postStatistics}>
                 <span><Heart className={styles.lucideIconStats} color="var(--primary-blue)"/> {post.likes.length.toString()}</span>                
                 {post.comments.length > 0 && <button className={styles.textButton} 
@@ -235,10 +283,10 @@ export function PostCard({post, onDelete}: PostCardProps) {
             { (showComments && comments) && (
                 <section className={styles.commentsSection}>
                     <h3>Comments:</h3>
-                    {displayNewComment && <NewCommentCard post={post} onCommentPosted={handlePostedComment}/>}
+                    {displayNewComment && <NewCommentCard post={post} content={editing ? post.content : ""} onCommentPosted={handlePostedComment}/>}
                     <ul className={styles.commentsList}>
                         {comments.map((comment) => (
-                            <PostCard key={comment._id} post={comment} onDelete={handleDelete}/>
+                            <PostCard key={comment._id} postInput={comment} onDelete={handleDelete}/>
                         ))}
                     </ul>
                 </section>
@@ -247,9 +295,9 @@ export function PostCard({post, onDelete}: PostCardProps) {
     );
 }
 
-function commentAge(createdAt: string): string {
+function commentAge(createdAt: string, updatedAt: string): string {
     const now = new Date();
-    const commentDate = new Date(createdAt);
+    const commentDate = new Date(Math.max(new Date(createdAt).getTime(),new Date(updatedAt).getTime()));                            
     const diffInSeconds = Math.floor((now.getTime() - commentDate.getTime()) / 1000);
     
     if (diffInSeconds < 60) {

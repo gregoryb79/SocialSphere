@@ -1,0 +1,19 @@
+.avatarSection {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;       
+    button {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: var(--white);
+        &:hover{
+            transform: scale(1);
+            transform: translateY(-50%);
+        }
+
+    }
+}

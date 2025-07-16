@@ -7,6 +7,10 @@ import { initDb } from "./models/initDb";
 import { seedDatabase } from "./models/generatedBdata";
 import { setupChatSocket } from "./sockets/chat";
 
+/* TEMP UNTILL FULL SQL*/
+import mongoose from "mongoose";
+/************************/
+
 dotenv.config();
 
 const server = createServer(app);
@@ -31,6 +35,12 @@ async function init() {
         await initDb();
         await seedDatabase();
         setupChatSocket(server);
+
+        /* TEMP UNTILL FULL SQL*/
+        await mongoose.connect(process.env.CONNECTION_STRING!, {
+            dbName: process.env.DB_NAME,
+        });
+        /************************/
 
         server.listen(port, () => {
             console.log(`Server listening on port ${port}`);

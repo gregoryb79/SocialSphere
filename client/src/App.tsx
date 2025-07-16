@@ -5,7 +5,7 @@ import { ArrowLeft, Bell, Home, LogIn, LogOut, MessageCircle, Plus, Search, Sett
 import { IconButton } from "./pages/components/IconButton";
 import { useEffect, useState } from "react";
 import { Spinner } from "./pages/components/Spinner";
-import { doLogOut, getLoggedInUserName } from "./models/users";
+import { doLogOut, getLoggedInUserId, getLoggedInUserName } from "./models/users";
 
 export function App() {  
 
@@ -53,6 +53,8 @@ function Footer() {
   const location = useLocation();
   const [loading, setLoading] = useState<boolean>(false);
   const username = getLoggedInUserName();
+  const userId = getLoggedInUserId();
+  console.log(`Footer rendered for user: ${username} with ID: ${userId}`);
   useEffect(() => {
     setLoading(false); // Hide spinner on any route change
   }, [location]);
@@ -80,7 +82,7 @@ function Footer() {
             setLoading(true);
           }} disabled={username == "Guest"} />
         <IconButton title="Profile" ariaLabel="Configure your profile" icon={<User className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-text)"}/>} onClick={() => {
-            navigate("/profile");
+            navigate(`/profile/${userId}`);
             setLoading(true);
           }} disabled={username == "Guest"}/>
         {(username == "Guest") && <IconButton title="Log In" icon={<LogIn className={styles.lucideIcon} color="var(--primary-blue)" />} ariaLabel="Log In Button" onClick={() => navigate("/login")} />}

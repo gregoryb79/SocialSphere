@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { getLoggedInUserId } from "../models/users";
-import { postComment } from "../models/comments";
-import { addComment } from "../models/posts";
+import { editComment, postComment } from "../models/comments";
+// import { addComment } from "../models/posts";
 
 export function useAddComment(onSuccess: (newCommentId: string) => void) {
     const [error, setError] = useState<string>();
@@ -22,16 +22,8 @@ export function useAddComment(onSuccess: (newCommentId: string) => void) {
             } else {
                 console.error("uAC Failed to post comment");
                 setError("Failed to post comment");
-            }
+            }                
                 
-            // const result = await addComment(newCommentId, postId);
-            // if (result) {
-            //     console.log(`uAC Comment ${newCommentId} added to post ${postId} successfully`);  
-            //     onSuccess();          
-            // } else {
-            //     console.error(`uAC Failed to add comment ${newCommentId} to post ${postId}`);
-            //     setError(`Failed to add comment ${newCommentId} to post ${postId}`);
-            // }        
         } catch (error) {
             if (!isCanceled.current) {
                 setError(error as string);
@@ -52,4 +44,47 @@ export function useAddComment(onSuccess: (newCommentId: string) => void) {
     }, []);
     
     return { error, loading, doAddComment};
+}
+
+export function useEditComment(onSuccess: (commentId: string) => void) {
+    const [error, setError] = useState<string>();
+    const [loading, setLoading] = useState(false);  
+    const isCanceled = useRef(false);
+    isCanceled.current = false;
+    const currUserId = useRef<string>(getLoggedInUserId());
+
+    async function doEditComment(commentContent: string, commentId: string) {
+        setError(undefined);
+        setLoading(true);
+
+        try {                
+            const result = await editComment(commentContent, commentId);
+            if (result) {
+                console.log(`uAC Comment ${commentId} edited successfully.`); 
+                onSuccess(commentId);            
+            } else {
+                console.error("uAC Failed to edit comment");
+                setError("Failed to edit comment");
+            }                
+                    
+        } catch (error) {
+            if (!isCanceled.current) {
+                setError(error as string);
+                console.error("uAC Error edditing comment", error);                    
+            }
+        } finally {
+            if (!isCanceled.current) {
+                setLoading(false);
+            }
+        }
+    }
+    
+    useEffect(() => {       
+        return () => {
+            console.log("Cleanup: setting isCanceled.current = true");
+            isCanceled.current = true;
+        };
+    }, []);
+    
+    return { error, loading, doEditComment};
 }

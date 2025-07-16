@@ -6,7 +6,8 @@ import { SearchIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getUserByName, type User } from "../models/users";
 import { Spinner } from "./components/Spinner";
-import { fetchPostsByContent, type Post } from "../models/posts";
+import { fetchPostsByContent } from "../models/posts";
+import { type Comment } from "../models/comments";
 import { PostCard } from "./components/PostCard";
 
 
@@ -16,7 +17,7 @@ const [user, setUser] = useState<User | null>(UserInfo || null);
 const [userLoading, setUserLoading] = useState<boolean>(false);
 const [userError, setUserError] = useState<string | null>(null);
 
-const [postResults, setPostResults] = useState<Post[]>([]);
+const [postResults, setPostResults] = useState<Comment[]>([]);
 const [postLoading, setPostLoading] = useState<boolean>(false);
 const [postError, setPostError] = useState<string | null>(null);
 
@@ -24,6 +25,7 @@ const [postError, setPostError] = useState<string | null>(null);
 const [searchTerm, setSearchTerm] = useState<string>("");
 
 const navigate = useNavigate();
+const noResults = 'no-users-found';
 
 
 useEffect(() => {
@@ -97,10 +99,6 @@ const handleUserClick = (userId: string) => {
     navigate(`/profile/${userId}`); 
 };
 
-const handlePostClick = (postId: string) => {
-    console.log("Post clicked:", postId); 
-};
-
   return (
     <main className={styles.searchMain}>
       <div>
@@ -111,7 +109,7 @@ const handlePostClick = (postId: string) => {
             type="search"
             name="search"
             label=""
-            placeholder="Type to search the app for Users or Posts..."
+            placeholder="Search the app for Users or Posts..."
             onChange={(e) => setSearchTerm(e.target.value)}
             value={searchTerm}
           />
@@ -123,34 +121,38 @@ const handlePostClick = (postId: string) => {
           />
         </h1>
       </div>
-      <section>
-      <ul className={styles.searchResults}>
+      <section className={styles.searchResults}>
+      <ul>
         {userLoading && <Spinner />}
         {userError && <div>{userError}</div>}
         {user && (
-          <li
+          <li className={styles.searchResultItem}
             key={user._id}
             onClick={() => handleUserClick(user._id)} 
           >
-            <h2>{user.username}</h2>
-            {user.profilePicture && <img src={user.profilePicture} alt={`${user.username}'s profile`} />}
-            {user.bio && <p>{user.bio}</p>}
+            {user.avatar && <img src={user.avatar} alt={`${user.username}'s profile`} className={styles.userAvatar}/>}
+            <div className={styles.userInfo}>
+            <h2 className={styles.userName}>@{user.username}</h2>
+            {user.bio && <p className={styles.userBio}>{user.bio}</p>}
+            </div>
           </li>
         )}
         {!userLoading && !userError && !user && searchTerm && (
-          <li>No users found matching "{searchTerm}"</li>
+          <li key={noResults}>
+             <p className={styles.noResults}>No users found matching "{searchTerm}"</p>
+          </li>
         )}
       </ul>
-      <ul>
+      <ul className={styles.searchResultsPosts}> 
         {postLoading && <Spinner />}
         {postError && <div>{postError}</div>}
         {postResults.map((post) => (
-          <li key={post._id} onClick={() => handlePostClick(post._id)}>
-            <PostCard post={post} />
-          </li>
+            <PostCard key={post._id} postInput={post}/>
         ))}
         {!postLoading && !postError && postResults.length === 0 && searchTerm && (
-            <li>No posts found matching "{searchTerm}"</li>
+          <li key={noResults}>
+            <p className={styles.noResults}>No posts found matching "{searchTerm}"</p>
+          </li>
         )}
       </ul>
       </section>

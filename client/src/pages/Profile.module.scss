@@ -18,17 +18,32 @@
     gap: 1rem;
     margin-top: 1rem;
 
+        .userInfo{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+    }
     img{
-        width: 5rem;
-        height: 5rem;
+        width: 10rem;
+        height: 10rem;
         border-radius: 50%;
         object-fit: cover;
-    }
+    }    
+     .nameBio{
+        flex-direction: column;
+        align-items: center;
+        font-size: var(--font-lg);
 
-    h1{
-        font-size: var(--font-xl);
+           > h1{
+        font-size: 3rem;
         color: var(--primary-blue);
+        margin-bottom: 1.5rem;
+        justify-self: center;
     }
+}
 
 }
 .followStats{
@@ -40,14 +55,14 @@
     gap: 1rem;
     margin-top: 1rem;
 
-    p{
+    button{
         font-size: var(--font-md);
         color: var(--primary-blue);
     }
 }
 
 .userPosts{
-    margin-top: 1rem;;
+    margin-top: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;

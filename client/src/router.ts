@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
                 Component: Home,                
                 loader: async () => {
                     console.log("Fetching posts for home page");
-                    const userId = getCurrentUserId();
+                    const userId = getLoggedInUserId();
                     const username = getLoggedInUserName() || "Guest";
                     const posts = await fetchPosts(userId);
                     return {
@@ -35,10 +35,10 @@ export const router = createBrowserRouter([
                       };
                 }
              },      
-           { path: "/profile",
+           { path: "/profile/:userId",
                 Component: Profile,                
-                loader: async () => {
-                    const userId = getCurrentUserId();
+                loader: async ({ params }) => {
+                    const userId = params.userId ? params.userId : getCurrentUserId();
                     const user = await fetchUser(userId);
                     const posts = await fetchOwnPosts(userId);
                     return {user, posts};
@@ -78,6 +78,7 @@ export const router = createBrowserRouter([
                 Component: Notifications,
                 loader: async () => {
                     const userId = getLoggedInUserId();
+                    console.log("Loading notifications for userId:", userId);
 
                     if (!userId || userId === "Guest") {
                         console.warn("No valid userId was found. Moving to login")

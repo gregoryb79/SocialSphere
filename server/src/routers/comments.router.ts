@@ -128,6 +128,49 @@ router.post('/',authenticate, async (req, res) => {
     }
 });
 
+router.put('/',authenticate, async (req, res) => {
+    const { content, commentId } = req.body;    
+    const authorId = (req as AuthRequest).user?.userId;     
+
+    console.log(`Editing comment ${commentId} by user ${authorId} with content: ${content}.`);
+
+    if (!authorId) {
+        res.status(401).json({ error: "Unauthorized" });
+        return;
+    }
+
+    if (!content || content.trim() === "") {
+        res.status(400).json({ error: "Content cannot be empty" });
+        return;
+    }
+    
+    
+    try {
+        const existingCommentResult = await dbClient.execute({
+            sql: `SELECT * FROM comments WHERE id = ? AND author_id = ?`,
+            args: [commentId, authorId]
+        });
+        if (existingCommentResult.rows.length === 0) {
+            res.status(404).json({ error: "Comment not found or unauthorized" });
+            return;
+        }
+        const result = await dbClient.execute({
+            sql: `UPDATE comments SET content = ?, updated_at = ? WHERE id = ?`,
+            args: [content, new Date().toISOString() ,commentId]
+        });        
+
+        if (result.rowsAffected === 1) {
+            res.status(201).json({id: commentId});
+            console.log(`Comment ${commentId} updated successfully.`);
+        } else {
+            res.status(500).json({ error: "Failed to update comment" });
+        };
+    } catch (error) {
+        console.error("Error updating comment:", error);
+        res.status(500).json({ error: "Failed to update comment" });
+    }
+});
+
 router.post('/like',authenticate, async (req, res) => {
     const { postId, userId } = req.body; 
     const getLoggedInUserId = (req as AuthRequest).user?.userId; 
@@ -209,16 +252,15 @@ router.delete('/:id', authenticate, async (req, res) => {
 });
 
 async function deleteChildren (commentId: string, authorId: string) {
-    // console.log(`Deleting children comments for comment ${commentId} by user ${authorId}`);
-    
+        
     try {
         const result = await dbClient.execute({
             sql: `SELECT id FROM comments WHERE parent_id = ? AND author_id = ?`,
             args: [commentId, authorId]
         });
-        // console.log(result);
+        
         if (result.rows.length === 0) {
-            // console.log(`No child comments found for comment ${commentId}`);
+
             const result = await dbClient.execute({
                 sql: `DELETE FROM comments WHERE id = ? AND author_id = ?`,
                 args: [commentId, authorId]
@@ -235,10 +277,8 @@ async function deleteChildren (commentId: string, authorId: string) {
             return;
         }else{
             const childIds = result.rows.map(row => row.id) as string[];
-            // console.log(childIds);
-            for (const childId of childIds) {
-                // const childCommentId = row as unknown as string;
-                // console.log(`Deleting child comment ${childCommentId}`);
+            
+            for (const childId of childIds) {                
                 await deleteChildren(childId, authorId);                
             }
             return;

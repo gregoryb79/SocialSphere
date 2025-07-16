@@ -4,8 +4,9 @@ import { socket } from "../socketClient";
 
 import styles from "./Chat.module.scss";
 import { getLoggedInUserId, getLoggedInUserName } from "../models/users";
+import { useLoaderData, useNavigate } from "react-router";
 
-type Message = {
+export type Message = {
     username: string;
     text: string;
     chat_id: string;
@@ -13,69 +14,47 @@ type Message = {
     receiver_id: string;
 };
 
-type Friend = {
+export type Friend = {
     id: string;
     username: string;
 };
 
+export async function chatLoader() {
+    const userId = getLoggedInUserId();;
+    const username = getLoggedInUserName();
+    const res = await fetch(`http://localhost:5050/chat/friends/${userId}`);
+    const friends = await res.json();
+
+    return { userId, username, friends };
+}
+
 export function Chat() {
+    const navigate = useNavigate();
+    const { userId, username, friends } = useLoaderData() as { userId: string; username: string; friends: Friend[]};
+
     const [messages, setMessages] = useState<Message[]>([]);
     const [message, setMessage] = useState("");
-    const [friends, setFriends] = useState<Friend[]>([]);
     const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
-
-    const userId = getLoggedInUserId() || "guest-id";
-    const username = getLoggedInUserName() || "Guest";
 
     const getChatId = (friendId: string) => {
         return [userId, friendId].sort().join("-");
     };
 
-    const fetchFriends = async () => {
-        try {
-            const res = await fetch(`http://localhost:5050/chat/friends/${userId}`);
-            const data = await res.json();
-            setFriends(data);
-        } catch (error) {
-            console.error("Failed to fetch friends", error);
-        }
-    };
-
-    const fetchMessages = async (chatId: string) => {
-        try {
-            const res = await fetch(`http://localhost:5050/chat/messages/${chatId}`);
-            const data = await res.json();
-            setMessages(data);
-        } catch (error) {
-            console.error("Failed to fetch messages:", error);
-        }
-    };
-
-    const sendMessage = () => {
-        if (!message.trim() || !selectedFriend) return;
-
-        const chat_id = getChatId(selectedFriend.id);
-        const newMessage: Message = {
-            username,
-            text: message,
-            chat_id,
-            sender_id: userId,
-            receiver_id: selectedFriend.id,
-        };
-
-        socket.emit("message", newMessage);
-        setMessage("");
-    };
-
     useEffect(() => {
-        fetchFriends();
-    }, []);
-
-    useEffect(() => {
-        if (selectedFriend) {
+        const fetchMessages = async () => {
+            if (!selectedFriend) return;
+            
             const chat_id = getChatId(selectedFriend.id);
-            fetchMessages(chat_id);
-        }
+
+            try {
+                const res = await fetch(`http://localhost:5050/chat/messages/${chat_id}`);
+                const data = await res.json();
+                setMessages(data);
+            } catch (error) {
+                console.error("Failed to fetch messages:", error);
+            }
+        };
+        fetchMessages();
     }, [selectedFriend]);
 
     useEffect(() => {
@@ -93,6 +72,16 @@ export function Chat() {
         };
     }, [selectedFriend]);
 
+    const sendMessage = () => {
+        if (!message.trim() || !selectedFriend) return;
+
+        const chat_id = getChatId(selectedFriend.id);
+        const newMessage: Message = { username, text: message, chat_id, sender_id: userId, receiver_id:selectedFriend.id };
+
+        socket.emit("message", newMessage);
+        setMessage("");
+    };
+
     return (
         <div className={styles.chatContainer}>
             <div className={styles.friendsList}>
@@ -104,8 +93,13 @@ export function Chat() {
                     </button>
                 ))}
             </div>
+
             {selectedFriend && (
                 <>
+                    <div className={styles.chatHeader}>
+                        <button onClick={() => setSelectedFriend(null)} className={styles.backButton}>🔙 Back to Friends</button>
+                        <h4>Chat with {selectedFriend.username}</h4>
+                    </div>
                     <ul className={styles.messages}>
                         {messages.map((msg, i) => (
                         <li key={i} className={msg.sender_id === userId ? styles.ownMessage : ""}>
@@ -113,6 +107,7 @@ export function Chat() {
                         </li>
                         ))}
                     </ul>
+                    
                     <div className={styles.inputArea}>
                         <input value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={(e) => {if (e.key === "Enter") sendMessage();}} placeholder="Write message here..." />
                         <button onClick={sendMessage}>Send</button>

@@ -1,7 +1,7 @@
 import express from "express";
 import { authenticate } from "../middlewares/auth.middleware";
 import { followUser, unfollowUser } from "../controllers/user.controller";
-
+import { deleteUser, updateUser } from "../models/user";
 export const router = express.Router();
 import { dbClient } from "../models/db";
 import { getUserById } from '../models/user';
@@ -21,6 +21,17 @@ router.get('/:userId', async (req, res) => {
   } catch (error) {
     console.error("Error fetching user profile:", error);
     res.status(500).json({ error: "Failed to fetch user profile" });
+  }
+});
+
+router.delete('/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    await deleteUser(userId);
+    res.json({ message: 'Account deleted' });
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    res.status(500).json({ error: 'Failed to delete account' });
   }
 });
 

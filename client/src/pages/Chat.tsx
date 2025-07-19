@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import { socket } from "../socketClient";
 
 import styles from "./Chat.module.scss";
-import { getLoggedInUserId, getLoggedInUserName } from "../models/users";
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData } from "react-router";
 
 export type Message = {
     username: string;
@@ -19,17 +18,7 @@ export type Friend = {
     username: string;
 };
 
-export async function chatLoader() {
-    const userId = getLoggedInUserId();;
-    const username = getLoggedInUserName();
-    const res = await fetch(`http://localhost:5050/chat/friends/${userId}`);
-    const friends = await res.json();
-
-    return { userId, username, friends };
-}
-
 export function Chat() {
-    const navigate = useNavigate();
     const { userId, username, friends } = useLoaderData() as { userId: string; username: string; friends: Friend[]};
 
     const [messages, setMessages] = useState<Message[]>([]);
@@ -86,12 +75,15 @@ export function Chat() {
         <div className={styles.chatContainer}>
             <div className={styles.friendsList}>
                 <h3>Choose friend to chat:</h3>
-                {friends.length === 0 && <p>No friends avialable</p>}
-                {friends.map((friend, index) => (
-                    <button key={`${friend.id}-${index}`} onClick={() => setSelectedFriend(friend)} className={selectedFriend?.id === friend.id ? styles.selected : ""}>
-                        {friend.username}
-                    </button>
-                ))}
+
+                {(!friends || friends.length === 0) ? (
+                    <p className={styles.noFriends}>No friends available</p>
+                ) : (
+                    friends.map((friend, index) => (
+                        <button key={`${friend.id}-${index}`} onClick={() => setSelectedFriend(friend)} className={selectedFriend?.id === friend.id ? styles.selected : ""}>
+                            {friend.username}
+                        </button>
+                )))}
             </div>
 
             {selectedFriend && (

@@ -83,10 +83,9 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
 
   return (
    <main className={styles.settingsMain}>
-    <h1>Settings</h1>
+    <h1>Account Settings:</h1>
      <section className={styles.profileInformation}>
-       <h2>Profile Information</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} >
           <Input
             type="text"
             value={username}
@@ -94,6 +93,7 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
             name="username"
             id="username"
             label="Username:"
+            required
             />
           <Input
             type="email"
@@ -102,6 +102,7 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
             name="email"
             id="email"
             label="Email:"
+            required
             />
           <label>Bio:</label>
           <textarea 
@@ -110,6 +111,7 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
             name={"bio"}
             id={"bio"} 
             rows={3}
+            className={styles.bio}
               />
           <URLorFileUploadInput 
               setImageHostURL={setAvatarHostURL} 
@@ -118,13 +120,16 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
               id="avatarURL" 
               label="Profile Picture" 
               name="avatarURL" 
-              placeholder="put link or upload"/> 
+              placeholder="put link or upload"
+              />   
           <PasswordInput
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             name="currentPassword"
             id="currentPassword"
             label="Current Password:"
+            autoComplete='none'
+            required
            />
           <PasswordInput
             value={newPassword}
@@ -132,6 +137,8 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
             name="newPassword"
             id="newPassword"
             label="New Password:"
+            autoComplete='none'
+            required
            />
           <PasswordInput
             value={confirmPassword}
@@ -139,9 +146,11 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
             name="confirmPassword"
             id="confirmPassword"
             label="Confirm Password:"
+            autoComplete='none'
+            required
            />
         </form>
-          <div className={styles.passwordRules}>
+          <div className={styles.passwordRulesSection}>
               <h3>Password Rules:</h3>
                   <PasswordRules password={newPassword} />  
           </div>        
@@ -153,6 +162,7 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
      </section>
      <section className={styles.accountActions}>
         <GeneralButton label="Save Changes" onClick={handleSaveChanges} />
+        <div className={styles.deleteButton}>
         <GeneralButton label="Delete Account"
           onClick={() => setShowConfirm(true)}/>
           {showConfirm && (
@@ -162,6 +172,7 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
                onNo={() => setShowConfirm(false)}
              />
            )} 
+           </div>
       </section>      
    </main>
   );

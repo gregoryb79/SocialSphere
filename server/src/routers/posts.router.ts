@@ -1,7 +1,10 @@
 import express from 'express';
 export const router = express.Router();
 import { dbClient } from "../models/db";
+import { updatePost } from "../controllers/post.controller";
+import { authenticate } from "../middlewares/auth.middleware";
 
+router.put("/:id", authenticate, updatePost);
    
 router.get('/:userId', async (req, res) => {
     const { userId } = req.params;
@@ -120,3 +123,5 @@ async function fetchAndCombinePosts(postIds: string[], posts: any[]) {
             updatedAt: post.updated_at
         };});    
 }
+
+export default router;

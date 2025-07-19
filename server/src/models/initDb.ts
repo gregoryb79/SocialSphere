@@ -71,7 +71,7 @@ export async function initDb() {
       FOREIGN KEY (post_id) REFERENCES posts(id),
       FOREIGN KEY (user_id) REFERENCES users(id)
     );`,
-    
+
     `CREATE TABLE IF NOT EXISTS comment_likes (
       comment_id TEXT NOT NULL,
       user_id TEXT NOT NULL,
@@ -118,17 +118,17 @@ export async function initDb() {
   console.log("Starting database seeding...");
 
   try {
-    const check = await dbClient.execute({
-      sql: `INSERT INTO friends (id, user1_id, user2_id) VALUES (?, ?, ?)`,
-      args: ["friend-user1-user2", "user1", "user2"],
+    const existing = await dbClient.execute({
+      sql: `SELECT id FROM friends WHERE id=?`,
+      args: ["friend-user1-user2"],
     });
 
-    if (check.rows.length === 0) {
+    if (existing.rows.length === 0) {
       await dbClient.execute({
         sql: `INSERT INTO friends (id, user1_id, user2_id) VALUES (?, ?, ?)`,
         args: ["friend-user1-user2", "user1", "user2"],
       });
-      
+
       console.log("Seeded friendship between user1 and user2");
     } else {
       console.log("Friendship already exists. Skipping...");
@@ -136,5 +136,4 @@ export async function initDb() {
   } catch (error) {
     console.error("Failed to seed friendship:", error);
   }
-
 }

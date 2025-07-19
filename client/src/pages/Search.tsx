@@ -147,7 +147,7 @@ const handleUserClick = (userId: string) => {
         {postLoading && <Spinner />}
         {postError && <div>{postError}</div>}
         {postResults.map((post) => (
-            <PostCard key={post._id} post={post}/>
+            <PostCard key={post._id} postInput={post}/>
         ))}
         {!postLoading && !postError && postResults.length === 0 && searchTerm && (
           <li key={noResults}>

@@ -10,19 +10,21 @@ import { Spinner } from "./Spinner";
 import { type Comment } from "../../models/comments";
 import { Input } from "./Input";
 import { GeneralButton } from "./GeneralButton";
-import { useAddComment } from "../../hooks/usePosts";
+import { useAddComment, useEditComment } from "../../hooks/usePosts";
 import { ErrorMsg } from "./ErrorMsg";
 
 type CommentProps = {
     post: Comment;
+    content?: string;
     onCommentPosted: (newCommentId: string) => void;
 }
-export function NewCommentCard({post, onCommentPosted}: CommentProps){  
+export function NewCommentCard({post, content, onCommentPosted}: CommentProps){  
 
     const currUserId = useRef<string>(getLoggedInUserId());
     console.log(`CommentCard rendered for comment: ${post._id} by user: ${currUserId.current}`);
     const likeIconColor = useRef<string>("var(--primary-blue)");
     const [disable,setDisable] = useState<boolean>(false);    
+    // const [commentContent, setCommentContent] = useState<string>(content || "");
    
     function handlePostComment(event: React.FormEvent<HTMLFormElement>) {
         console.log(`NCC: Post comment button clicked on post: ${post._id}`);
@@ -36,15 +38,27 @@ export function NewCommentCard({post, onCommentPosted}: CommentProps){
             return;
         }
         
-        doAddComment(commentContent, post._id);
+        if (!content) {
+            doAddComment(commentContent, post._id);
+        } else {
+            doEditComment(commentContent, post._id);
+        }
+
     }
     const { error, loading, doAddComment } = useAddComment((newCommentId: string) => {
         onCommentPosted(newCommentId);}
-    );
+    );    
+    const { error: errorEdit, loading: editLoading, doEditComment } = useEditComment((commentId: string) => {
+        onCommentPosted(commentId);}
+    ); 
       
     const [showError, setShowError] = useState(false);
     useEffect(() => {
         if (error) {
+            console.error("Error during posting comment:", error);
+            setShowError(true);
+        }
+        if (errorEdit) {
             console.error("Error during posting comment:", error);
             setShowError(true);
         }
@@ -55,15 +69,15 @@ export function NewCommentCard({post, onCommentPosted}: CommentProps){
     return (
         <>
             <form className={styles.newCommentCard} onSubmit={handlePostComment}>            
-                <label htmlFor="commentContent">New Comment</label>
+                <label htmlFor="commentContent">{!content ? "New Comment" : "Edit Comment"}</label>
                 <textarea id="commentContent" name="commentContent" placeholder="Write your comment here..."
-                    rows={5} required className={styles.commentTtext}/>
+                    rows={5} required className={styles.commentTtext} defaultValue={content}/>
                 <section className={styles.buttonsSection}>
-                    <GeneralButton label="Post Comment" disabled={disable}/>            
+                    <GeneralButton label={!content ? "Post Comment" : "Update Comment"} disabled={disable}/>            
                     <GeneralButton label="Cancel" disabled={disable} onClick={() => onCommentPosted("")}/>
                 </section>                
             </form> 
-            {loading && <Spinner />}
+            {loading || editLoading && <Spinner />}
             {showError && error && <ErrorMsg message={error} onOk={() => {setShowError(false)}} />}
         </>
                

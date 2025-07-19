@@ -106,4 +106,33 @@ export async function postComment(commentText: string, parent_id: string): Promi
     // });
 }
 
+export async function editComment(commentText: string, commentId: string): Promise<boolean> {
+    console.log(`Editing comment:`, commentText);
+    console.log(`Comment ID:`, commentId);
+    if (!commentText || commentText.trim() === "") {
+        console.error("Comment text cannot be empty");       
+        return Promise.reject(new Error("Comment text cannot be empty"));        
+    }
+    if (!getLoggedInUserId()) {
+        console.error("No user logged in, cannot post comment");
+        return Promise.reject(new Error("No user logged in, cannot post comment"));
+    }
+    try {
+        const response = await apiClient.put("/comments", 
+            {
+                content: commentText,
+                commentId: commentId
+            });
+        if (response.status !== 201) {
+            console.error(`Failed to edit comment with ID ${commentId}, status:`, response.status);
+            return false;
+        }
+        console.log(`Comment updated successfully.`);
+        return true;
+    } catch (error) {
+        console.error(`Error editing comment:`, error);
+        return Promise.reject(new Error(`Error editing comment: ${error}`));
+    }  
+}
+
 const mockComments: Comment[] = [];

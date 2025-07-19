@@ -100,8 +100,10 @@ export function Register() {
                     placeholder="put link or upload"/>               
                 <textarea name="bio" id="bio" rows={3} placeholder='say something about you' className={styles.bioTtext}/>
                 <PasswordInput id="password" label="Password" name="password" placeholder="Enter your password" 
-                required minLength={8} onInput={(e) => setPassword(e.currentTarget.value)} value={password}/>
-                <PasswordInput id="password" label="Repeat password:" name="repeatPassword" placeholder="Repeat password" required />
+                required minLength={8} onInput={(e) => setPassword(e.currentTarget.value)} value={password}
+                autoComplete='off'/>
+                <PasswordInput id="password" label="Repeat password:" name="repeatPassword" placeholder="Repeat password" required 
+                autoComplete='off'/>
                 <GeneralButton label="Register"/>     
                 <section className={styles.passwordRulesSection}>
                     <h6>Password Rules:</h6>

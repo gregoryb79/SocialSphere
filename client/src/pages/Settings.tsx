@@ -144,7 +144,7 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
             name="currentPassword"
             id="currentPassword"
             label="Current Password:"
-            autoComplete='none'
+            autoComplete='off'
             required
            />
           <PasswordInput
@@ -153,7 +153,7 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
             name="newPassword"
             id="newPassword"
             label="New Password:"
-            autoComplete='none'
+            autoComplete='off'
             required
            />
           <PasswordInput
@@ -162,7 +162,7 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
             name="confirmPassword"
             id="confirmPassword"
             label="Confirm Password:"
-            autoComplete='none'
+            autoComplete='off'
             required
            />
         </form>

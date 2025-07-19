@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLoaderData, useRevalidator } from 'react-router';
+import { useLoaderData, useNavigate, useRevalidator } from 'react-router';
 import styles from './Settings.module.scss';
 import { GeneralButton } from './components/GeneralButton';
 import { Input } from './components/Input';
@@ -9,6 +9,8 @@ import { apiClient } from '../models/apiClient';
 import { deleteUser, getLoggedInUserId, type User } from '../models/users';
 import { Confirm } from './components/Confirm';
 import { URLorFileUploadInput } from './components/URLorFileUploadInput';
+import { verifyPassword } from '../models/users';
+import { Spinner } from './components/Spinner';
 
 export function Settings()  {
   const user = useLoaderData() as User;
@@ -24,10 +26,13 @@ export function Settings()  {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showError, setShowError] = useState(false);
   const [err, setErrors] = useState<{ [key: string]: string }>({});
+  const navigate = useNavigate();
+  const [showSpinner, setShowSpinner] = useState(false);
+
 
   const { revalidate } = useRevalidator();
   
-  const validateForm = () => {
+  const validateForm = async () => {
     const errors: Record<string, string> = {};
     if (!username) {
       errors.username = 'Username is required';
@@ -35,9 +40,13 @@ export function Settings()  {
     if (!email) {
       errors.email = 'Email is required';
     }
-    if (!bio) {
-      errors.bio = 'Bio is required';
+      if (currentPassword) {
+    const userId = getLoggedInUserId();
+    const isValid = await verifyPassword(userId, currentPassword);
+    if (!isValid) {
+      errors.password = 'Current password is incorrect';
     }
+  }
     if (newPassword && newPassword !== confirmPassword) {
       errors.password = 'Passwords do not match';
     }
@@ -45,9 +54,11 @@ export function Settings()  {
     return Object.keys(errors).length === 0;
   };
 
+
+
 async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
   event.preventDefault();
-  if (validateForm()) {
+  if ( await validateForm()) {
     try {
       const userId = getLoggedInUserId();
       const updatedProfile: UpdatedProfile = {
@@ -66,9 +77,12 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         updatedProfile.password = newPassword;
       }
 
+      setShowSpinner(true);
       await apiClient.put(`/users/${userId}`, updatedProfile);
+      setShowSpinner(false);
       console.log('Profile updated successfully!');
       revalidate();
+      navigate("/");
     } catch (error) {
       console.error(error);
       setErrors({ profile: (error as Error).message });
@@ -76,14 +90,16 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
   }
 }
 
-  async function handleSaveChanges  () {
-  const event = { preventDefault: () => {} } as React.FormEvent<HTMLFormElement>;
-  await handleSubmit(event);
-};
+  async function handleSaveChanges(): Promise<void> {
+    setShowSpinner(true);
+    await handleSubmit(new Event('submit') as unknown as React.FormEvent<HTMLFormElement>);
+    setShowSpinner(false);
+  }
 
   return (
    <main className={styles.settingsMain}>
     <h1>Account Settings:</h1>
+    {showSpinner && <Spinner/>}
      <section className={styles.profileInformation}>
         <form onSubmit={handleSubmit} >
           <Input

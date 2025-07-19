@@ -208,3 +208,17 @@ export async function deleteUser() {
     console.error("Error deleting account:", error);
   }
 }
+
+export async function verifyPassword(userId: string, password: string) {
+  const response = await fetch(`/users/${userId}/verify-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password }),
+  });
+
+  if (response.ok) {
+    return true;
+  } else {
+    return false;
+  }
+}

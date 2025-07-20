@@ -9,20 +9,23 @@ const generateToken = (userId: string) => {
   return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
 };
 
-export const register = async (req: Request, res: Response) => {
+export const register  = async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
 
     const existingUser = await findUserByUsername(username) || await findUserByEmail(email);
     if (existingUser) {
-      return res.status(400).json({ error: "Username or email already in use" });
+      res.status(400).json({ error: "Username or email already in use" });
+      return;
     }
 
     const hashedPassword = await hashPassword(password);
     await createUser({ username, email, password: hashedPassword });
 
     const newUser = await findUserByEmail(email);
-    if (!newUser) return res.status(500).json({ error: "User creation failed" });
+    if (!newUser) {
+      res.status(500).json({ error: "User creation failed" });
+      return;}
 
     const token = generateToken(newUser.id);
     res.status(201).json({ token });
@@ -38,7 +41,8 @@ export const login = async (req: Request, res: Response) => {
 
     const user = await findUserByEmail(email);
     if (!user || !(await comparePasswords(password, user.password))) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      res.status(401).json({ error: "Invalid credentials" });
+      return;
     }
 
     const token = generateToken(user.id);

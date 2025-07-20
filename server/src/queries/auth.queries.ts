@@ -6,7 +6,16 @@ export async function findUserByEmail(email: string): Promise<User | null> {
     sql: "SELECT * FROM users WHERE email = ? LIMIT 1",
     args: [email],
   });
-  return result.rows[0] || null;
+  const row = result.rows[0];
+  if (!row) return null;
+  return {
+    id: row.id,
+    username: row.username,
+    email: row.email,
+    password: row.password,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  } as unknown as User;
 }
 
 export async function findUserByUsername(username: string): Promise<User | null> {
@@ -14,7 +23,16 @@ export async function findUserByUsername(username: string): Promise<User | null>
     sql: "SELECT * FROM users WHERE username = ? LIMIT 1",
     args: [username],
   });
-  return result.rows[0] || null;
+  const row = result.rows[0];
+  if (!row) return null;
+  return {
+    id: row.id,
+    username: row.username,
+    email: row.email,
+    password: row.password,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  } as unknown as User;
 }
 
 export async function createUser({

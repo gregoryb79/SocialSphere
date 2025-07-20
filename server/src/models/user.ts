@@ -26,7 +26,8 @@ export async function deleteUser(id: string) {
 }
 
 export async function updateUser(id: string, fields: any) {
-    const updates = Object.entries(fields).map(([key, value]) => `${key} = '${value}'`).join(", ");
-    return dbClient.execute(`UPDATE users SET ${updates}, updated_at= CURRENT_TIMESTAMP WHERE id = "${id}`);
+  const updates = Object.entries(fields).map(([key, value]) => `${key} = ?`).join(", ");
+  const params = Object.values(fields);
+  return dbClient.execute(`UPDATE users SET ${updates}, updated_at= CURRENT_TIMESTAMP WHERE id = ?`, [...params as (string | number | boolean)[], id]);
 }
 

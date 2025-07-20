@@ -63,14 +63,14 @@ export function getLoggedInUserId(): string {
 }
 
 export async function fetchLoggedInUser(): Promise<User> {
-    const message = await getUsers();
-    console.log("Verifying connection to server:", message);
-        
-    return new Promise((resolve) => {
-        setTimeout(() => {
-        resolve(mockUser);
-        }, 1000);
-    });
+  try {
+    const userId = getLoggedInUserId();
+    const response = await apiClient.get(`/users/${userId}`);
+    return response.data as User;
+  } catch (error) {
+    console.error("Error fetching logged in user:", error);
+    throw error;
+  }
 }
 
 export async function putLogIn(email: string, password: string): Promise<boolean> {
@@ -225,3 +225,5 @@ export async function verifyPassword(userId: string, password: string) {
     return false;
   }
 }
+
+

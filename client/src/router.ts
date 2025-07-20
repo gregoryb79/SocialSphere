@@ -14,7 +14,7 @@ import { Notifications } from "./pages/Notifications";
 import { fetchNotifications } from "./models/notifications";
 import { PauseOctagon } from "lucide-react";
 import { getComments } from "./models/comments";
-import { Chat, chatLoader } from "./pages/Chat";
+import { Chat } from "./pages/Chat";
 
 export const router = createBrowserRouter([
     {
@@ -96,7 +96,26 @@ export const router = createBrowserRouter([
             },
             { path: "/chat", 
                 Component: Chat,
-                loader: chatLoader
+                loader: async () => {
+                    const userId = getLoggedInUserId();;
+                    const username = getLoggedInUserName();
+
+                    if (!userId || !username || userId === "Guest") {
+                        console.warn("User is not logged in. Redirecting to login");
+                        return redirect("/login");
+                    }
+
+                    try {
+                        const API_BASE_URL = import.meta.env.VITE_API_VASE_URL;
+                        const res = await fetch(`${API_BASE_URL}:/chat/friends/${userId}`);
+                        const friends = await res.json();
+                
+                        return { userId, username, friends };
+                    } catch (error) {
+                        console.error("Failed to load friends:", error);
+                        throw new Response("Failed to load friends", { status: 500 });
+                    }
+                }
             }    
         ]
     }

@@ -39,18 +39,22 @@ export async function createUser({
   username,
   email,
   password,
+  avatar,
+  bio,
 }: {
   username: string;
   email: string;
   password: string;
+  avatar?: string;
+  bio?: string;
 }) {
   const userId = crypto.randomUUID();
   const result = await dbClient.execute({
     sql: `
-      INSERT INTO users (id, username, email, password, created_at, updated_at)
-      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      INSERT INTO users (id, username, email, password, avatar, bio, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     `,
-    args: [userId, username, email, password],
+    args: [userId, username, email, password, avatar || null, bio || null],
   });
 
   return result;

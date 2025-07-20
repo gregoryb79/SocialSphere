@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { createPost } from "../queries/post.queries";
 import { AuthRequest } from "../middlewares/auth.middleware";
+import { dbClient } from "../models/db";
 
 export const createPostController = async (req: AuthRequest, res: Response) => {
   try {
@@ -18,9 +19,6 @@ export const createPostController = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-import { Request, Response } from "express";
-import { dbClient } from "../models/db";
-import { AuthRequest } from "../middlewares/auth.middleware";
 
 export const updatePost = async (req: AuthRequest, res: Response) => {
   const postId = req.params.id;
@@ -34,9 +32,9 @@ export const updatePost = async (req: AuthRequest, res: Response) => {
   try {
     const result = await dbClient.execute({
       sql: `
-        UPDATE posts
+        UPDATE comments
         SET content = ?, updated_at = CURRENT_TIMESTAMP
-        WHERE id = ? AND author_id = ?
+        WHERE id = ? AND author_id = ? AND parent_id IS NULL
       `,
       args: [content, postId, userId],
     });

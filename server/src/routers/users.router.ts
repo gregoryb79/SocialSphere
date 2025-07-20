@@ -1,10 +1,9 @@
 import express from "express";
 import { authenticate } from "../middlewares/auth.middleware";
 import { followUser, unfollowUser } from "../controllers/user.controller";
-import { deleteUser, updateUser } from "../models/user";
+import { deleteUser, updateUser, getUserById } from "../models/user";
 export const router = express.Router();
 import { dbClient } from "../models/db";
-import { getUserById } from '../models/user';
 
 router.get("/", async (_, res) => {
     res.status(200).json({
@@ -37,3 +36,18 @@ router.delete('/:userId', async (req, res) => {
 
 router.post("/:id/follow", authenticate, followUser);
 router.post("/:id/unfollow", authenticate, unfollowUser);
+
+
+router.put("/:userId", authenticate, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const fields = req.body;
+    await updateUser(userId, fields);
+    res.json({ message: 'User updated' });
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Failed to update user' });
+  }
+});
+
+

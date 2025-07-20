@@ -21,6 +21,7 @@
     --standard-width: 100%; // Standard relative width for main content areas
     --standard-height: 80%; // Standard relative height for main content areas
     --app-max-width: 60rem; // Max width for the app container
+    --img-max-height: 15rem; // Max height for images in posts
 
     @media (prefers-color-scheme: dark){
         // Backgrounds

@@ -38,6 +38,7 @@
 
 .postImage{
     max-width: 100%;
+    max-height: var(--img-max-height);
 }
 .postStatistics{
     display: flex;

@@ -50,7 +50,7 @@ export function LogIn() {
             {loadingLogin && <Spinner/>} 
             <form className={styles.loginForm} onSubmit={handleLogIn}>                
                 <Input type="email" id="email" label="Email" name="email" placeholder="Enter your e-mail" required />
-                <PasswordInput id="password" label="Password" name="password" placeholder="Enter your password" required />                
+                <PasswordInput id="password" label="Password" name="password" placeholder="Enter your password" required autoComplete='off'/>                
                 <GeneralButton label="Log In" />
                 <p>Don't have an account? <Link to="/register">Register</Link></p>                            
             </form>

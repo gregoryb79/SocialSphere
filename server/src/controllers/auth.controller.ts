@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { IUser, User } from "../models/user.model";
+import { findUserByEmail, findUserByUsername, createUser } from "../queries/auth.queries";
+import { hashPassword, comparePasswords } from "../utils/hash";
 import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
@@ -8,42 +9,50 @@ const generateToken = (userId: string) => {
   return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
 };
 
-export const register = async (req: Request, res: Response) => {
-  console.log("Registering user with body:", req.body);
+export const register  = async (req: Request, res: Response) => {
   try {
     const { username, email, password, avatar, bio } = req.body;
 
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    const existingUser = await findUserByUsername(username) || await findUserByEmail(email);
     if (existingUser) {
-      console.log("Username or email already in use");
       res.status(400).json({ error: "Username or email already in use" });
       return;
     }
 
-    const newUser  = await User.create({ username, email, password, avatar, bio }) as IUser;
-    const token = generateToken((newUser._id as string).toString());
+    const hashedPassword = await hashPassword(password);
+    await createUser({ username, email, password, avatar, bio: hashedPassword });
 
-    res.status(201).json({ token });
+    const newUser = await findUserByEmail(email);
+    if (!newUser) {
+      res.status(500).json({ error: "User creation failed" });
+      return;
+    }
+
+    console.log("New user created:", newUser.username, newUser.id);    
+    const token = generateToken(newUser.id);
+    console.log("Token generated for user:", token);
+    res.status(201).json({ token, username: newUser.username });
   } catch (err) {
-    console.error("Error during registration:", err);
-    res.status(500).json({ error: "Server error" });    
+    console.error("Registration error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 };
 
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    console.log(`Logging in user with email ${email} and password ${password}`);
 
-    const user = await User.findOne({ email }) as IUser;
-    if (!user || !(await user.comparePassword(password))) {
+    const user = await findUserByEmail(email);
+    if (!user || !(await comparePasswords(password, user.password))) {
       res.status(401).json({ error: "Invalid credentials" });
       return;
     }
-
-    const token = generateToken((user._id as string).toString());
+    console.log("User logged in:", user.username, user.id);
+    const token = generateToken(user.id);
+    console.log("Token generated for user:", token);
     res.status(200).json({ token, username: user.username });
   } catch (err) {
+    console.error("Login error:", err);
     res.status(500).json({ error: "Server error" });
   }
 };

@@ -20,7 +20,7 @@
 
     --standard-width: 100%; // Standard relative width for main content areas
     --standard-height: 80%; // Standard relative height for main content areas
-    --app-max-width: 37rem; // Max width for the app container
+    --app-max-width: 60rem; // Max width for the app container
 
     @media (prefers-color-scheme: dark){
         // Backgrounds
@@ -31,6 +31,10 @@
         // Text
         --dark-text:   #F9FAFB;   // Headings, main text
         --light-text:  #9CA3AF;   // Labels, secondary info     
+    }
+
+    @media (max-width: 500px) {
+        --app-max-width: 100%; 
     }
 }
 

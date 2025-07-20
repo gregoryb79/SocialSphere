@@ -70,3 +70,13 @@
    
 }
 
+.followerCount, .followingCount {
+  cursor: pointer;
+  color: var(--primary-blue);
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+.followerCount:hover, .followingCount:hover {
+  color: var(--primary-dark);
+}

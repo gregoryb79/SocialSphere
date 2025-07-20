@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Followers.module.scss";
+import Follow from "./Follow";
+import { getLoggedInUserId } from "../../models/users"; 
+import { getToken } from "../../models/apiClient";
 
 interface Follower {
   _id: string;
@@ -15,6 +18,8 @@ interface FollowersProps {
 const Followers: React.FC<FollowersProps> = ({ userId, token }) => {
   const [followers, setFollowers] = useState<Follower[]>([]);
   const [loading, setLoading] = useState(true);
+  token = getToken() || "";
+  const loggedInUserId = getLoggedInUserId();
 
   useEffect(() => {
     const fetchFollowers = async () => {
@@ -47,7 +52,13 @@ const Followers: React.FC<FollowersProps> = ({ userId, token }) => {
         followers.map((follower) => (
           <div key={follower._id} className={styles.follower}>
             <img src={follower.avatar || "/default-avatar.png"} alt={follower.username} />
-            <span>{follower.username}</span>
+            <span>{follower.username}</span>{loggedInUserId !== userId && (
+              <Follow
+                targetUserId={userId}
+                initialIsFollowing={true}
+                token={token}
+              />
+            )}
           </div>
         ))
       )}

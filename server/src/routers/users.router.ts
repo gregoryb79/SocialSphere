@@ -4,7 +4,11 @@ import { followUser, unfollowUser } from "../controllers/user.controller";
 import { deleteUser, updateUser } from "../models/user";
 export const router = express.Router();
 import { dbClient } from "../models/db";
+import { getFollowers, getFollowing } from "../controllers/follow.controller";
 import { getUserById } from '../models/user';
+
+router.get("/:id/followers",authenticate, getFollowers);
+router.get("/:id/following",authenticate, getFollowing);
 
 router.get("/", async (_, res) => {
     res.status(200).json({
@@ -24,7 +28,7 @@ router.get('/:userId', async (req, res) => {
   }
 });
 
-router.delete('/:userId', async (req, res) => {
+router.delete('/:userId', authenticate, async (req, res) => {
   try {
     const { userId } = req.params;
     await deleteUser(userId);

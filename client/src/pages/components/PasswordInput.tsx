@@ -27,7 +27,7 @@ export function PasswordInput(props: PasswordInputProps) {
                 className={styles.togglePasswordVisibilityButton}
                 type="button"
                 onClick={togglePasswordVisibility}
-            ><Eye color="var(--dark-text)"/></button>
+            ><Eye color="var(--light-text)"/></button>
         </div>
     );
 }

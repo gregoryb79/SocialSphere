@@ -112,6 +112,7 @@ const handleUserClick = (userId: string) => {
             placeholder="Search the app for Users or Posts..."
             onChange={(e) => setSearchTerm(e.target.value)}
             value={searchTerm}
+            autoComplete="off"
           />
           <IconButton
             title="Search"

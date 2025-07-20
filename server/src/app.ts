@@ -7,13 +7,11 @@ import { json } from "body-parser";
 import { router as notificationRouter } from "./routers/notifications.route";  
 import { router as postsRouter } from "./routers/posts.router";
 import { router as commentsRouter} from "./routers/comments.router";
-
 import { router as chatRouter } from "./routers/chat.route"; 
 import { router as searchRouter} from "./routers/search.router"; 
 import { router as authRouter } from "./routers/auth.router";
 import { router as usersRouter} from "./routers/users.router";
-
-
+import { router as chatRouter } from "./routers/chat.route"; 
 import cors from "cors";
 
 export const app = express();
@@ -36,4 +34,8 @@ app.use("/api/notifications", notificationRouter)
 app.use("/posts", postsRouter);
 app.use("/comments", commentsRouter);
 app.use("/search", searchRouter);
+app.use("/posts", postsRouter);
+app.use("/comments", commentsRouter);
+app.use("/api/notifications", notificationRouter)
+app.use("/notifications", notificationRouter)
 app.use("/chat", chatRouter);

@@ -11,7 +11,7 @@ const generateToken = (userId: string) => {
 export const register = async (req: Request, res: Response) => {
   console.log("Registering user with body:", req.body);
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, avatar, bio } = req.body;
 
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
@@ -20,7 +20,7 @@ export const register = async (req: Request, res: Response) => {
       return;
     }
 
-    const newUser  = await User.create({ username, email, password }) as IUser;
+    const newUser  = await User.create({ username, email, password, avatar, bio }) as IUser;
     const token = generateToken((newUser._id as string).toString());
 
     res.status(201).json({ token });

@@ -25,10 +25,13 @@ export const register  = async (req: Request, res: Response) => {
     const newUser = await findUserByEmail(email);
     if (!newUser) {
       res.status(500).json({ error: "User creation failed" });
-      return;}
+      return;
+    }
 
+    console.log("New user created:", newUser.username, newUser.id);    
     const token = generateToken(newUser.id);
-    res.status(201).json({ token });
+    console.log("Token generated for user:", token);
+    res.status(201).json({ token, username: newUser.username });
   } catch (err) {
     console.error("Registration error:", err);
     res.status(500).json({ error: "Server error" });
@@ -44,9 +47,10 @@ export const login = async (req: Request, res: Response) => {
       res.status(401).json({ error: "Invalid credentials" });
       return;
     }
-
+    console.log("User logged in:", user.username, user.id);
     const token = generateToken(user.id);
-    res.status(200).json({ token });
+    console.log("Token generated for user:", token);
+    res.status(200).json({ token, username: user.username });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ error: "Server error" });

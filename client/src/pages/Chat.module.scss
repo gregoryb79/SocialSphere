@@ -6,7 +6,8 @@
     flex-direction: column;
     background-color: #f1f5f9;
     padding: 1rem;
-    font-family: sans-serif;
+    font-family: sans-serif;    
+    color: #3b82f6;
 }
 
 .messages {
@@ -123,4 +124,11 @@
             font-weight: bold;
         }
     }
+}
+
+.noFriends {
+    color: #888;
+    font-style: italic;
+    padding: 1rem;
+    text-align: center;
 }

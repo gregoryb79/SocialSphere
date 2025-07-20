@@ -1,13 +1,102 @@
 @use '../styles/mixins' as *;
 
 .settingsMain{
-    width: 100%;
-    height: var(--standard-height);    
-    @include pageFrame;    
+    @include pageFrame;   
+   
+    display: flex;
+    flex-direction: column;
+    align-items: center;      
+    padding: 0.5rem;
+    
+}
+
+
+.profileInformation{
+    margin-top: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 2rem;
+    gap: 0.5rem;
+    width: 90%;   
+    font-size: var(--font-lg);
+    background-color: var(--white-bg);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-bottom: 1rem;
+    @include shadowBorder; 
+    
+    .passwordRulesSection{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 0.5rem;
+    } 
+
+    .bio{
+        resize: none;
+        @include shadowBorder;
+        padding: 0.25rem;
+        width: 100%;
+        font-size: var(--font-lg);
+    }
+ 
+  }
+
+.passwordRules {
+    padding-inline: 0.5rem;
+    color: var(--dark-text);
+    font-size: var(--font-xs);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;    
+
+    li.satisfied {
+        color: var(--green-success);
+    }
 }
 
+.avatarSection {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;       
+    button {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: var(--white);
+        &:hover{
+            transform: scale(1);
+            transform: translateY(-50%);
+        }
+
+    }
+}
+
+ .accountActions {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 1rem;
+ }
+
+@media (max-width: 500px){
+    .settingsMain{
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;        
+    }
+    .profileInformation{
+        width: 100%;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;        
+        p{
+            text-align: center;
+        }
+    }
+}

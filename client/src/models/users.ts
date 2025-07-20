@@ -1,5 +1,4 @@
 import { apiClient, clearToken, getToken, setToken } from "./apiClient";
-
 export type User = {
     _id: string;
     username: string;
@@ -37,7 +36,9 @@ export function getCurrentUserId(): string {
 //returns the username of the logged in user
 export function getLoggedInUserName(): string {
     const loggedUser = JSON.parse(localStorage.getItem("loggeduser")!);
-    if (!loggedUser) {
+    const userId = getLoggedInUserId();
+
+    if (!loggedUser || userId === "Guest") {
         console.warn("No user is logged in, returning 'Guest'");
         return "Guest";
     }
@@ -60,18 +61,6 @@ export function getLoggedInUserId(): string {
     console.log("UserId:", decoded.userId);    
     return decoded.userId;    
 }
-/*  mock function is replaced below
-export async function fetchUser(userId: string): Promise<User> {
-    const message = await getUsers();
-    console.log("Verifying connection to server:", message);
-        
-    return new Promise((resolve) => {
-        setTimeout(() => {
-        resolve(mockUser);
-        }, 1000);
-    });
-}
-*/
 
 export async function fetchLoggedInUser(): Promise<User> {
     const message = await getUsers();
@@ -97,6 +86,14 @@ export async function putLogIn(email: string, password: string): Promise<boolean
             return false; 
         }
         const { token, username } = response.data;
+        if (!token || !username) {
+            console.error("Login response did not contain a token or username");
+            return false; 
+        }
+        console.log("Token received:", token, "for user:", username);
+        const payload = token.split('.')[1];
+        const decoded = JSON.parse(atob(payload));
+        console.log("Decoded token payload:", decoded);
         setToken(token);
         localStorage.setItem("loggeduser", JSON.stringify({ username }));
         console.log("Login successful, token received");
@@ -124,6 +121,11 @@ export async function postRegister(email: string, username: string, password: st
             return false; 
         }
         const { token } = response.data;
+        if (!token) {
+            console.error("Registration response did not contain a token");
+            return false; 
+        }
+        console.log("Token received:", token);
         setToken(token);
         console.log("Registration successful, token received");
         localStorage.setItem("loggeduser", JSON.stringify({ username }));
@@ -198,3 +200,28 @@ export async function fetchUser(userId: string): Promise<User> {
   }
 }
 
+export async function deleteUser() {
+  try {
+    const userId = getCurrentUserId();
+    await apiClient.delete(`/users/${userId}`);
+    console.log("Account deleted");
+    window.location.href = '/register';
+    doLogOut();
+  } catch (error) {
+    console.error("Error deleting account:", error);
+  }
+}
+
+export async function verifyPassword(userId: string, password: string) {
+  const response = await fetch(`/users/${userId}/verify-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password }),
+  });
+
+  if (response.ok) {
+    return true;
+  } else {
+    return false;
+  }
+}

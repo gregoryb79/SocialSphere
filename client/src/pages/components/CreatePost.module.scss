@@ -1,0 +1,20 @@
+.createPost {
+  padding: 1rem;
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 100px;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+  }
+}

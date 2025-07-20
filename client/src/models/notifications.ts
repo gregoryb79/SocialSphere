@@ -11,7 +11,6 @@ export type Notification = {
 };
 
 export async function fetchNotifications(userId: string) {
-  
   const res = await apiClient.get(`/api/notifications/${userId}`);
 
   // if (!res.ok) {

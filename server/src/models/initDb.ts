@@ -139,6 +139,7 @@ export async function initDb() {
     } else {
       console.log("Friendship already exists. Skipping...");
     }
+  }
   } catch (error) {
     console.error("Failed to seed friendship:", error);
   }

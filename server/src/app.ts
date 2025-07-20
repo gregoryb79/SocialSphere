@@ -7,7 +7,6 @@ import { json } from "body-parser";
 import { router as notificationRouter } from "./routers/notifications.route";  
 import { router as postsRouter } from "./routers/posts.router";
 import { router as commentsRouter} from "./routers/comments.router";
-import { router as chatRouter } from "./routers/chat.route"; 
 import { router as searchRouter} from "./routers/search.router"; 
 import { router as authRouter } from "./routers/auth.router";
 import { router as usersRouter} from "./routers/users.router";

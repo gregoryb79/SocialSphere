@@ -39,7 +39,7 @@ function TopNav() {
           setLoading(true);
         }}/>      
       <h2>SocialSphere</h2>
-      <IconButton title="Settings" ariaLabel="Settings"  icon={<Settings className={styles.lucideIconTop} color={(username != "Guest") ? "var(--white)" : "var(--light-text)"}/>} onClick={() => {
+      <IconButton title="Settings" ariaLabel="Settings"  icon={<Settings className={styles.lucideIconTop} color={(username != "Guest") ? "var(--white)" : "var(--primary-blue)"}/>} onClick={() => {
           navigate("/settings");
           setLoading(true);
         }}disabled={username == "Guest"}/>
@@ -68,20 +68,20 @@ function Footer() {
             setLoading(true);
           }}/>      
         <IconButton title="Search" ariaLabel="Open Search Page" icon={<Search className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => navigate("/search")}/>
-        <IconButton title="Create Post" ariaLabel="Create new post" icon={<Plus className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-text)"}/>} onClick={() => {
+        <IconButton title="Create Post" ariaLabel="Create new post" icon={<Plus className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(---light-gray-bg)"}/>} onClick={() => {
             navigate("/new-post");
             setLoading(true);
           }} disabled={username == "Guest"}/>
-        <IconButton title="Notifications" ariaLabel="Check your notifications" icon={<Bell className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-text)"}/>} onClick={() => {
+        <IconButton title="Notifications" ariaLabel="Check your notifications" icon={<Bell className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-gray-bg)"}/>} onClick={() => {
               navigate("/notifications");
               setLoading(true);
             }} disabled={username == "Guest"}/>
-        <IconButton title="Chat" ariaLabel="Open Chat Page" icon={<MessageCircle className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-text)"} />} 
+        <IconButton title="Chat" ariaLabel="Open Chat Page" icon={<MessageCircle className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-gray-bg)"} />} 
           onClick={() => {
             navigate("/chat");
             setLoading(true);
           }} disabled={username == "Guest"} />
-        <IconButton title="Profile" ariaLabel="Configure your profile" icon={<User className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-text)"}/>} onClick={() => {
+        <IconButton title="Profile" ariaLabel="Configure your profile" icon={<User className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-gray-bg)"}/>} onClick={() => {
             navigate(`/profile/${userId}`);
             setLoading(true);
           }} disabled={username == "Guest"}/>

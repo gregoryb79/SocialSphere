@@ -44,7 +44,7 @@ export async function getUserById(id: string) : Promise<User | null> {
         created_at: rawUser.created_at as string,
         updated_at: rawUser.updated_at as string
     };
-    console.log(`Fetched user with ID: ${result.id}`, result);
+    console.log(`Fetched full user info for user with ID: ${result.id}`);
     return result;
 }
 

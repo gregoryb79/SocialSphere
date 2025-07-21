@@ -80,10 +80,8 @@ export async function fetchLoggedInUser(): Promise<User> {
             updatedAt: new Date().toISOString()
         };
     }
-    const response = await apiClient.get(`/users/${userId}`);
-    // console.log("Fetched logged in user:", response.data);
-    const loggedInUser = response.data as User;
-    // console.log("Fetched logged in user:", loggedInUser);
+    const response = await apiClient.get(`/users/${userId}`);    
+    const loggedInUser = response.data as User;    
     return loggedInUser;
   } catch (error) {
     console.error("Error fetching logged in user:", error);

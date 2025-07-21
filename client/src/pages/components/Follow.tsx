@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./Follow.scss";
+import styles from "./Follow.module.scss";
 
 interface FollowProps {
   targetUserId: string;

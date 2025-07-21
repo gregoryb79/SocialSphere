@@ -140,14 +140,7 @@ export function PostCard({postInput, onDelete}: PostCardProps) {
     }
     
     const [editing, setEditing] = useState<boolean>(false);
-    async function handlePostedComment(newCommentId: string) {
-        
-        // if (editing) {
-        //     console.log(`PC: comment ${newCommentId} was edited`);            
-        //     setEditing(false);
-        //     setDisplayNewComment(false);
-        //     return;
-        // }
+    async function handlePostedComment(newCommentId: string) {       
             
         if (newCommentId) {            
             if (newCommentId != post._id) {

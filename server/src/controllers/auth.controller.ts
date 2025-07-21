@@ -11,7 +11,7 @@ const generateToken = (userId: string) => {
 
 export const register  = async (req: Request, res: Response) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, avatar, bio } = req.body;
 
     const existingUser = await findUserByUsername(username) || await findUserByEmail(email);
     if (existingUser) {
@@ -20,7 +20,7 @@ export const register  = async (req: Request, res: Response) => {
     }
 
     const hashedPassword = await hashPassword(password);
-    await createUser({ username, email, password: hashedPassword });
+    await createUser({ username, email, password, avatar, bio: hashedPassword });
 
     const newUser = await findUserByEmail(email);
     if (!newUser) {

@@ -23,6 +23,7 @@ export function Profile() {
 
   const navigate = useNavigate();
   const noResults = 'no-users-found';
+
   const isOwnProfile = user._id === getLoggedInUserId();
 
   return (
@@ -37,6 +38,7 @@ export function Profile() {
             </div>
          </div>
          <div className={styles.followStats}>
+
             <h3 className={styles.followerCount} onClick={() => { setShowFollowers(true); setShowFollowing(false); }}>
               Followers: {user.followers?.length ?? 0}
             </h3>
@@ -45,6 +47,7 @@ export function Profile() {
               Following: {user.following?.length ?? 0}
             </h3>
             <IconButton title="Bookmark" ariaLabel= "Saved Bookmarks" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>} onClick={() => navigate("/Bookmarks")}/>
+
          </div>
       </section>
       {showFollowers ? (

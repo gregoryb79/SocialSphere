@@ -6,9 +6,9 @@ export async function createPost(authorId: string, content: string, image?: stri
 
   const result = await dbClient.execute({
     sql: `
-      INSERT INTO posts (id, author_id, content, image, created_at, updated_at)
-      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-    `,
+  INSERT INTO comments (id, author_id, content, image, parent_id, created_at, updated_at)
+  VALUES (?, ?, ?, ?, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+`,
     args: [id, authorId, content, image || null],
   });
 

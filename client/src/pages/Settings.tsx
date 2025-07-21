@@ -18,7 +18,7 @@ export function Settings()  {
   const [showConfirm, setShowConfirm] = useState(false);
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
-  const [bio, setBio] = useState(user.bio);
+  const [bio, setBio] = useState(user.bio || '');
   const [avatarHostURL, setAvatarHostURL] = useState<string>("");
   const [isAvatarUploaded, setIsAvatarUploaded] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
@@ -78,11 +78,12 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
       }
 
       setShowSpinner(true);
-      await apiClient.put(`/users/${userId}`, updatedProfile);
+      const response = await apiClient.put(`/users/${userId}`, updatedProfile);
       setShowSpinner(false);
       console.log('Profile updated successfully!');
       revalidate();
-      navigate("/");
+      navigate(`/profile/${userId}`);
+      return response.data as User;
     } catch (error) {
       console.error(error);
       setErrors({ profile: (error as Error).message });

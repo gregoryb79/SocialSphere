@@ -16,6 +16,10 @@ export function Profile() {
 
   const navigate = useNavigate();
   const noResults = 'no-users-found';
+    const handleBookmarksClick = () => {
+    navigate('/bookmarks');
+  };
+
 
   return (
     <main className={styles.profileMain}>
@@ -28,9 +32,9 @@ export function Profile() {
             </div>
          </div>
          <div className={styles.followStats}>
-            <GeneralButton label="Followers:" {...user.followers} />
-            <GeneralButton label="Following:" {...user.following}  />
-            <IconButton title="Bookmark" ariaLabel= "Saved Bookmarks" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>} onClick={() => navigate("/Bookmarks")}/>
+            <GeneralButton label="Followers:" count={user.followers?.length ?? 0} />
+            <GeneralButton label="Following:" count={user.following?.length ?? 0} />
+            <IconButton title="Bookmark" ariaLabel= "Saved Bookmarks" icon={<Bookmark className={styles.lucideIconPost} color="var(--primary-blue)"/>} onClick={handleBookmarksClick}/>
          </div>
       </section>
       <ul className={styles.userPosts}>

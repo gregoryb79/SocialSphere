@@ -1,15 +1,17 @@
 import express from "express";
 import { authenticate } from "../middlewares/auth.middleware";
 import { followUser, unfollowUser } from "../controllers/user.controller";
-import { deleteUser, updateUser } from "../models/user";
+import { deleteUser, updateUser, getUserById} from "../models/user";
+import type {User} from "../models/user"
 export const router = express.Router();
 import { dbClient } from "../models/db";
-import { getUserById } from '../models/user';
 
 router.get("/", async (_, res) => {
     res.status(200).json({
         message: "Welcome to the SocialSphere users API",});
 });
+
+
 
 router.get('/:userId', async (req, res) => {
   const { userId } = req.params;
@@ -24,6 +26,28 @@ router.get('/:userId', async (req, res) => {
   }
 });
 
+
+
+
+
+
+router.post("/:id/follow", authenticate, followUser);
+router.post("/:id/unfollow", authenticate, unfollowUser);
+
+router.put("/:userId", authenticate, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const fields = req.body;
+    console.log(`Updating user ${userId} with fields:`, fields);
+    await updateUser(userId, fields);
+    console.log(`User updated successfully!`);
+    res.json({ message: 'User updated' });
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Failed to update user' });
+  }
+});
+
 router.delete('/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
@@ -35,5 +59,3 @@ router.delete('/:userId', async (req, res) => {
   }
 });
 
-router.post("/:id/follow", authenticate, followUser);
-router.post("/:id/unfollow", authenticate, unfollowUser);

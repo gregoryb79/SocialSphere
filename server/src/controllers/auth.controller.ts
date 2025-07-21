@@ -20,7 +20,7 @@ export const register  = async (req: Request, res: Response) => {
     }
 
     const hashedPassword = await hashPassword(password);
-    await createUser({ username, email, password, avatar, bio: hashedPassword });
+    await createUser({ username, email, password: hashedPassword, avatar, bio });
 
     const newUser = await findUserByEmail(email);
     if (!newUser) {

@@ -65,8 +65,24 @@ export function getLoggedInUserId(): string {
 export async function fetchLoggedInUser(): Promise<User> {
   try {
     const userId = getLoggedInUserId();
-    const response = await apiClient.get(`/users/${userId}`);
-    return response.data as User;
+    if (!userId || userId === "Guest") {
+        console.warn("No valid userId was found. Returning Guest user");
+        return {
+            _id: "guest",
+            username: "Guest",
+            email: "",
+            avatar: "",
+            bio: "",
+            followers: [],
+            following: [],
+            bookmarks: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+    }
+    const response = await apiClient.get(`/users/${userId}`);    
+    const loggedInUser = response.data as User;    
+    return loggedInUser;
   } catch (error) {
     console.error("Error fetching logged in user:", error);
     throw error;

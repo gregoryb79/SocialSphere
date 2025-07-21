@@ -29,9 +29,10 @@ import { getToken } from "../../models/apiClient";
 
 type PostCardProps = {
     postInput: Comment; 
+    following?: string[];
     onDelete?: (childID: string) => void; 
 };
-export function PostCard({postInput, onDelete}: PostCardProps) {
+export function PostCard({postInput, following, onDelete}: PostCardProps) {
     const pRef = useRef<HTMLParagraphElement>(null);
     const [clamped, setClamped] = useState(false);
     const [showMore, setShowMore] = useState(false);
@@ -255,7 +256,7 @@ export function PostCard({postInput, onDelete}: PostCardProps) {
             {post.author !== getLoggedInUserId() && (
               <Follow
                 targetUserId={post.author}
-                initialIsFollowing={false}// To add later = postInput.followers?.includes(getLoggedInUserId()) ?? false}
+                initialIsFollowing={following?.includes(post.author) || false}// To add later = postInput.followers?.includes(getLoggedInUserId()) ?? false}
                 token={getToken() || ""}
               />
             )}

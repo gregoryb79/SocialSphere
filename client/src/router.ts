@@ -26,11 +26,12 @@ export const router = createBrowserRouter([
                 Component: Home,                
                 loader: async () => {
                     console.log("Fetching posts for home page");
-                    const userId = getLoggedInUserId();
-                    const username = getLoggedInUserName() || "Guest";
+                    const loggedInUser = await fetchLoggedInUser();
+                    console.log("Loader: logged in user:", loggedInUser.username);
+                    const userId = loggedInUser._id;                    
                     const posts = await fetchPosts(userId);
                     return {
-                        username,
+                        loggedInUser,
                         posts: Array.isArray(posts) ? posts : []
                       };
                 }

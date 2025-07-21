@@ -4,6 +4,19 @@ import { dbClient } from "../models/db";
 import { updatePost } from "../controllers/post.controller";
 import { authenticate } from "../middlewares/auth.middleware";
 
+export type Comment = {
+    _id: string;
+    author: string; 
+    authorName: string; 
+    parentId: string; 
+    content: string;
+    image: string;
+    likes: string[]; 
+    comments: string[];
+    createdAt: string;
+    updatedAt: string;
+};
+
 router.put("/:id", authenticate, updatePost);
    
 router.get('/:userId', async (req, res) => {
@@ -59,7 +72,22 @@ router.get('/:userId', async (req, res) => {
                 args: [userId]
             });
 
-            const posts = postsResult.rows;
+            const extraPostsResult = await dbClient.execute({
+                sql: `SELECT c.id, c.author_id, c.content, c.image, c.created_at, c.updated_at,
+                            u.username as author_name
+                    FROM comments c
+                    INNER JOIN users u ON c.author_id = u.id
+                    WHERE c.parent_id IS NULL
+                    ORDER BY c.created_at DESC`,                    
+                args: []
+            });
+
+            const followedPosts = postsResult.rows;
+            const extraPosts = extraPostsResult.rows;            
+            const concatPosts = followedPosts.concat(extraPosts);                        
+            const posts = Array.from(new Map(concatPosts.map(post => [post.id, post])).values());
+            console.log(`Found ${posts.length} posts for user ${userId}`);            
+
             const postIds = posts.map(post => post.id as string);
             console.log(`Found ${postIds} posts for user ${userId}`);
 

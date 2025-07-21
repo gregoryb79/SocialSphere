@@ -36,7 +36,8 @@ export function Chat() {
             const chat_id = getChatId(selectedFriend.id);
 
             try {
-                const res = await fetch(`http://localhost:5050/chat/messages/${chat_id}`);
+                const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5050";
+                const res = await fetch(`${API_BASE_URL}/chat/messages/${chat_id}`);
                 const data = await res.json();
                 setMessages(data);
             } catch (error) {

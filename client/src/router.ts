@@ -106,7 +106,7 @@ export const router = createBrowserRouter([
                     }
 
                     try {
-                        const API_BASE_URL = import.meta.env.VITE_API_VASE_URL;
+                        const API_BASE_URL = import.meta.env.VITE_API_VASE_URL ?? "http://localhost:5050";
                         const res = await fetch(`${API_BASE_URL}:/chat/friends/${userId}`);
                         const friends = await res.json();
                 

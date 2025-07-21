@@ -27,21 +27,9 @@ export async function fetchPosts(userId: string): Promise<Comment[]> {
         return response.data as Comment[];
     } catch (error) {
         console.error("Error fetching posts:", error);
-        throw error;
+        return [];
     }
 }
-/*
-export async function fetchOwnPosts(userId: string): Promise<Comment[]> {
-  const message = await getUsers();
-  console.log("Verifying connection to server:", message);
-    
-    return new Promise((resolve) => {
-        setTimeout(() => {
-        resolve(mockMyPosts);
-        }, 1000);
-    });
-}
-*/
 
 export async function getPost(postId: string): Promise<Comment> {
     const message = await getUsers();
@@ -63,24 +51,6 @@ export async function getPost(postId: string): Promise<Comment> {
     });
 }
 
-// export async function addComment(commentId: string, postId: string): Promise<boolean> {
-        
-//     console.log(`Adding comment ${commentId} to post ${postId}`);
-//     const post = mockPosts.find(p => p._id === postId);
-//     if (!post) {
-//         console.error(`Post with ID ${postId} not found`);
-//         return Promise.reject(new Error(`Post with ID ${postId} not found`));
-//     }
-//     post.comments.push(commentId);    
-//     console.log(`Comment ${commentId} added to post ${postId}`);
-    
-//     return new Promise((resolve) => {
-//         setTimeout(() => {
-//             console.log(`Comment ${commentId} added to ${postId} successfully`);
-//             resolve(true);
-//         }, 1000);
-//     });
-// }
 
 export async function likePost(postId: string): Promise<Comment> {
     // const post = mockPosts.find(p => p._id === postId);
@@ -259,12 +229,14 @@ export async function fetchPostsByContent(searchTerm: string): Promise<Comment[]
 
 
 export async function fetchOwnPosts(userId: string): Promise<Comment[]> {
+  console.log("Fetching own posts for user:", userId);
   try {
-    const { data } = await apiClient.get<Comment[]>(`/posts/${userId}`);
+    const { data } = await apiClient.get<Comment[]>(`/posts/${userId}?author=${userId}`);
     return data;
   } catch (error) {
     console.error("Error fetching own posts:", error);
-    throw error;
+    return [];
+    // throw error;
   }
 }
 

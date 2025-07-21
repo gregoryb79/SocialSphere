@@ -21,11 +21,45 @@ router.put("/:id", authenticate, updatePost);
    
 router.get('/:userId', async (req, res) => {
     const { userId } = req.params;
-    console.log(`Fetching posts for user: ${userId}`);
+    const { author } = req.query as { author?: string };
+    console.log(`Fetching posts for user: ${userId}, author: ${author}`);    
 
     if (!userId) {
         res.status(400).json({ error: "User ID is required" });
         return;
+    }
+
+    if (author && author !== "guest" && author !== "Guest" && author == userId) {
+        console.log(`Fetching own posts for user: ${userId}`);
+        try{
+            const postsResult = await dbClient.execute({
+                    sql: `SELECT c.id, c.author_id, c.content, c.image, c.created_at, c.updated_at,
+                    u.username as author_name
+                    FROM comments c
+                    INNER JOIN users u ON c.author_id = u.id
+                    WHERE c.author_id = ?
+                    AND c.parent_id IS NULL                   
+                    ORDER BY c.created_at DESC`,
+                    args: [author]
+                });
+
+            const posts = postsResult.rows;
+            const postIds = posts.map(post => post.id as string);
+            console.log(`Found ${postIds} posts for guest user`);
+
+            if (postIds.length === 0) {
+                res.json([]);
+                return;
+            }
+            const combinedPosts = await fetchAndCombinePosts(postIds, posts);
+
+            res.json(combinedPosts);
+            return;
+        } catch (error) {
+            console.error("Error fetching posts for author:", error);
+            res.status(500).json({ error: "Failed to fetch posts for author" });
+            return;
+        }
     }
 
     if (userId === "guest" || userId === "Guest") {

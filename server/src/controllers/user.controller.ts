@@ -54,6 +54,10 @@ export const unfollowUser = async (req: AuthRequest, res: Response) => {
     return;
   }
 
+  if (!currentUserId || !targetUserId) {
+  return res.status(401).json({ error: "Unauthorized" });
+}
+
   await unfollowUserQuery(currentUserId as string, targetUserId);
   res.status(200).json({ message: "Unfollowed user" });
 };

@@ -9,6 +9,10 @@ import { Spinner } from "./components/Spinner";
 import { fetchPostsByContent } from "../models/posts";
 import { type Comment } from "../models/comments";
 import { PostCard } from "./components/PostCard";
+import Follow from "./components/Follow";
+import { getLoggedInUserId } from "../models/users";
+import { getToken } from "../models/apiClient";
+
 
 
 export function Search() {
@@ -135,6 +139,13 @@ const handleUserClick = (userId: string) => {
             <div className={styles.userInfo}>
             <h2 className={styles.userName}>@{user.username}</h2>
             {user.bio && <p className={styles.userBio}>{user.bio}</p>}
+            {user._id !== getLoggedInUserId() && (
+              <Follow
+                targetUserId={user._id}
+                initialIsFollowing={user.followers?.includes(getLoggedInUserId()) ?? false}
+                token={getToken() || ""}
+              />
+            )}
             </div>
           </li>
         )}

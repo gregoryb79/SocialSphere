@@ -5,12 +5,17 @@ import { deleteUser, updateUser, getUserById} from "../models/user";
 import type {User} from "../models/user"
 export const router = express.Router();
 import { dbClient } from "../models/db";
+import { getFollowers, getFollowing } from "../controllers/follow.controller";
+import { getUserById } from '../models/user';
+
+
+router.get("/:id/followers",authenticate, getFollowers);
+router.get("/:id/following",authenticate, getFollowing);
 
 router.get("/", async (_, res) => {
     res.status(200).json({
         message: "Welcome to the SocialSphere users API",});
 });
-
 
 
 router.get('/:userId', async (req, res) => {
@@ -25,11 +30,6 @@ router.get('/:userId', async (req, res) => {
     res.status(500).json({ error: "Failed to fetch user profile" });
   }
 });
-
-
-
-
-
 
 router.post("/:id/follow", authenticate, followUser);
 router.post("/:id/unfollow", authenticate, unfollowUser);
@@ -48,7 +48,7 @@ router.put("/:userId", authenticate, async (req, res) => {
   }
 });
 
-router.delete('/:userId', async (req, res) => {
+router.delete('/:userId', authenticate, async (req, res) => {
   try {
     const { userId } = req.params;
     await deleteUser(userId);

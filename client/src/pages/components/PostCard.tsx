@@ -24,6 +24,8 @@ import { Spinner } from "./Spinner";
 import { getLoggedInUserId } from "../../models/users";
 import { NewCommentCard } from "./NewCommentCard";
 import { Confirm } from "./Confirm";
+import Follow from "./Follow";
+import { getToken } from "../../models/apiClient";
 
 type PostCardProps = {
     postInput: Comment; 
@@ -250,6 +252,13 @@ export function PostCard({postInput, onDelete}: PostCardProps) {
             {showMore && <button className={styles.textButton} onClick={() => setShowMore(false)}>See less</button>}
             {post.image && <img src={post.image} alt="Post visual content" className={styles.postImage} />}
             <p><strong>Author:</strong> {post.authorName}</p>
+            {post.author !== getLoggedInUserId() && (
+              <Follow
+                targetUserId={post.author}
+                initialIsFollowing={false}// To add later = postInput.followers?.includes(getLoggedInUserId()) ?? false}
+                token={getToken() || ""}
+              />
+            )}
             {isPost && <p><strong>Created at:</strong> {new Date(post.createdAt).toLocaleString()}</p>}
             {!isPost && <p>{commentAge(post.createdAt,post.updatedAt)}</p>}
             <section className={styles.postStatistics}>

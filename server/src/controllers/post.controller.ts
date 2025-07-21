@@ -26,7 +26,8 @@ export const updatePost = async (req: AuthRequest, res: Response) => {
   const { content } = req.body;
 
   if (!content) {
-    return res.status(400).json({ error: "Content cannot be empty" });
+    res.status(400).json({ error: "Content cannot be empty" });
+    return;
   }
 
   try {
@@ -40,7 +41,8 @@ export const updatePost = async (req: AuthRequest, res: Response) => {
     });
 
     if (result.rowsAffected === 0) {
-      return res.status(403).json({ error: "Unauthorized or post not found" });
+      res.status(403).json({ error: "Unauthorized or post not found" });
+      return;
     }
 
     res.status(200).json({ message: "Post updated" });

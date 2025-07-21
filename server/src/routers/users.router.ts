@@ -6,7 +6,7 @@ import type {User} from "../models/user"
 export const router = express.Router();
 import { dbClient } from "../models/db";
 import { getFollowers, getFollowing } from "../controllers/follow.controller";
-import { getUserById } from '../models/user';
+
 
 
 router.get("/:id/followers",authenticate, getFollowers);

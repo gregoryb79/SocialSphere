@@ -4,6 +4,7 @@ import { socket } from "../socketClient";
 
 import styles from "./Chat.module.scss";
 import { useLoaderData } from "react-router";
+import { apiClient } from "../models/apiClient";
 
 export type Message = {
     username: string;
@@ -36,10 +37,8 @@ export function Chat() {
             const chat_id = getChatId(selectedFriend.id);
 
             try {
-                const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5050";
-                const res = await fetch(`${API_BASE_URL}/chat/messages/${chat_id}`);
-                const data = await res.json();
-                setMessages(data);
+                const res = await apiClient.get(`/chat/messages/${chat_id}`)
+                setMessages(res.data);
             } catch (error) {
                 console.error("Failed to fetch messages:", error);
             }

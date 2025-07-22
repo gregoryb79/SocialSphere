@@ -11,13 +11,14 @@ import styles from "./GeneralButton.module.scss";
 type GeneralButtonProps = {
   label: string;
   disabled?: boolean; 
-  count?: number;  
+  count?: number; 
+  type?: "button" | "submit" | "reset"; 
   onClick?: () => void;    
 };
-export function GeneralButton({label, disabled, count, onClick}: GeneralButtonProps) {
+export function GeneralButton({label, disabled, count, type, onClick}: GeneralButtonProps) {
 
     return (
-    <button className={styles.generalButton} onClick={onClick} disabled={disabled}>
+    <button className={styles.generalButton} onClick={onClick} disabled={disabled} type={type? type : "submit"}>
       {label} {count}
     </button>
   );

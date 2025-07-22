@@ -12,22 +12,28 @@ import { Input } from "./Input";
 import { GeneralButton } from "./GeneralButton";
 import { useAddComment, useEditComment } from "../../hooks/usePosts";
 import { ErrorMsg } from "./ErrorMsg";
+import { useNavigate } from "react-router";
 
 type CommentProps = {
-    post: Comment;
+    post?: Comment;
     content?: string;
     onCommentPosted: (newCommentId: string) => void;
 }
 export function NewCommentCard({post, content, onCommentPosted}: CommentProps){  
 
-    const currUserId = useRef<string>(getLoggedInUserId());
-    console.log(`CommentCard rendered for comment: ${post._id} by user: ${currUserId.current}`);
+    const currUserId = useRef<string>(getLoggedInUserId());    
+    console.log(`CommentCard rendered for comment: ${post?._id} by user: ${currUserId.current}`);
     const likeIconColor = useRef<string>("var(--primary-blue)");
     const [disable,setDisable] = useState<boolean>(false);    
-    // const [commentContent, setCommentContent] = useState<string>(content || "");
+    
+    const commentLabel = useRef<string>(!content ? "New Comment" : "Edit Comment");
+    if (!post) commentLabel.current = "";
+    const buttonLabel = useRef<string>(!content ? "Post Comment" : "Update Comment");
+    if (!post) buttonLabel.current = "Create Post";
+   
    
     function handlePostComment(event: React.FormEvent<HTMLFormElement>) {
-        console.log(`NCC: Post comment button clicked on post: ${post._id}`);
+        console.log(`NCC: Post comment button clicked on post: ${post?._id}`);
         event.preventDefault();
         setDisable(true);
         const formData = new FormData(event.currentTarget);
@@ -39,9 +45,9 @@ export function NewCommentCard({post, content, onCommentPosted}: CommentProps){
         }
         
         if (!content) {
-            doAddComment(commentContent, post._id);
+            doAddComment(commentContent, post?._id || "");
         } else {
-            doEditComment(commentContent, post._id);
+            doEditComment(commentContent, post?._id || "");
         }
 
     }
@@ -64,17 +70,24 @@ export function NewCommentCard({post, content, onCommentPosted}: CommentProps){
         }
     }, [error]);
 
-
+    const navigate = useNavigate();
+    function onCancelClick() {        
+        if (!post) {
+            navigate("/"); 
+        } else {
+            onCommentPosted("");
+        }
+    }
       
     return (
         <>
             <form className={styles.newCommentCard} onSubmit={handlePostComment}>            
-                <label htmlFor="commentContent">{!content ? "New Comment" : "Edit Comment"}</label>
-                <textarea id="commentContent" name="commentContent" placeholder="Write your comment here..."
-                    rows={5} required className={styles.commentTtext} defaultValue={content}/>
+                <label htmlFor="commentContent">{commentLabel.current}</label>
+                <textarea id="commentContent" name="commentContent" placeholder={!post ? "Enter your text here..." : "Write your comment here..."}
+                    rows={!post? 10 : 5} required className={styles.commentTtext} defaultValue={content}/>
                 <section className={styles.buttonsSection}>
-                    <GeneralButton label={!content ? "Post Comment" : "Update Comment"} disabled={disable}/>            
-                    <GeneralButton label="Cancel" disabled={disable} onClick={() => onCommentPosted("")}/>
+                    <GeneralButton label={buttonLabel.current} type="submit" disabled={disable}/>            
+                    <GeneralButton label="Cancel" type="button" disabled={disable} onClick={onCancelClick}/>
                 </section>                
             </form> 
             {loading || editLoading && <Spinner />}

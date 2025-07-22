@@ -98,12 +98,12 @@ router.post('/',authenticate, async (req, res) => {
         return;
     }
 
-    const newCommentId = `c-${randomUUID()}`; 
+    const newCommentId = parentId ? `c-${randomUUID()}` : `p-${randomUUID()}`; 
     const newComment = {
         id: newCommentId,
         author_id: authorId,
         content: content,
-        parent_id: parentId,
+        parent_id: parentId ? parentId : null,
         image: null, 
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()

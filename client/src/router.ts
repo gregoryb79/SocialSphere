@@ -60,7 +60,7 @@ export const router = createBrowserRouter([
             { path: "/new-post",
                 Component: NewPost,
                 loader: async () => {                    
-                    return await fetchLoggedInUser();
+                    return getLoggedInUserId();
                 }
             },
             { path: "/login",

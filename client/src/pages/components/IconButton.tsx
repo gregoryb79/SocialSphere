@@ -22,9 +22,11 @@ type IconButtonProps = {
   onClick?: () => void;    
 };
 export function IconButton({disabled, title, label, ariaLabel, icon, onClick}: IconButtonProps) {
+    const hasLabel = label !== undefined && label !== "";
 
     return (
-    <button className={styles.iconButton} onClick={onClick} aria-label={ariaLabel} title={title} disabled={disabled} type="button">
+    <button className={`${styles.iconButton} ${hasLabel ? styles.hasLabel : ""}`} onClick={onClick} aria-label={ariaLabel} title={title} disabled={disabled} type="button" 
+      style={{color: disabled ? "var(--light-gray-bg)" : "var(--primary-blue)"}}>
       {icon}
       {label}
     </button>

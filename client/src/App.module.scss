@@ -1,3 +1,19 @@
+@import './styles/variables';
+
+.mainContainer{    
+    height: 90vh;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    height: var(--standard-height);
+
+    @media (min-width: $widthLimit) {
+        flex-direction: row-reverse;
+    }
+}
+
 .nav{
     display: flex;
     flex-direction: row;
@@ -8,7 +24,20 @@
     color: var(--white);
 
     height: calc(var(--font-xxl) + 1rem); 
+
+    @media (min-width: $widthLimit) {
+        justify-content: space-between;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
     
+}
+
+.topNavButtons{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;   
 }
 
 .footer{
@@ -20,6 +49,10 @@
     gap: 0.5rem;
     border: 2px solid var(--gray-border);
     padding: 0.5rem;
+    @media (min-width: $widthLimit) {
+        height: var(--standard-height);   
+        width: 20%;     
+    }
 }
 .footerNav{
     display: flex;
@@ -32,6 +65,12 @@
 
     height: var(--font-xxl);
     width: 100%;
+
+    @media (min-width: $widthLimit) {
+        flex-direction: column;       
+        justify-content: space-around;
+        height: var(--standard-height);
+    }
     
 }
 

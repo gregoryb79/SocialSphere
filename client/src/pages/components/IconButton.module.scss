@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;   
+    // width: 100%;
     justify-content: center;  
     gap: 0.5rem;
     cursor: pointer;
@@ -14,5 +15,12 @@
         transform: none;        
     }
     font-size: var(--font-lg);
-    background-color: var(--light-gray-bg);
+    background-color: var(--light-gray-bg);   
+
+}
+
+.hasLabel {
+    width: 100%;
+    justify-content: flex-start;
+    padding-left: 1rem;
 }

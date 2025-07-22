@@ -54,15 +54,7 @@ export async function initDb() {
       PRIMARY KEY (user_id, post_id),
       FOREIGN KEY (user_id) REFERENCES users(id),
       FOREIGN KEY (post_id) REFERENCES posts(id)
-    );`,
-    `CREATE TABLE IF NOT EXISTS post_likes (
-      post_id TEXT NOT NULL,
-      user_id TEXT NOT NULL,
-      PRIMARY KEY (post_id, user_id),
-      FOREIGN KEY (post_id) REFERENCES posts(id),
-      FOREIGN KEY (user_id) REFERENCES users(id)
-    );`,
-
+    );`, 
     `CREATE TABLE IF NOT EXISTS comment_likes (
       comment_id TEXT NOT NULL,
       user_id TEXT NOT NULL,

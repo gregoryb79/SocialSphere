@@ -13,6 +13,7 @@ import { GeneralButton } from "./GeneralButton";
 import { useAddComment, useEditComment } from "../../hooks/usePosts";
 import { ErrorMsg } from "./ErrorMsg";
 import { useNavigate } from "react-router";
+import { URLorFileUploadInput } from "./URLorFileUploadInput";
 
 type CommentProps = {
     post?: Comment;
@@ -22,14 +23,23 @@ type CommentProps = {
 export function NewCommentCard({post, content, onCommentPosted}: CommentProps){  
 
     const currUserId = useRef<string>(getLoggedInUserId());    
-    console.log(`CommentCard rendered for comment: ${post?._id} by user: ${currUserId.current}`);
+    console.log(`CommentCard rendered for comment: ${post?._id} by user: ${currUserId.current} parentId: ${post?.parentId}`);
     const likeIconColor = useRef<string>("var(--primary-blue)");
     const [disable,setDisable] = useState<boolean>(false);    
     
+    
     const commentLabel = useRef<string>(!content ? "New Comment" : "Edit Comment");
     if (!post) commentLabel.current = "";
-    const buttonLabel = useRef<string>(!content ? "Post Comment" : "Update Comment");
+    const buttonLabel = useRef<string>(!content ? "Post Comment" : "Update Comment");       
     if (!post) buttonLabel.current = "Create Post";
+    const isPost = useRef<boolean>(false);
+    if (post && !post.parentId) isPost.current = true;
+    if (isPost.current) buttonLabel.current = "Update Post";
+    
+
+    const [avatarHostURL, setAvatarHostURL] = useState<string>("");
+    const [isAvatarUploaded, setIsAvatarUploaded] = useState(false);
+
    
    
     function handlePostComment(event: React.FormEvent<HTMLFormElement>) {
@@ -39,15 +49,17 @@ export function NewCommentCard({post, content, onCommentPosted}: CommentProps){
         const formData = new FormData(event.currentTarget);
         const commentContent = formData.get("commentContent") as string;    
         console.log(`NCC: commentContent = ${commentContent}`); 
+        const avatarURL = isAvatarUploaded ? avatarHostURL : formData.get("avatarURL") as string;
+        console.log(`NCC: avatarURL = ${avatarURL}`);
         if (!currUserId.current) {
             console.log("NCC: No user logged in, cannot post comment");
             return;
         }
         
         if (!content) {
-            doAddComment(commentContent, post?._id || "");
+            doAddComment(commentContent, post?._id || "", avatarURL);
         } else {
-            doEditComment(commentContent, post?._id || "");
+            doEditComment(commentContent, post?._id || "", avatarURL);
         }
 
     }
@@ -85,6 +97,14 @@ export function NewCommentCard({post, content, onCommentPosted}: CommentProps){
                 <label htmlFor="commentContent">{commentLabel.current}</label>
                 <textarea id="commentContent" name="commentContent" placeholder={!post ? "Enter your text here..." : "Write your comment here..."}
                     rows={!post? 10 : 5} required className={styles.commentTtext} defaultValue={content}/>
+                {(!post || isPost.current) && <URLorFileUploadInput 
+                                    setImageHostURL={setAvatarHostURL} 
+                                    setIsImageUploaded={setIsAvatarUploaded}                                         
+                                    type="text" 
+                                    id="avatarURL" 
+                                    label="Image to attach:" 
+                                    name="avatarURL" 
+                                    placeholder="put link or upload"/>}    
                 <section className={styles.buttonsSection}>
                     <GeneralButton label={buttonLabel.current} type="submit" disabled={disable}/>            
                     <GeneralButton label="Cancel" type="button" disabled={disable} onClick={onCancelClick}/>

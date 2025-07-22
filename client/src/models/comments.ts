@@ -60,7 +60,7 @@ export async function deleteCommentWithChildren(commentId: string): Promise<void
 //     });
 // }
 
-export async function postComment(commentText: string, parent_id: string): Promise<string> {
+export async function postComment(commentText: string, parent_id: string, avatarURL: string): Promise<string> {
     console.log(`Posting comment:`, commentText);
     console.log(`Parent ID:`, parent_id);
     if (!commentText || commentText.trim() === "") {
@@ -75,7 +75,8 @@ export async function postComment(commentText: string, parent_id: string): Promi
         const response = await apiClient.post("/comments", 
             {
                 content: commentText,
-                parentId: parent_id
+                parentId: parent_id,
+                avatarURL: avatarURL
             });
         console.log(`Comment posted successfully:`, response.data);
         return response.data.id as string;
@@ -106,7 +107,7 @@ export async function postComment(commentText: string, parent_id: string): Promi
     // });
 }
 
-export async function editComment(commentText: string, commentId: string): Promise<boolean> {
+export async function editComment(commentText: string, commentId: string, avatarURL: string): Promise<boolean> {
     console.log(`Editing comment:`, commentText);
     console.log(`Comment ID:`, commentId);
     if (!commentText || commentText.trim() === "") {
@@ -121,7 +122,8 @@ export async function editComment(commentText: string, commentId: string): Promi
         const response = await apiClient.put("/comments", 
             {
                 content: commentText,
-                commentId: commentId
+                commentId: commentId,
+                avatarURL: avatarURL
             });
         if (response.status !== 201) {
             console.error(`Failed to edit comment with ID ${commentId}, status:`, response.status);

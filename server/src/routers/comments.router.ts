@@ -83,10 +83,10 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/',authenticate, async (req, res) => {
-    const { content, parentId } = req.body;    
+    const { content, parentId, avatarURL } = req.body;    
     const authorId = (req as AuthRequest).user?.userId;     
 
-    console.log(`Posting comment by user ${authorId} with content: ${content}, parentId: ${parentId}`);
+    console.log(`Posting comment by user ${authorId} with content: ${content}, parentId: ${parentId}, avatarURL: ${avatarURL}`);
 
     if (!authorId) {
         res.status(401).json({ error: "Unauthorized" });
@@ -104,7 +104,7 @@ router.post('/',authenticate, async (req, res) => {
         author_id: authorId,
         content: content,
         parent_id: parentId ? parentId : null,
-        image: null, 
+        image: avatarURL || null, 
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
     }
@@ -129,7 +129,7 @@ router.post('/',authenticate, async (req, res) => {
 });
 
 router.put('/',authenticate, async (req, res) => {
-    const { content, commentId } = req.body;    
+    const { content, commentId, avatarURL } = req.body;    
     const authorId = (req as AuthRequest).user?.userId;     
 
     console.log(`Editing comment ${commentId} by user ${authorId} with content: ${content}.`);
@@ -154,10 +154,18 @@ router.put('/',authenticate, async (req, res) => {
             res.status(404).json({ error: "Comment not found or unauthorized" });
             return;
         }
+        const isPost = existingCommentResult.rows[0].parent_id === null;
         const result = await dbClient.execute({
             sql: `UPDATE comments SET content = ?, updated_at = ? WHERE id = ?`,
             args: [content, new Date().toISOString() ,commentId]
-        });        
+        });  
+        if (isPost && avatarURL) {
+            await dbClient.execute({
+                sql: `UPDATE comments SET image = ? WHERE id = ?`,
+                args: [avatarURL, commentId]
+            });
+        }
+              
 
         if (result.rowsAffected === 1) {
             res.status(201).json({id: commentId});

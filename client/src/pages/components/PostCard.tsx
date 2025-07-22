@@ -152,7 +152,7 @@ export function PostCard({postInput, following, onDelete}: PostCardProps) {
             }
         }else {
             console.log(`PC: New comment posting for ${post._id} was canceled`);
-            if (post.comments.length == 0)setShowComments(false);
+            if (post.comments.length == 0 || !post.parentId)setShowComments(false);
         }
         if (post.comments.length == 0) setShowComments(false);
         setDisplayNewComment(false);
@@ -221,14 +221,14 @@ export function PostCard({postInput, following, onDelete}: PostCardProps) {
 
     async function handleEdit() {
         console.log(`Edit post/comment with ID: ${post._id}`);
-        if (post.parentId) {
+        // if (post.parentId) {
             console.log(`Post/comment ${post._id} is a comment`);
             if(!showComments) displayComments();
             setEditing(true);
             setDisplayNewComment(true);
-        }else {
-            console.log(`Post/comment ${post._id} is a post`);
-        }
+        // }else {
+            // console.log(`Post/comment ${post._id} is a post`);
+        // }
     }
 
     

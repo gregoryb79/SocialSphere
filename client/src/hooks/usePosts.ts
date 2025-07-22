@@ -10,12 +10,12 @@ export function useAddComment(onSuccess: (newCommentId: string) => void) {
     isCanceled.current = false;
     const currUserId = useRef<string>(getLoggedInUserId());
 
-    async function doAddComment(commentContent: string, postId: string) {
+    async function doAddComment(commentContent: string, postId: string, avatarURL: string) {
         setError(undefined);
         setLoading(true);
 
         try {                
-            const newCommentId = await postComment(commentContent, postId);
+            const newCommentId = await postComment(commentContent, postId, avatarURL);
             if (newCommentId) {
                 console.log(`uAC Comment posted successfully with ID: ${newCommentId}`); 
                 onSuccess(newCommentId);            
@@ -53,12 +53,12 @@ export function useEditComment(onSuccess: (commentId: string) => void) {
     isCanceled.current = false;
     const currUserId = useRef<string>(getLoggedInUserId());
 
-    async function doEditComment(commentContent: string, commentId: string) {
+    async function doEditComment(commentContent: string, commentId: string, avatarURL: string) {
         setError(undefined);
         setLoading(true);
 
         try {                
-            const result = await editComment(commentContent, commentId);
+            const result = await editComment(commentContent, commentId, avatarURL);
             if (result) {
                 console.log(`uAC Comment ${commentId} edited successfully.`); 
                 onSuccess(commentId);            

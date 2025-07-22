@@ -20,8 +20,6 @@ export function Register() {
     const navigate = useNavigate();
     const { revalidate } = useRevalidator();
     const [showError, setShowError] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [avatarPath, setAvatarPath] = useState<string>("");
     const [avatarHostURL, setAvatarHostURL] = useState<string>("");
     const [isAvatarUploaded, setIsAvatarUploaded] = useState(false);
 
@@ -46,29 +44,7 @@ export function Register() {
         console.log(`email = ${email}, username = ${username}, password = ${password}, repeatPassword = ${repeatPassword}`);            
         doRegister(email, username, password, repeatPassword, avatarURL, bio);
     }
-
-    function handleAvatarUpload() {        
-        console.log("Avatar upload button clicked");        
-        fileInputRef.current?.click();
-    }
-
-    async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const file = e.target.files?.[0];
-        if (file) {            
-            console.log("Selected file:", file);
-            setAvatarPath(file.name);
-            try{
-                const result = await uploadToImgbb(file);
-                console.log("File uploaded successfully:", result);
-                setAvatarHostURL(result);
-                setIsAvatarUploaded(true);
-            }catch (error) {
-                console.error("Error uploading file:", error);
-                // setShowError(true);
-            }
-        }
-    }
-
+  
     const {error,loading: loadingRegister, doRegister } = useDoRegister(() => {
         revalidate();
         navigate("/");

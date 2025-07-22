@@ -12,36 +12,54 @@ import { Input } from "./Input";
 import { GeneralButton } from "./GeneralButton";
 import { useAddComment, useEditComment } from "../../hooks/usePosts";
 import { ErrorMsg } from "./ErrorMsg";
+import { useNavigate } from "react-router";
+import { URLorFileUploadInput } from "./URLorFileUploadInput";
 
 type CommentProps = {
-    post: Comment;
+    post?: Comment;
     content?: string;
     onCommentPosted: (newCommentId: string) => void;
 }
 export function NewCommentCard({post, content, onCommentPosted}: CommentProps){  
 
-    const currUserId = useRef<string>(getLoggedInUserId());
-    console.log(`CommentCard rendered for comment: ${post._id} by user: ${currUserId.current}`);
+    const currUserId = useRef<string>(getLoggedInUserId());    
+    console.log(`CommentCard rendered for comment: ${post?._id} by user: ${currUserId.current} parentId: ${post?.parentId}`);
     const likeIconColor = useRef<string>("var(--primary-blue)");
     const [disable,setDisable] = useState<boolean>(false);    
-    // const [commentContent, setCommentContent] = useState<string>(content || "");
+    
+    
+    const commentLabel = useRef<string>(!content ? "New Comment" : "Edit Comment");
+    if (!post) commentLabel.current = "";
+    const buttonLabel = useRef<string>(!content ? "Post Comment" : "Update Comment");       
+    if (!post) buttonLabel.current = "Create Post";
+    const isPost = useRef<boolean>(false);
+    if (post && !post.parentId) isPost.current = true;
+    if (isPost.current) buttonLabel.current = "Update Post";
+    
+
+    const [avatarHostURL, setAvatarHostURL] = useState<string>("");
+    const [isAvatarUploaded, setIsAvatarUploaded] = useState(false);
+
+   
    
     function handlePostComment(event: React.FormEvent<HTMLFormElement>) {
-        console.log(`NCC: Post comment button clicked on post: ${post._id}`);
+        console.log(`NCC: Post comment button clicked on post: ${post?._id}`);
         event.preventDefault();
         setDisable(true);
         const formData = new FormData(event.currentTarget);
         const commentContent = formData.get("commentContent") as string;    
         console.log(`NCC: commentContent = ${commentContent}`); 
+        const avatarURL = isAvatarUploaded ? avatarHostURL : formData.get("avatarURL") as string;
+        console.log(`NCC: avatarURL = ${avatarURL}`);
         if (!currUserId.current) {
             console.log("NCC: No user logged in, cannot post comment");
             return;
         }
         
         if (!content) {
-            doAddComment(commentContent, post._id);
+            doAddComment(commentContent, post?._id || "", avatarURL);
         } else {
-            doEditComment(commentContent, post._id);
+            doEditComment(commentContent, post?._id || "", avatarURL);
         }
 
     }
@@ -64,17 +82,32 @@ export function NewCommentCard({post, content, onCommentPosted}: CommentProps){
         }
     }, [error]);
 
-
+    const navigate = useNavigate();
+    function onCancelClick() {        
+        if (!post) {
+            navigate("/"); 
+        } else {
+            onCommentPosted("");
+        }
+    }
       
     return (
         <>
-            <form className={styles.newCommentCard} onSubmit={handlePostComment}>            
-                <label htmlFor="commentContent">{!content ? "New Comment" : "Edit Comment"}</label>
-                <textarea id="commentContent" name="commentContent" placeholder="Write your comment here..."
-                    rows={5} required className={styles.commentTtext} defaultValue={content}/>
+            <form className={styles.newCommentCard} onSubmit={handlePostComment} data-is-new-post={!post}>            
+                <label htmlFor="commentContent">{commentLabel.current}</label>
+                <textarea id="commentContent" name="commentContent" placeholder={!post ? "Enter your text here..." : "Write your comment here..."}
+                    rows={!post? 15 : 5} required className={styles.commentTtext} defaultValue={content}/>
+                {(!post || isPost.current) && <URLorFileUploadInput 
+                                    setImageHostURL={setAvatarHostURL} 
+                                    setIsImageUploaded={setIsAvatarUploaded}                                         
+                                    type="text" 
+                                    id="avatarURL" 
+                                    label="Image to attach:" 
+                                    name="avatarURL" 
+                                    placeholder="put link or upload"/>}    
                 <section className={styles.buttonsSection}>
-                    <GeneralButton label={!content ? "Post Comment" : "Update Comment"} disabled={disable}/>            
-                    <GeneralButton label="Cancel" disabled={disable} onClick={() => onCommentPosted("")}/>
+                    <GeneralButton label={buttonLabel.current} type="submit" disabled={disable}/>            
+                    <GeneralButton label="Cancel" type="button" disabled={disable} onClick={onCancelClick}/>
                 </section>                
             </form> 
             {loading || editLoading && <Spinner />}

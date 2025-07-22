@@ -93,10 +93,10 @@ export function NewCommentCard({post, content, onCommentPosted}: CommentProps){
       
     return (
         <>
-            <form className={styles.newCommentCard} onSubmit={handlePostComment}>            
+            <form className={styles.newCommentCard} onSubmit={handlePostComment} data-is-new-post={!post}>            
                 <label htmlFor="commentContent">{commentLabel.current}</label>
                 <textarea id="commentContent" name="commentContent" placeholder={!post ? "Enter your text here..." : "Write your comment here..."}
-                    rows={!post? 10 : 5} required className={styles.commentTtext} defaultValue={content}/>
+                    rows={!post? 15 : 5} required className={styles.commentTtext} defaultValue={content}/>
                 {(!post || isPost.current) && <URLorFileUploadInput 
                                     setImageHostURL={setAvatarHostURL} 
                                     setIsImageUploaded={setIsAvatarUploaded}                                         

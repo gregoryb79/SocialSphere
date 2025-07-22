@@ -152,7 +152,7 @@ export function PostCard({postInput, following, onDelete}: PostCardProps) {
             }
         }else {
             console.log(`PC: New comment posting for ${post._id} was canceled`);
-            if (post.comments.length == 0)setShowComments(false);
+            if (post.comments.length == 0 || !post.parentId)setShowComments(false);
         }
         if (post.comments.length == 0) setShowComments(false);
         setDisplayNewComment(false);

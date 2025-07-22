@@ -20,7 +20,7 @@ export function NewPost() {
 
   return (
     <div className={styles.newPostMain}>
-      <h1 className={styles.newPostHeader}>Create New Post</h1>
+      <h2 className={styles.newPostHeader}>Create New Post</h2>
       {loading && <Spinner />}
       <NewCommentCard onCommentPosted={handleNewPost}/>
     </div>

@@ -1,4 +1,4 @@
-@import './styles/variables';
+@use './styles/variables' as *;
 
 :root{
     --primary-blue:     #3B82F6;   // Buttons like "Login"
@@ -21,7 +21,7 @@
     --font-xs:  0.75rem;    // ~12px — Optional notes, input hints
 
     --standard-width: 100%; // Standard relative width for main content areas
-    --standard-height: 80%; // Standard relative height for main content areas
+    --standard-height: 90%; // Standard relative height for main content areas
     --app-max-width: 30rem; // Max width for the app container
     --img-max-height: 15rem; // Max height for images in posts    
 

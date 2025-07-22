@@ -21,7 +21,7 @@
     --font-xs:  0.75rem;    // ~12px — Optional notes, input hints
 
     --standard-width: 100%; // Standard relative width for main content areas
-    --standard-height: 100%; // Standard relative height for main content areas
+    --standard-height: 80%; // Standard relative height for main content areas
     --app-max-width: 30rem; // Max width for the app container
     --img-max-height: 15rem; // Max height for images in posts    
 
@@ -38,7 +38,8 @@
     }
 
     @media (min-width: $widthLimit) {      
-        --app-max-width: 100%;            
+        --app-max-width: 100%; 
+        --standard-height: 100%;           
     }
 }
 

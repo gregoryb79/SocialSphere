@@ -12,15 +12,6 @@ export async function initDb() {
       created_at TEXT,
       updated_at TEXT
     );`,
-    `CREATE TABLE IF NOT EXISTS posts (
-      id TEXT PRIMARY KEY,
-      author_id TEXT NOT NULL,
-      content TEXT NOT NULL,
-      image TEXT,
-      created_at TEXT,
-      updated_at TEXT,
-      FOREIGN KEY (author_id) REFERENCES users(id)
-    );`,
     `CREATE TABLE IF NOT EXISTS comments (
       id TEXT PRIMARY KEY,
       author_id TEXT NOT NULL,
@@ -116,31 +107,4 @@ export async function initDb() {
 
   console.log("✅ All tables created in Turso database");
   console.log("Starting database seeding...");
-
-  try {
-    const check = await dbClient.execute({
-      sql: `INSERT INTO friends (id, user1_id, user2_id) VALUES (?, ?, ?)`,
-      args: ["friend-user1-user2", "user1", "user2"],
-    });
-
-    if (check.rows.length === 0) {
-    const existing = await dbClient.execute({
-      sql: `SELECT id FROM friends WHERE id=?`,
-      args: ["friend-user1-user2"],
-    });
-
-    if (existing.rows.length === 0) {
-      await dbClient.execute({
-        sql: `INSERT INTO friends (id, user1_id, user2_id) VALUES (?, ?, ?)`,
-        args: ["friend-user1-user2", "user1", "user2"],
-      });
-
-    console.log("Seeded friendship between user1 and user2");
-    } else {
-      console.log("Friendship already exists. Skipping...");
-    }
-  }
-  } catch (error) {
-    console.error("Failed to seed friendship:", error);
-  }
 }

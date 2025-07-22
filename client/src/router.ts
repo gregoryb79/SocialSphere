@@ -15,6 +15,7 @@ import { fetchNotifications } from "./models/notifications";
 import { PauseOctagon } from "lucide-react";
 import { getComments } from "./models/comments";
 import { Chat } from "./pages/Chat";
+import { apiClient } from "./models/apiClient";
 
 export const router = createBrowserRouter([
     {
@@ -107,9 +108,8 @@ export const router = createBrowserRouter([
                     }
 
                     try {
-                        const API_BASE_URL = import.meta.env.VITE_API_VASE_URL ?? "http://localhost:5050";
-                        const res = await fetch(`${API_BASE_URL}:/chat/friends/${userId}`);
-                        const friends = await res.json();
+                        const res = await apiClient.get(`/chat/friends/${userId}`);
+                        const friends = res.data
                 
                         return { userId, username, friends };
                     } catch (error) {

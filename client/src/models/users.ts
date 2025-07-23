@@ -218,8 +218,9 @@ export async function fetchUser(userId: string): Promise<User> {
 
 export async function deleteUser() {
   try {
-    const userId = getCurrentUserId();
+    const userId = getLoggedInUserId();
     const response = await apiClient.delete(`/users/${userId}`);
+    await response.data;
     if (response.status === 200) {
       console.log("Account deleted");
       window.location.href = '/register';
@@ -231,20 +232,3 @@ export async function deleteUser() {
     console.error("Error deleting account:", error);
   }
 }
-
-/*
-export async function deleteUser() {
-  try {
-    const userId = getCurrentUserId();
-    await apiClient.delete(`/users/${userId}`);
-    console.log("Account deleted");
-    window.location.href = '/register';
-    doLogOut();
-  } catch (error) {
-    console.error("Error deleting account:", error);
-  }
-}
-
-
-
-*/

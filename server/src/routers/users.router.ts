@@ -51,9 +51,11 @@ router.put("/:id", authenticate, async (req, res) => {
 });
 
 router.delete('/:userId', authenticate, async (req, res) => {
+  console.log('DELETE request received');
   try {
     const { userId } = req.params;
     await deleteUser(userId);
+    console.log('User deleted successfully');
     res.json({ message: 'Account deleted' });
   } catch (error) {
     console.error('Error deleting account:', error);

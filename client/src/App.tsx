@@ -39,17 +39,17 @@ function TopNav() {
   return (
     <nav className={styles.nav}>
       {loading && <Spinner/>}
-      <IconButton title="Back" ariaLabel="Navigate Back" icon={<ArrowLeft className={styles.lucideIconTop} color="var(--white)"/>} onClick={() => {
+      <IconButton title="Back" ariaLabel="Navigate Back" icon={<ArrowLeft className={styles.lucideIconTop} color="var(--white-bg)"/>} onClick={() => {
           navigate(-1);
           setLoading(true);
         }}/>      
-      <h2>SocialSphere</h2>
+      <h2 className={styles.siteTitle}>SocialSphere</h2>
       <section className={styles.topNavButtons}>
-        {isDescktop && <IconButton title="Notifications" ariaLabel="Check your notifications" icon={<Bell className={styles.lucideIconTop} color={(username != "Guest") ? "var(--white)" : "var(--primary-blue)"} />} onClick={() => {
+        {isDescktop && <IconButton title="Notifications" ariaLabel="Check your notifications" icon={<Bell className={styles.lucideIconTop} color={(username != "Guest") ? "var(--white-bg)" : "var(--primary-blue)"} />} onClick={() => {
                 navigate("/notifications");
                 setLoading(true);
               }} disabled={username == "Guest"}/>}
-        <IconButton title="Settings" ariaLabel="Settings"  icon={<Settings className={styles.lucideIconTop} color={(username != "Guest") ? "var(--white)" : "var(--primary-blue)"}/>} onClick={() => {
+        <IconButton title="Settings" ariaLabel="Settings"  icon={<Settings className={styles.lucideIconTop} color={(username != "Guest") ? "var(--white-bg)" : "var(--primary-blue)"}/>} onClick={() => {
             navigate("/settings");
             setLoading(true);
           }}disabled={username == "Guest"}/>

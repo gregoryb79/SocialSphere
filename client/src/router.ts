@@ -22,7 +22,6 @@ export const router = createBrowserRouter([
         path: "/",
         Component: App,        
         children: [            
-            { path: "*", Component: NotFound },   
             { index: true,
                 Component: Home,                
                 loader: async () => {
@@ -34,7 +33,7 @@ export const router = createBrowserRouter([
                     return {
                         loggedInUser,
                         posts: Array.isArray(posts) ? posts : []
-                      };
+                    };
                 }
              },      
            { path: "/profile/:userId",
@@ -45,7 +44,7 @@ export const router = createBrowserRouter([
                     const posts = await fetchOwnPosts(userId);
                     return {user, posts};
                 }
-             },
+            },
             { path: "/settings",
                 Component: Settings,
                 loader: async () => {                    
@@ -81,12 +80,12 @@ export const router = createBrowserRouter([
                 loader: async () => {
                     const userId = getLoggedInUserId();
                     console.log("Loading notifications for userId:", userId);
-
+                    
                     if (!userId || userId === "Guest") {
                         console.warn("No valid userId was found. Moving to login")
                         return redirect("/login");
                     }
-
+                    
                     try {
                         const notifications = await fetchNotifications(userId);
                         return notifications;
@@ -101,23 +100,24 @@ export const router = createBrowserRouter([
                 loader: async () => {
                     const userId = getLoggedInUserId();;
                     const username = getLoggedInUserName();
-
+                    
                     if (!userId || !username || userId === "Guest") {
                         console.warn("User is not logged in. Redirecting to login");
                         return redirect("/login");
                     }
-
+                    
                     try {
                         const res = await apiClient.get(`/chat/friends/${userId}`);
                         const friends = res.data
-                
+                        
                         return { userId, username, friends };
                     } catch (error) {
                         console.error("Failed to load friends:", error);
                         throw new Response("Failed to load friends", { status: 500 });
                     }
                 }
-            }    
+            },    
+            { path: "*", Component: NotFound },   
         ]
     }
 ]);

@@ -73,7 +73,7 @@ export function Register() {
                     id="avatarURL" 
                     label="Profile Picture" 
                     name="avatarURL" 
-                    placeholder="put link or upload"/>               
+                    placeholder="C:\Pictures\avatar.png"/>               
                 <textarea name="bio" id="bio" rows={3} placeholder='say something about you' className={styles.bioTtext}/>
                 <PasswordInput id="password" label="Password" name="password" placeholder="Enter your password" 
                 required minLength={8} onInput={(e) => setPassword(e.currentTarget.value)} value={password}

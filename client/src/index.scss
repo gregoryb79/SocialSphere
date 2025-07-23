@@ -5,6 +5,7 @@
     --light-gray-bg:    #F9FAFB;   // Background of the entire app
     --gray-border:      #E5E7EB;   // Input borders, card outlines
     --dark-text:        #111827;   // Main text (headings, questions)
+    --gray-text:        #334155;   // Secondary text (labels, meta info)
     --light-text:       #6B7280;   // Secondary text (labels, meta info)
     --green-success:    #10B981;   // Feedback: OK 
     --red-error:        #EF4444;   // Feedback: Error messages 
@@ -12,6 +13,7 @@
 
     --white:            #FFFFFF;   // Base color for cards and inputs
     --input-bg:         #F3F4F6;   // Input fields background
+    --white-bg:         #FFFFFF;   // Always white background
 
     --font-xxl: 2rem;      // ~32px — Main headings 
     --font-xl:  1.5rem;     // ~24px — Section titles 
@@ -34,6 +36,7 @@
 
         // Text
         --dark-text:   #F9FAFB;   // Headings, main text
+        --gray-text:   #D1D5DB;   // Secondary text (labels, meta info)
         --light-text:  #9CA3AF;   // Labels, secondary info     
     }
 

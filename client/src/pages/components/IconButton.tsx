@@ -18,13 +18,16 @@ type IconButtonProps = {
   title?: string;
   label?: string;
   icon?: React.ReactNode;
+  isDescktop?: boolean;
   ariaLabel?: string;
   onClick?: () => void;    
 };
-export function IconButton({disabled, title, label, ariaLabel, icon, onClick}: IconButtonProps) {
+export function IconButton({disabled, title, label, isDescktop,ariaLabel, icon, onClick}: IconButtonProps) {
+    const hasLabel = label !== undefined && label !== "";
 
     return (
-    <button className={styles.iconButton} onClick={onClick} aria-label={ariaLabel} title={title} disabled={disabled} type="button">
+    <button className={`${styles.iconButton} ${hasLabel ? styles.hasLabel : ""} ${isDescktop ? styles.desktop : ""} ${disabled ? styles.disabled : ""}`} 
+      onClick={onClick} aria-label={ariaLabel} title={title} disabled={disabled} type="button">
       {icon}
       {label}
     </button>

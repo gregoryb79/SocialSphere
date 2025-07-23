@@ -137,7 +137,7 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
               id="avatarURL" 
               label="Profile Picture" 
               name="avatarURL" 
-              placeholder="put link or upload"
+              placeholder="C:\Pictures\avatar.png"
               />   
           <PasswordInput
             value={currentPassword}

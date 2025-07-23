@@ -27,6 +27,7 @@ app.use((req, _, next) => {
 app.use(json());
 
 app.use("/users", usersRouter);
+app.use("/api/users", usersRouter);
 app.use("/auth", authRouter);
 
 app.use("/api/notifications", notificationRouter)

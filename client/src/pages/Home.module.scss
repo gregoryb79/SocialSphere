@@ -1,4 +1,5 @@
 @use '../styles/mixins' as *;
+@use '../styles/variables' as *;
 
 .homeMain{
     width: 100%;
@@ -17,6 +18,11 @@
         width: var(--font-xl);
         height: var(--font-xl); 
         stroke-width: 3;    
+    }
+
+    @media (min-width: $widthLimit) {      
+        margin-top: 1rem;
+        margin-bottom: 1rem;
     }
 }
 

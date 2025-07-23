@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
                     };
                 }
              },      
-           { path: "/profile/:userId",
+           { path: "profile/:userId",
                 Component: Profile,                
                 loader: async ({ params }) => {
                     console.log("$$$ Fetching profile for userId:", params.userId);

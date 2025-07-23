@@ -109,7 +109,7 @@ const response = await apiClient.put(`/users/${userId}`, {
               id="avatarURL" 
               label="Profile Picture" 
               name="avatarURL" 
-              placeholder="put link or upload"
+              placeholder="C:\Pictures\avatar.png"
               />   
           <PasswordInput
             value={currentPassword}

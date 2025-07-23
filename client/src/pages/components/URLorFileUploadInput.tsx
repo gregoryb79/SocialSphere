@@ -60,6 +60,7 @@ export function URLorFileUploadInput( {setImageHostURL, setIsImageUploaded, ...p
                     <button
                         className={styles.uploadButton}
                         title='Upload'
+                        type="button"
                         onClick={handleAvatarUpload}
                     ><Upload color="var(--primary-blue)" /></button>
 

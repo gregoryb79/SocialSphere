@@ -28,13 +28,13 @@ export function NewCommentCard({post, content, onCommentPosted}: CommentProps){
     const [disable,setDisable] = useState<boolean>(false);    
     
     
-    const commentLabel = useRef<string>(!content ? "New Comment" : "Edit Comment");
+    const commentLabel = useRef<string>(!content ? "New Comment" : "Edit:");
     if (!post) commentLabel.current = "";
-    const buttonLabel = useRef<string>(!content ? "Post Comment" : "Update Comment");       
+    const buttonLabel = useRef<string>(!content ? "Post Comment" : "Update");       
     if (!post) buttonLabel.current = "Create Post";
     const isPost = useRef<boolean>(false);
-    if (post && !post.parentId) isPost.current = true;
-    if (isPost.current) buttonLabel.current = "Update Post";
+    // if (post && !post.parentId) isPost.current = true;
+    // if (isPost.current) buttonLabel.current = "Update Post";
     
 
     const [avatarHostURL, setAvatarHostURL] = useState<string>("");

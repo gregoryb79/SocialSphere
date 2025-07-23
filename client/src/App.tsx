@@ -80,48 +80,48 @@ function Footer() {
       <nav className={styles.footerNav}>
         {loading && <Spinner/>}
         <IconButton title="Home" ariaLabel="Navigate to HomePage" 
-          label={isDescktop ? "Home" : ""}
-          icon={<Home className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
+          label={isDescktop ? "Home" : ""} isDescktop={isDescktop}
+          icon={<Home className={styles.lucideIconFooter}/>} onClick={() => {
             navigate("/");
             setLoading(true);
           }}/>      
         <IconButton title="Search" ariaLabel="Open Search Page" 
-          label={isDescktop ? "Search" : ""}
-          icon={<Search className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => navigate("/search")}/>
+          label={isDescktop ? "Search" : ""} isDescktop={isDescktop}
+          icon={<Search className={styles.lucideIconFooter}/>} onClick={() => navigate("/search")}/>
         <IconButton title="Create Post" ariaLabel="Create new post" 
-          label={isDescktop ? "Add Post" : ""}
-          icon={<Plus className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(---light-gray-bg)"}/>} onClick={() => {
+          label={isDescktop ? "Add Post" : ""} isDescktop={isDescktop}
+          icon={<Plus className={`${styles.lucideIconFooter} ${username == "Guest" ? styles.disabled : ""} ${isDescktop ? styles.desktop : ""}`}/>} onClick={() => {
             navigate("/new-post");
             setLoading(true);
           }} disabled={username == "Guest"}/>
-        {!isDescktop && <IconButton title="Notifications" ariaLabel="Check your notifications" icon={<Bell className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-gray-bg)"}/>} onClick={() => {
+        {!isDescktop && <IconButton title="Notifications" ariaLabel="Check your notifications" 
+          icon={<Bell className={`${styles.lucideIconFooter} ${username == "Guest" ? styles.disabled : ""} ${isDescktop ? styles.desktop : ""}`}/>} onClick={() => {
               navigate("/notifications");
               setLoading(true);
             }} disabled={username == "Guest"}/>}
         <IconButton title="Chat" ariaLabel="Open Chat Page" 
-          label={isDescktop ? "Chat" : ""}
-          icon={<MessageCircle className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-gray-bg)"} />} 
+          label={isDescktop ? "Chat" : ""} isDescktop={isDescktop}
+          icon={<MessageCircle className={`${styles.lucideIconFooter} ${username == "Guest" ? styles.disabled : ""} ${isDescktop ? styles.desktop : ""}`}/>} 
           onClick={() => {
             navigate("/chat");
             setLoading(true);
           }} disabled={username == "Guest"} />
         <IconButton title="Profile" ariaLabel="Configure your profile" 
-          label={isDescktop ? username : ""}
-          icon={<User className={styles.lucideIconFooter} color={(username != "Guest") ? "var(--primary-blue)" : "var(--light-gray-bg)"}/>} onClick={() => {
+          label={isDescktop ? username : ""} isDescktop={isDescktop}
+          icon={<User className={`${styles.lucideIconFooter} ${username == "Guest" ? styles.disabled : ""} ${isDescktop ? styles.desktop : ""}`}/>} onClick={() => {
             navigate(`/profile/${userId}`);
             setLoading(true);
           }} disabled={username == "Guest"}/>
         {(username == "Guest") && <IconButton title="Log In" 
-          label={isDescktop ? "Log In" : ""}
-          icon={<LogIn className={styles.lucideIcon} color="var(--primary-blue)" />} ariaLabel="Log In Button" onClick={() => navigate("/login")} />}
+          label={isDescktop ? "Log In" : ""}  isDescktop={isDescktop}
+          icon={<LogIn className={styles.lucideIconFooter}/>} ariaLabel="Log In Button" onClick={() => navigate("/login")} />}
         {(username != "Guest") && <IconButton title="LogOut" ariaLabel="LogOut" 
-          label={isDescktop ? "Log Out" : ""}
-          icon={<LogOut className={styles.lucideIconFooter} color="var(--primary-blue)"/>} onClick={() => {
+          label={isDescktop ? "Log Out" : ""}  isDescktop={isDescktop}
+          icon={<LogOut className={styles.lucideIconFooter}/>} onClick={() => {
             doLogOut();
             navigate("/login");
           }}/>}
-      </nav>
-      {/* <p>-- Social Sphere --</p> */}
+      </nav>      
       
     </footer>
   );

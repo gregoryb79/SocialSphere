@@ -86,6 +86,17 @@
 
 .lucideIconFooter{
     width: var(--font-xl);
-    height: var(--font-xl);  
-    background-color: var(--light-gray-bg);     
+    height: var(--font-xl);     
+    background-color: var(--light-gray-bg);    
 }
+
+
+.disabled{
+    color: var(--light-gray-bg);
+    cursor: not-allowed;
+    &:hover{
+        transform: scale(1);
+        color: var(--light-gray-bg);
+    }
+}
+

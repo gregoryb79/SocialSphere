@@ -34,7 +34,7 @@ function TopNav() {
   }, [location]);
 
   const [width, setWidth] = useState(window.innerWidth);
-  const [isDescktop, setIsDescktop] = useState(width >= 500); 
+  const [isDescktop, setIsDescktop] = useState(width >= 810); 
   
   return (
     <nav className={styles.nav}>
@@ -71,7 +71,7 @@ function Footer() {
   }, [location]);
 
   const [width, setWidth] = useState(window.innerWidth);
-  const [isDescktop, setIsDescktop] = useState(width >= 500);  
+  const [isDescktop, setIsDescktop] = useState(width >= 810);  
 
   console.log(`$$$ Current window width: ${width}, is desktop: ${isDescktop}`);
 

@@ -56,12 +56,13 @@ export function URLorFileUploadInput( {setImageHostURL, setIsImageUploaded, ...p
         
     return (
         <section className={styles.avatarSection}>
-                    <Input value={avatarPath} onInput={(e) => setAvatarPath(e.currentTarget.value)} {...props}  />
-                    <IconButton
+                    <Input value={avatarPath} onInput={(e) => setAvatarPath(e.currentTarget.value)} {...props}  />                    
+                    <button
+                        className={styles.uploadButton}
                         title='Upload'
-                        icon={<Upload className={styles.lucideIconFooter} color="var(--primary-blue)" />}
                         onClick={handleAvatarUpload}
-                    />
+                    ><Upload color="var(--primary-blue)" /></button>
+
                     <input
                         type="file"
                         accept="image/*"

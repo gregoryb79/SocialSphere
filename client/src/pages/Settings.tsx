@@ -11,7 +11,6 @@ import { Confirm } from './components/Confirm';
 import { URLorFileUploadInput } from './components/URLorFileUploadInput';
 import { Spinner } from './components/Spinner';
 
-
 export function Settings()  {
   const user = useLoaderData() as User;
   console.log(`User:`, user);
@@ -49,7 +48,6 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
 
       setShowSpinner(true);
 const response = await apiClient.put(`/users/${userId}`, {
-  //params: { id: userId },
     ...updatedProfile,
   
 });

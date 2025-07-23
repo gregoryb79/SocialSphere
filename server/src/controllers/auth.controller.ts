@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { findUserByEmail, findUserByUsername, createUser } from "../queries/auth.queries";
 import { hashPassword, comparePasswords } from "../utils/hash";
 import jwt from "jsonwebtoken";
+import { getUserById } from "../models/user";
+import { dbClient } from "../models/db";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
@@ -56,3 +58,35 @@ export const login = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
+export async function updateUser(req: Request) {
+  try {
+    const userId = req.params.id;
+    const user = req.body;
+
+    if (user.currentPassword) {
+      const existingUser = await getUserById(userId);
+
+      if (!existingUser) {
+        throw new Error("User not found");
+      }
+
+      if (!(await comparePasswords(user.currentPassword, existingUser.password))) {
+        throw new Error("Current password is incorrect");
+      }
+    }
+
+    const updates = Object.entries(user).map(([key, value]) => `${key} = ?`).join(", ");
+    const params = Object.values(user);
+    const updatedUser = await dbClient.execute(`UPDATE users SET ${updates}, updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [...params as (string | number | boolean)[], userId]);
+
+    if (user.password) {
+      const hashedPassword = await hashPassword(user.password);
+      await dbClient.execute(`UPDATE users SET password = ? WHERE id = ?`, [hashedPassword, userId]);
+    }
+
+    return updatedUser;
+  } catch (err) {
+    throw err;
+  }
+}

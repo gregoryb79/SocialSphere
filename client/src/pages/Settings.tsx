@@ -9,8 +9,8 @@ import { apiClient } from '../models/apiClient';
 import { deleteUser, getLoggedInUserId, type User } from '../models/users';
 import { Confirm } from './components/Confirm';
 import { URLorFileUploadInput } from './components/URLorFileUploadInput';
-import { verifyPassword } from '../models/users';
 import { Spinner } from './components/Spinner';
+
 
 export function Settings()  {
   const user = useLoaderData() as User;
@@ -32,53 +32,27 @@ export function Settings()  {
 
   const { revalidate } = useRevalidator();
   
-  const validateForm = async () => {
-    const errors: Record<string, string> = {};
-    if (!username) {
-      errors.username = 'Username is required';
-    }
-    if (!email) {
-      errors.email = 'Email is required';
-    }
-      if (currentPassword) {
-    const userId = getLoggedInUserId();
-    const isValid = await verifyPassword(userId, currentPassword);
-    if (!isValid) {
-      errors.password = 'Current password is incorrect';
-    }
-  }
-    if (newPassword && newPassword !== confirmPassword) {
-      errors.password = 'Passwords do not match';
-    }
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-
-
+  
 async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
   event.preventDefault();
-  if ( await validateForm()) {
+                
     try {
       const userId = getLoggedInUserId();
       const updatedProfile: UpdatedProfile = {
         username,
         email,
         bio,
-        avatar: isAvatarUploaded ? avatarHostURL : null,
-      };
+        avatar: isAvatarUploaded ? avatarHostURL : user.avatar,
+        password: newPassword,
+      }; 
 
-      if (newPassword && newPassword !== confirmPassword) {
-        setErrors({ password: 'Passwords do not match' });
-        return;
-      }
-
-      if (newPassword) {
-        updatedProfile.password = newPassword;
-      }
 
       setShowSpinner(true);
-      const response = await apiClient.put(`/users/${userId}`, updatedProfile);
+const response = await apiClient.put(`/users/${userId}`, {
+  //params: { id: userId },
+    ...updatedProfile,
+  
+});
       setShowSpinner(false);
       console.log('Profile updated successfully!');
       revalidate();
@@ -88,7 +62,7 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
       console.error(error);
       setErrors({ profile: (error as Error).message });
     }
-  }
+  
 }
 
   async function handleSaveChanges(): Promise<void> {
@@ -211,6 +185,6 @@ interface UpdatedProfile {
   username: string;
   email: string;
   bio: string | undefined;
-  avatar: string | null;
-  password?: string;
+  avatar: string | undefined;
+  password: string;
 }

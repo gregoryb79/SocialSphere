@@ -1,4 +1,5 @@
 import { dbClient } from "./db";
+import { comparePasswords, hashPassword } from "../utils/hash";
 
 export type User = {
     id: string;
@@ -52,9 +53,4 @@ export async function deleteUser(id: string) {
     return dbClient.execute(`DELETE FROM users WHERE id = '${id}'`);
 }
 
-export async function updateUser(id: string, fields: any) {
-  const updates = Object.entries(fields).map(([key, value]) => `${key} = ?`).join(", ");
-  const params = Object.values(fields);
-  return dbClient.execute(`UPDATE users SET ${updates}, updated_at= CURRENT_TIMESTAMP WHERE id = ?`, [...params as (string | number | boolean)[], id]);
-}
 

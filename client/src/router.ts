@@ -39,6 +39,7 @@ export const router = createBrowserRouter([
            { path: "/profile/:userId",
                 Component: Profile,                
                 loader: async ({ params }) => {
+                    console.log("$$$ Fetching profile for userId:", params.userId);
                     const userId = params.userId ? params.userId : getCurrentUserId();
                     const user = await fetchUser(userId);
                     const posts = await fetchOwnPosts(userId);

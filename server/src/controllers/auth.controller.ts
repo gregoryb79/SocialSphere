@@ -76,7 +76,10 @@ export async function updateUser(req: Request) {
       }
     }
 
-    const updates = Object.entries(user).map(([key, value]) => `${key} = ?`).join(", ");
+    let updates = Object.entries(user).map(([key, value]) => `${key} = ?`).join(", ");
+     if (!user.password) {
+        updates += ", password = password"; 
+        }
     const params = Object.values(user);
     const updatedUser = await dbClient.execute(`UPDATE users SET ${updates}, updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [...params as (string | number | boolean)[], userId]);
 

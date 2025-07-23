@@ -1,5 +1,4 @@
 import { dbClient } from "./db";
-import { comparePasswords, hashPassword } from "../utils/hash";
 
 export type User = {
     id: string;
@@ -50,7 +49,15 @@ export async function getUserById(id: string) : Promise<User | null> {
 }
 
 export async function deleteUser(id: string) {
-    return dbClient.execute(`DELETE FROM users WHERE id = '${id}'`);
+  console.log(`Deleting user with ID ${id}`);
+  try {
+    const result = await dbClient.execute('DELETE FROM users WHERE id = ?', [id]);
+    console.log(`Deletion result: ${result}`);
+    if (!result) {
+      throw new Error(`User with ID ${id} not found`);
+    }
+    console.log('User deleted successfully');
+  } catch (error) {
+    console.error(`Error deleting user: ${error}`);
+  }
 }
-
-

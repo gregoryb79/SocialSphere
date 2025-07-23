@@ -1,11 +1,12 @@
 import express from "express";
 import { authenticate } from "../middlewares/auth.middleware";
 import { followUser, unfollowUser } from "../controllers/user.controller";
-import { deleteUser, updateUser, getUserById} from "../models/user";
+import { deleteUser, getUserById} from "../models/user";
 import type {User} from "../models/user"
 export const router = express.Router();
 import { dbClient } from "../models/db";
 import { getFollowers, getFollowing } from "../controllers/follow.controller";
+import { updateUser } from "../controllers/auth.controller";
 
 
 
@@ -34,17 +35,18 @@ router.get('/:userId', async (req, res) => {
 router.post("/:id/follow", authenticate, followUser);
 router.post("/:id/unfollow", authenticate, unfollowUser);
 
-router.put("/:userId", authenticate, async (req, res) => {
+router.put("/:id", authenticate, async (req, res) => {
   try {
-    const { userId } = req.params;
-    const fields = req.body;
-    console.log(`Updating user ${userId} with fields:`, fields);
-    await updateUser(userId, fields);
-    console.log(`User updated successfully!`);
-    res.json({ message: 'User updated' });
+    console.log("req.body:", req.body);
+    const existingUser = await getUserById(req.params.id);
+    if (!existingUser) {
+      throw new Error('User not found');
+    }
+    const result = await updateUser(req);
+    res.json(result);
   } catch (error) {
-    console.error('Error updating user:', error);
-    res.status(500).json({ error: 'Failed to update user' });
+    console.error(error);
+    res.status(500).json({ error: "Failed to update user" });
   }
 });
 
